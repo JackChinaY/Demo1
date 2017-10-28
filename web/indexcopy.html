@@ -1,0 +1,3235 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>收款机上位机系统</title>
+    <link rel="shortcut icon" type="image/x-icon" href="image/favicon1.ico"/>
+    <link rel="stylesheet" href="zui/zui.min.css">
+    <script src="javascript/jquery-2.0.3.min.js"></script>
+    <script src="zui/zui.min.js"></script>
+    <!--<script src="javascript/jquerysession.js"></script>-->
+    <script src="javascript/index.js"></script>
+    <!--<script src="javascript/caiyang.js"></script>-->
+	<script>
+	//读取数据到界面
+        function readshezhi(){
+            var obj=JSON.parse(localStorage.getItem("bendishuju"));
+
+            //通信信息
+            $("#duankou").val(obj.duankou);
+            $("#botelv").val(obj.botelv);
+            $("#shujuwei").val(obj.shujuwei);
+            $("#tingzhiwei").val(obj.tingzhiwei);
+            //发票抬头信息
+            $("#fapiaotaitou").val(obj.fapiaotaitou);
+            $("#shuihao").val(obj.shuihao);
+            $("#dizhi").val(obj.dizhi);
+            $("#dianhua").val(obj.dianhua);
+            $("#kahuhang").val(obj.kaihuhang);
+            $("#yinghangzhanghao").val(obj.yinghangzhanghao);
+            $("#qita").val(obj.qita);
+            $("#biaozhiwei").val(obj.biaozhiwei);
+            //收银员信息
+            $("#shouyinyuanbianhao").val(obj.shouyinyuanbianhao);
+            $("#shouyinyuanmingcheng").val(obj.shouyinyuanmingcheng);
+            $("#shouyinyuanmima").val(obj.shouyinyuanmima);
+            $("#shouyinyuanbiaozhiwei").val(obj.shouyinyuanbiaozhiwei);
+            //税率信息
+            $("#shuizhongbianhao").val(obj.shuizhongbianhao);
+            $("#shuilvzhi").val(obj.shuilvzhi);
+            $("#shuilvmingzi").val(obj.shuilvmingzi);
+            $("#shuilvxiane").val(obj.shuilvxiane);
+            $("#shuilvbiaozhiwei").val(obj.shuilvbiaozhiwei);
+            //部类信息
+            $("#buleibianhao").val(obj.buleibianhao);
+            $("#buleimingcheng").val(obj.buleimingcheng);
+            $("#buleijiage").val(obj.buleijiage);
+            $("#shuizhongsuoyin").val(obj.shuizhongsuoyin);
+            $("#buleibiaozhiwei").val(obj.buleibiaozhiwei);
+            //折扣信息
+            $("#zhekoukoujia").val(obj.zhekoukoujia);
+            $("#zhikoujian").val(obj.zhikoujian);
+            $("#fapiaoxiane").val(obj.fapiaoxiane);
+            //外币信息
+            $("#waibixuhao").val(obj.waibixuhao);
+            $("#waibimingcheng").val(obj.waibimingcheng);
+            $("#waibibiaozhifu").val(obj.waibibiaozhifu);
+            $("#fuhaofangxiang").val(obj.fuhaofangxiang);
+            $("#huilv").val(obj.huilv);
+            $("#asciima").val(obj.asciima);
+            $("#xiaoshudian").val(obj.xiaoshudian);
+            $("#waibibiaozhiwei").val(obj.waibibiaozhiwei);
+            //单品信息
+            $("#plubianhao").val(obj.plubianhao);
+            $("#plubarcode").val(obj.plubarcode);
+            $("#plumingcheng").val(obj.plumingcheng);
+            $("#pludanjia").val(obj.pludanjia);
+            $("#plubulei").val(obj.plubulei);
+            $("#pluzibulei").val(obj.pluzibulei);
+            $("#plukucunzongliang").val(obj.plukucunzongliang);
+            $("#kucunkongzhibiaozhi").val(obj.kucunkongzhibiaozhi);
+            $("#danpingbiaozhiwei").val(obj.danpingbiaozhiwei);
+//            上传本地信息设置
+//            baocunshezhi();
+        }
+//        查看报表
+function searchBaobiao(){
+//    <!--buleibaobiaoshow-->
+//    <!--danpingbaobiaoshow-->
+//    <!--shiduanbaobiaoshow-->
+//    <!--jiaoyibaobiaoshow-->
+//    <!--yingyeyuanquxiaobaobiaoshow-->
+//    <!--yingyeyuantuihuobaobiaoshow-->
+//    <!--yingyeyuangengzhengbaobiaoshow-->
+//    <!--shuilvbaobiaoshow-->
+    if (network==0){//没联网状态不支持查看报表
+        alert("本地操作不支持查看报表");
+    }else{
+     var baobiaozhonglei=document.getElementById("biaobiaoleicxing").value;
+        if(baobiaozhonglei==1){//日报表
+           var ribaobiao=document.getElementById("ribaobiao").value;
+
+//             alert("11");
+            if(ribaobiao==1){//日报表-部类报表
+
+                $("#buleibaobiaoshow").show();
+                $("#danpingbaobiaoshow").hide();
+                $("#shiduanbaobiaoshow").hide();
+                $("#jiaoyibaobiaoshow").hide();
+                $("#yingyeyuanquxiaobaobiaoshow").hide();
+                $("#yingyeyuantuihuobaobiaoshow").hide();
+                $("#yingyeyuangengzhengbaobiaoshow").hide();
+                $("#shuilvbaobiaoshow").hide();
+            }else if(ribaobiao==2){
+                $("#buleibaobiaoshow").hide();
+                $("#danpingbaobiaoshow").show();
+                $("#shiduanbaobiaoshow").hide();
+                $("#jiaoyibaobiaoshow").hide();
+                $("#yingyeyuanquxiaobaobiaoshow").hide();
+                $("#yingyeyuantuihuobaobiaoshow").hide();
+                $("#yingyeyuangengzhengbaobiaoshow").hide();
+                $("#shuilvbaobiaoshow").hide();
+            }else if(ribaobiao==3){
+                $("#buleibaobiaoshow").hide();
+                $("#danpingbaobiaoshow").hide();
+                $("#shiduanbaobiaoshow").show();
+                $("#jiaoyibaobiaoshow").hide();
+                $("#yingyeyuanquxiaobaobiaoshow").hide();
+                $("#yingyeyuantuihuobaobiaoshow").hide();
+                $("#yingyeyuangengzhengbaobiaoshow").hide();
+                $("#shuilvbaobiaoshow").hide();
+            }else if(ribaobiao==4){
+                $("#buleibaobiaoshow").hide();
+                $("#danpingbaobiaoshow").hide();
+                $("#shiduanbaobiaoshow").hide();
+                $("#jiaoyibaobiaoshow").show();
+                $("#yingyeyuanquxiaobaobiaoshow").hide();
+                $("#yingyeyuantuihuobaobiaoshow").hide();
+                $("#yingyeyuangengzhengbaobiaoshow").hide();
+                $("#shuilvbaobiaoshow").hide();
+            }else if(ribaobiao==5){
+                $("#buleibaobiaoshow").hide();
+                $("#danpingbaobiaoshow").hide();
+                $("#shiduanbaobiaoshow").hide();
+                $("#jiaoyibaobiaoshow").hide();
+                $("#yingyeyuanquxiaobaobiaoshow").show();
+                $("#yingyeyuantuihuobaobiaoshow").hide();
+                $("#yingyeyuangengzhengbaobiaoshow").hide();
+                $("#shuilvbaobiaoshow").hide();
+            }else if(ribaobiao==8){
+                $("#buleibaobiaoshow").hide();
+                $("#danpingbaobiaoshow").hide();
+                $("#shiduanbaobiaoshow").hide();
+                $("#jiaoyibaobiaoshow").hide();
+                $("#yingyeyuanquxiaobaobiaoshow").hide();
+                $("#yingyeyuantuihuobaobiaoshow").show();
+                $("#yingyeyuangengzhengbaobiaoshow").hide();
+                $("#shuilvbaobiaoshow").hide();
+            }else if(ribaobiao==9){
+                $("#buleibaobiaoshow").hide();
+                $("#danpingbaobiaoshow").hide();
+                $("#shiduanbaobiaoshow").hide();
+                $("#jiaoyibaobiaoshow").hide();
+                $("#yingyeyuanquxiaobaobiaoshow").hide();
+                $("#yingyeyuantuihuobaobiaoshow").hide();
+                $("#yingyeyuangengzhengbaobiaoshow").show();
+                $("#shuilvbaobiaoshow").hide();
+            }else if(ribaobiao==10){
+                $("#buleibaobiaoshow").hide();
+                $("#danpingbaobiaoshow").hide();
+                $("#shiduanbaobiaoshow").hide();
+                $("#jiaoyibaobiaoshow").hide();
+                $("#yingyeyuanquxiaobaobiaoshow").hide();
+                $("#yingyeyuantuihuobaobiaoshow").hide();
+                $("#yingyeyuangengzhengbaobiaoshow").hide();
+                $("#shuilvbaobiaoshow").show();
+            }
+        }else if(baobiaozhonglei==2){//周期报表
+            var zhouqibaobiao=document.getElementById("zhouqibaobiao").value;
+            if(zhouqibaobiao==1){//周期报表-部类报表
+//                alert("11");
+                $("#buleibaobiaoshow").show();
+                $("#danpingbaobiaoshow").hide();
+                $("#shiduanbaobiaoshow").hide();
+                $("#jiaoyibaobiaoshow").hide();
+                $("#yingyeyuanquxiaobaobiaoshow").hide();
+                $("#yingyeyuantuihuobaobiaoshow").hide();
+                $("#yingyeyuangengzhengbaobiaoshow").hide();
+                $("#shuilvbaobiaoshow").hide();
+            }else if(zhouqibaobiao==2){
+                $("#buleibaobiaoshow").hide();
+                $("#danpingbaobiaoshow").show();
+                $("#shiduanbaobiaoshow").hide();
+                $("#jiaoyibaobiaoshow").hide();
+                $("#yingyeyuanquxiaobaobiaoshow").hide();
+                $("#yingyeyuantuihuobaobiaoshow").hide();
+                $("#yingyeyuangengzhengbaobiaoshow").hide();
+                $("#shuilvbaobiaoshow").hide();
+            }else if(zhouqibaobiao==3){
+                $("#buleibaobiaoshow").hide();
+                $("#danpingbaobiaoshow").hide();
+                $("#shiduanbaobiaoshow").show();
+                $("#jiaoyibaobiaoshow").hide();
+                $("#yingyeyuanquxiaobaobiaoshow").hide();
+                $("#yingyeyuantuihuobaobiaoshow").hide();
+                $("#yingyeyuangengzhengbaobiaoshow").hide();
+                $("#shuilvbaobiaoshow").hide();
+            }else if(zhouqibaobiao==4){
+                $("#buleibaobiaoshow").hide();
+                $("#danpingbaobiaoshow").hide();
+                $("#shiduanbaobiaoshow").hide();
+                $("#jiaoyibaobiaoshow").show();
+                $("#yingyeyuanquxiaobaobiaoshow").hide();
+                $("#yingyeyuantuihuobaobiaoshow").hide();
+                $("#yingyeyuangengzhengbaobiaoshow").hide();
+                $("#shuilvbaobiaoshow").hide();
+            }else if(zhouqibaobiao==5){
+                $("#buleibaobiaoshow").hide();
+                $("#danpingbaobiaoshow").hide();
+                $("#shiduanbaobiaoshow").hide();
+                $("#jiaoyibaobiaoshow").hide();
+                $("#yingyeyuanquxiaobaobiaoshow").show();
+                $("#yingyeyuantuihuobaobiaoshow").hide();
+                $("#yingyeyuangengzhengbaobiaoshow").hide();
+                $("#shuilvbaobiaoshow").hide();
+            }else if(zhouqibaobiao==8){
+                $("#buleibaobiaoshow").hide();
+                $("#danpingbaobiaoshow").hide();
+                $("#shiduanbaobiaoshow").hide();
+                $("#jiaoyibaobiaoshow").hide();
+                $("#yingyeyuanquxiaobaobiaoshow").hide();
+                $("#yingyeyuantuihuobaobiaoshow").show();
+                $("#yingyeyuangengzhengbaobiaoshow").hide();
+                $("#shuilvbaobiaoshow").hide();
+            }else if(zhouqibaobiao==9){
+                $("#buleibaobiaoshow").hide();
+                $("#danpingbaobiaoshow").hide();
+                $("#shiduanbaobiaoshow").hide();
+                $("#jiaoyibaobiaoshow").hide();
+                $("#yingyeyuanquxiaobaobiaoshow").hide();
+                $("#yingyeyuantuihuobaobiaoshow").hide();
+                $("#yingyeyuangengzhengbaobiaoshow").show();
+                $("#shuilvbaobiaoshow").hide();
+            }else if(zhouqibaobiao==10){
+                $("#buleibaobiaoshow").hide();
+                $("#danpingbaobiaoshow").hide();
+                $("#shiduanbaobiaoshow").hide();
+                $("#jiaoyibaobiaoshow").hide();
+                $("#yingyeyuanquxiaobaobiaoshow").hide();
+                $("#yingyeyuantuihuobaobiaoshow").hide();
+                $("#yingyeyuangengzhengbaobiaoshow").hide();
+                $("#shuilvbaobiaoshow").show();
+            }
+        }else{//总报表
+            var zongbaobiao=document.getElementById("zongbaobiao").value;
+            if(zongbaobiao==1){//周期报表-部类报表
+//                alert("11");
+                $("#buleibaobiaoshow").show();
+                $("#danpingbaobiaoshow").hide();
+                $("#shiduanbaobiaoshow").hide();
+                $("#jiaoyibaobiaoshow").hide();
+                $("#yingyeyuanquxiaobaobiaoshow").hide();
+                $("#yingyeyuantuihuobaobiaoshow").hide();
+                $("#yingyeyuangengzhengbaobiaoshow").hide();
+                $("#shuilvbaobiaoshow").hide();
+            }else if(zongbaobiao==2){
+                $("#buleibaobiaoshow").hide();
+                $("#danpingbaobiaoshow").show();
+                $("#shiduanbaobiaoshow").hide();
+                $("#jiaoyibaobiaoshow").hide();
+                $("#yingyeyuanquxiaobaobiaoshow").hide();
+                $("#yingyeyuantuihuobaobiaoshow").hide();
+                $("#yingyeyuangengzhengbaobiaoshow").hide();
+                $("#shuilvbaobiaoshow").hide();
+            }else if(zongbaobiao==3){
+                $("#buleibaobiaoshow").hide();
+                $("#danpingbaobiaoshow").hide();
+                $("#shiduanbaobiaoshow").show();
+                $("#jiaoyibaobiaoshow").hide();
+                $("#yingyeyuanquxiaobaobiaoshow").hide();
+                $("#yingyeyuantuihuobaobiaoshow").hide();
+                $("#yingyeyuangengzhengbaobiaoshow").hide();
+                $("#shuilvbaobiaoshow").hide();
+            }else if(zongbaobiao==4){
+                $("#buleibaobiaoshow").hide();
+                $("#danpingbaobiaoshow").hide();
+                $("#shiduanbaobiaoshow").hide();
+                $("#jiaoyibaobiaoshow").show();
+                $("#yingyeyuanquxiaobaobiaoshow").hide();
+                $("#yingyeyuantuihuobaobiaoshow").hide();
+                $("#yingyeyuangengzhengbaobiaoshow").hide();
+                $("#shuilvbaobiaoshow").hide();
+            }else if(zongbaobiao==5){
+                $("#buleibaobiaoshow").hide();
+                $("#danpingbaobiaoshow").hide();
+                $("#shiduanbaobiaoshow").hide();
+                $("#jiaoyibaobiaoshow").hide();
+                $("#yingyeyuanquxiaobaobiaoshow").show();
+                $("#yingyeyuantuihuobaobiaoshow").hide();
+                $("#yingyeyuangengzhengbaobiaoshow").hide();
+                $("#shuilvbaobiaoshow").hide();
+            }else if(zongbaobiao==8){
+                $("#buleibaobiaoshow").hide();
+                $("#danpingbaobiaoshow").hide();
+                $("#shiduanbaobiaoshow").hide();
+                $("#jiaoyibaobiaoshow").hide();
+                $("#yingyeyuanquxiaobaobiaoshow").hide();
+                $("#yingyeyuantuihuobaobiaoshow").show();
+                $("#yingyeyuangengzhengbaobiaoshow").hide();
+                $("#shuilvbaobiaoshow").hide();
+            }else if(zongbaobiao==9){
+                $("#buleibaobiaoshow").hide();
+                $("#danpingbaobiaoshow").hide();
+                $("#shiduanbaobiaoshow").hide();
+                $("#jiaoyibaobiaoshow").hide();
+                $("#yingyeyuanquxiaobaobiaoshow").hide();
+                $("#yingyeyuantuihuobaobiaoshow").hide();
+                $("#yingyeyuangengzhengbaobiaoshow").show();
+                $("#shuilvbaobiaoshow").hide();
+            }else if(zongbaobiao==10){
+                $("#buleibaobiaoshow").hide();
+                $("#danpingbaobiaoshow").hide();
+                $("#shiduanbaobiaoshow").hide();
+                $("#jiaoyibaobiaoshow").hide();
+                $("#yingyeyuanquxiaobaobiaoshow").hide();
+                $("#yingyeyuantuihuobaobiaoshow").hide();
+                $("#yingyeyuangengzhengbaobiaoshow").hide();
+                $("#shuilvbaobiaoshow").show();
+            }
+        }
+    }
+}
+//        保存基础设置到数据库
+function baocunshezhi(){
+    if( network==1){//network==1表示联网状态，将数据保存到后台
+//        alert("111");
+        //保存发票抬头
+        savefapiaotaitou();
+        //保存收银员
+        savecashier();
+        //保存税率
+        saveshuilv();
+        //保存部类
+        savebulei();
+        //折扣加成及发票限额
+        savezhekou();
+        //保存外币
+        savewaibi();
+        //保存单品
+        savedanping();
+    }else{//未联网，保存本地，等待提交
+       alert("未联网，保存本地等待上传？");
+//        保存本地的操作
+        //通信信息
+        var duankou = document.getElementById("duankou").value;
+        var botelv = document.getElementById("botelv").value;
+        var shujuwei = document.getElementById("shujuwei").value;
+        var tingzhiwei = document.getElementById("tingzhiwei").value;
+        //发票抬头信息
+        var fapiaotaitou = document.getElementById("fapiaotaitou").value;
+        var shuihao = document.getElementById("shuihao").value;
+        var dizhi = document.getElementById("dizhi").value;
+        var dianhua = document.getElementById("dianhua").value;
+        var kaihuhang = document.getElementById("kahuhang").value;
+        var yinghangzhanghao = document.getElementById("yinghangzhanghao").value;
+        var qita = document.getElementById("qita").value;
+        var biaozhiwei = document.getElementById("biaozhiwei").value;
+        //收银员信息
+        var shouyinyuanbianhao = document.getElementById("shouyinyuanbianhao").value;
+        var shouyinyuanmingcheng = document.getElementById("shouyinyuanmingcheng").value;
+        var shouyinyuanmima = document.getElementById("shouyinyuanmima").value;
+        var shouyinyuanbiaozhiwei = document.getElementById("shouyinyuanbiaozhiwei").value;
+        //税率信息
+        var shuizhongbianhao = document.getElementById("shuizhongbianhao").value;
+        var shuilvzhi = document.getElementById("shuilvzhi").value;
+        var shuilvmingzi = document.getElementById("shuilvmingzi").value;
+        var shuilvxiane = document.getElementById("shuilvxiane").value;
+        var shuilvbiaozhiwei = document.getElementById("shuilvbiaozhiwei").value;
+        //部类信息
+        var buleibianhao = document.getElementById("buleibianhao").value;
+        var buleimingcheng = document.getElementById("buleimingcheng").value;
+        var buleijiage = document.getElementById("buleijiage").value;
+        var shuizhongsuoyin = document.getElementById("shuizhongsuoyin").value;
+        var buleibiaozhiwei = document.getElementById("buleibiaozhiwei").value;
+        //折扣信息
+        var zhekoukoujia = document.getElementById("zhekoukoujia").value;
+        var zhikoujian = document.getElementById("zhikoujian").value;
+        var fapiaoxiane = document.getElementById("fapiaoxiane").value;
+        //外币信息
+        var waibixuhao = document.getElementById("waibixuhao").value;
+        var waibimingcheng = document.getElementById("waibimingcheng").value;
+        var waibibiaozhifu = document.getElementById("waibibiaozhifu").value;
+        var fuhaofangxiang = document.getElementById("fuhaofangxiang").value;
+        var huilv = document.getElementById("huilv").value;
+        var asciima = document.getElementById("asciima").value;
+        var xiaoshudian = document.getElementById("xiaoshudian").value;
+        var waibibiaozhiwei = document.getElementById("waibibiaozhiwei").value;
+        //单品信息
+        var plubianhao = document.getElementById("plubianhao").value;
+        var plubarcode = document.getElementById("plubarcode").value;
+        var plumingcheng = document.getElementById("plumingcheng").value;
+        var pludanjia = document.getElementById("pludanjia").value;
+        var plubulei = document.getElementById("plubulei").value;
+        var pluzibulei = document.getElementById("pluzibulei").value;
+        var plukucunzongliang = document.getElementById("plukucunzongliang").value;
+        var kucunkongzhibiaozhi = document.getElementById("kucunkongzhibiaozhi").value;
+        var danpingbiaozhiwei = document.getElementById("danpingbiaozhiwei").value;
+
+        var obj={
+            "duankou":duankou,
+            "botelv":botelv,
+            "shujuwei":shujuwei,
+            "tingzhiwei":tingzhiwei,
+            "fapiaotaitou":fapiaotaitou,
+            "shuihao":shuihao,
+            "dizhi":dizhi,
+            "dianhua":dianhua,
+            "kaihuhang":kaihuhang,
+            "yinghangzhanghao":yinghangzhanghao,
+            "qita":qita,
+            "biaozhiwei":biaozhiwei,
+            "shouyinyuanbianhao":shouyinyuanbianhao,
+            "shouyinyuanmingcheng":shouyinyuanmingcheng,
+            "shouyinyuanmima":shouyinyuanmima,
+            "shouyinyuanbiaozhiwei":shouyinyuanbiaozhiwei,
+            "shuizhongbianhao":shuizhongbianhao,
+            "shuilvzhi":shuilvzhi,
+            "shuilvmingzi":shuilvmingzi ,
+            "shuilvxiane":shuilvxiane,
+            "shuilvbiaozhiwei":shuilvbiaozhiwei,
+            "buleibianhao":buleibianhao,
+            "buleimingcheng":buleimingcheng ,
+            "buleijiage":buleijiage,
+            "shuizhongsuoyin":shuizhongsuoyin,
+            "buleibiaozhiwei":buleibiaozhiwei,
+            "zhekoukoujia":zhekoukoujia,
+            "zhikoujian":zhikoujian,
+            "fapiaoxiane":fapiaoxiane,
+            "waibixuhao":waibixuhao,
+            "waibimingcheng":waibimingcheng,
+            "waibibiaozhifu":waibibiaozhifu,
+            "fuhaofangxiang":fuhaofangxiang,
+            "huilv":huilv,
+            "asciima":asciima,
+            "xiaoshudian":xiaoshudian,
+            "waibibiaozhiwei":waibibiaozhiwei,
+            "plubianhao":plubianhao,
+            "plubarcode":plubarcode,
+            "plumingcheng":plumingcheng,
+            "pludanjia":pludanjia,
+            "plubulei":plubulei,
+            "pluzibulei":pluzibulei ,
+            "plukucunzongliang":plukucunzongliang,
+            "kucunkongzhibiaozhi":kucunkongzhibiaozhi ,
+            "danpingbiaozhiwei":danpingbiaozhiwei
+        };
+        localStorage.setItem("bendishuju",JSON.stringify(obj));
+        alert("本地存储成功")
+    }
+
+}
+//保存单品
+function savedanping(){
+//    alert("注册用户");
+    //if (confirm("注销后的零售商不能享受会员待遇,确认要删除？")) {
+    // window.event.returnValue = false;
+    if (window.ActiveXObject) {
+        xmlHttpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    else if (window.XMLHttpRequest) //除IE外的其他浏览器实现
+    {
+        xmlHttpRequest = new XMLHttpRequest();
+    }
+    var plubianhao = document.getElementById("plubianhao").value;
+    var plubarcode = document.getElementById("plubarcode").value;
+    var plumingcheng = document.getElementById("plumingcheng").value;
+    var pludanjia = document.getElementById("pludanjia").value;
+    var plubulei = document.getElementById("plubulei").value;
+    var pluzibulei = document.getElementById("pluzibulei").value;
+    var plukucunzongliang = document.getElementById("plukucunzongliang").value;
+    var kucunkongzhibiaozhi = document.getElementById("kucunkongzhibiaozhi").value;
+    var danpingbiaozhiwei = document.getElementById("danpingbiaozhiwei").value;
+//    alert(biaozhiwei);
+    if (null != xmlHttpRequest) {
+        xmlHttpRequest.open("POST", "http://127.0.0.1:8088/MyProject/savedanping.action", true);//TRUE为异步传输。。。默认情况下是TRUE
+
+        xmlHttpRequest.onreadystatechange = savedanpingback;//回调函数
+        //真正向服务器端发送数据，以get提交参数这里必须设置为null。因为post是在请求体里附加参数
+        xmlHttpRequest.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xmlHttpRequest.send("plubianhao=" + plubianhao+"&plubarcode="+plubarcode+"&plumingcheng="+plumingcheng+
+                "&pludanjia="+pludanjia+"&plubulei="+plubulei+"&pluzibulei="+pluzibulei+"&plukucunzongliang="+plukucunzongliang+"&kucunkongzhibiaozhi="+kucunkongzhibiaozhi+"&danpingbiaozhiwei="+danpingbiaozhiwei);//向服务器发送登录的ID,用户手动输入会员编号，根据会员编号注销会员信息
+    }
+}
+function savedanpingback() {
+    if(xmlHttpRequest.readyState == 4 && xmlHttpRequest.status == 200){
+        var result = xmlHttpRequest.responseText;
+        if(result == "yes"){
+            alert("成功上传服务器！");
+        }else if(result == "no"){
+            alert("单品信息保存失败！");
+        }else {
+            alert("单品信息已存在！");
+        }
+    }
+}
+//保存外币
+function savewaibi(){
+//    alert("注册用户");
+    //if (confirm("注销后的零售商不能享受会员待遇,确认要删除？")) {
+    // window.event.returnValue = false;
+    if (window.ActiveXObject) {
+        xmlHttpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    else if (window.XMLHttpRequest) //除IE外的其他浏览器实现
+    {
+        xmlHttpRequest = new XMLHttpRequest();
+    }
+    var waibixuhao = document.getElementById("waibixuhao").value;
+    var waibimingcheng = document.getElementById("waibimingcheng").value;
+    var waibibiaozhifu = document.getElementById("waibibiaozhifu").value;
+    var fuhaofangxiang = document.getElementById("fuhaofangxiang").value;
+    var huilv = document.getElementById("huilv").value;
+    var asciima = document.getElementById("asciima").value;
+    var xiaoshudian = document.getElementById("xiaoshudian").value;
+    var waibibiaozhiwei = document.getElementById("waibibiaozhiwei").value;
+//    alert(biaozhiwei);
+    if (null != xmlHttpRequest) {
+        xmlHttpRequest.open("POST", "http://127.0.0.1:8088/MyProject/savewaibi.action", true);//TRUE为异步传输。。。默认情况下是TRUE
+
+        xmlHttpRequest.onreadystatechange = savewaibiback;//回调函数
+        //真正向服务器端发送数据，以get提交参数这里必须设置为null。因为post是在请求体里附加参数
+        xmlHttpRequest.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xmlHttpRequest.send("waibixuhao=" + waibixuhao+"&waibimingcheng="+waibimingcheng+"&waibibiaozhifu="+waibibiaozhifu+"&fuhaofangxiang="+fuhaofangxiang+"&huilv="+huilv+"&asciima="+asciima+"&xiaoshudian="+xiaoshudian+"&waibibiaozhiwei="+waibibiaozhiwei);//向服务器发送登录的ID,用户手动输入会员编号，根据会员编号注销会员信息
+    }
+}
+function savewaibiback() {
+    if(xmlHttpRequest.readyState == 4 && xmlHttpRequest.status == 200){
+        var result = xmlHttpRequest.responseText;
+        if(result == "yes"){
+//            alert("外币信息保存成功！");
+        }else if(result == "no"){
+            alert("外币信息保存失败！");
+        }else {
+            alert("外币信息已存在！");
+        }
+    }
+}
+//折扣加成及发票限额
+function savezhekou(){
+    if (window.ActiveXObject) {
+        xmlHttpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    else if (window.XMLHttpRequest) //除IE外的其他浏览器实现
+    {
+        xmlHttpRequest = new XMLHttpRequest();
+    }
+    var zhekoukoujia = document.getElementById("zhekoukoujia").value;
+    var zhikoujian = document.getElementById("zhikoujian").value;
+    var fapiaoxiane = document.getElementById("fapiaoxiane").value;
+    if (null != xmlHttpRequest) {
+        xmlHttpRequest.open("POST", "http://127.0.0.1:8088/MyProject/savezhekou.action", true);//TRUE为异步传输。。。默认情况下是TRUE
+
+        xmlHttpRequest.onreadystatechange = savezhekouback;//回调函数
+        //真正向服务器端发送数据，以get提交参数这里必须设置为null。因为post是在请求体里附加参数
+        xmlHttpRequest.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xmlHttpRequest.send("zhekoukoujia=" + zhekoukoujia+"&zhikoujian="+zhikoujian+"&fapiaoxiane="+fapiaoxiane);//向服务器发送登录的ID,用户手动输入会员编号，根据会员编号注销会员信息
+    }
+}
+function savezhekouback() {
+    if(xmlHttpRequest.readyState == 4 && xmlHttpRequest.status == 200){
+        var result = xmlHttpRequest.responseText;
+        if(result == "yes"){
+//            alert("折扣信息保存成功！");
+        }else if(result == "no"){
+            alert("折扣信息保存失败！");
+        }else {
+            alert("折扣信息已存在！");
+        }
+    }
+}
+
+//保存部类
+function savebulei(){
+    if (window.ActiveXObject) {
+        xmlHttpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    else if (window.XMLHttpRequest) //除IE外的其他浏览器实现
+    {
+        xmlHttpRequest = new XMLHttpRequest();
+    }
+    var buleibianhao = document.getElementById("buleibianhao").value;
+    var buleimingcheng = document.getElementById("buleimingcheng").value;
+    var buleijiage = document.getElementById("buleijiage").value;
+    var shuizhongsuoyin = document.getElementById("shuizhongsuoyin").value;
+    var buleibiaozhiwei = document.getElementById("buleibiaozhiwei").value;
+    if (null != xmlHttpRequest) {
+        xmlHttpRequest.open("POST", "http://127.0.0.1:8088/MyProject/savebulei.action", true);//TRUE为异步传输。。。默认情况下是TRUE
+
+        xmlHttpRequest.onreadystatechange = savebuleiback;//回调函数
+        //真正向服务器端发送数据，以get提交参数这里必须设置为null。因为post是在请求体里附加参数
+        xmlHttpRequest.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xmlHttpRequest.send("buleibianhao=" + buleibianhao+"&buleimingcheng="+buleimingcheng+"&buleijiage="+buleijiage+"&shuizhongsuoyin="+shuizhongsuoyin+"&buleibiaozhiwei="+buleibiaozhiwei);//向服务器发送登录的ID,用户手动输入会员编号，根据会员编号注销会员信息
+    }
+}
+function savebuleiback() {
+    if(xmlHttpRequest.readyState == 4 && xmlHttpRequest.status == 200){
+        var result = xmlHttpRequest.responseText;
+        if(result == "yes"){
+//            alert("部类信息保存成功！");
+        }else if(result == "no"){
+            alert("部类信息保存失败！");
+        }else {
+            alert("部类信息已存在！");
+        }
+    }
+}
+
+//保存税率
+function saveshuilv(){
+    if (window.ActiveXObject) {
+        xmlHttpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    else if (window.XMLHttpRequest) //除IE外的其他浏览器实现
+    {
+        xmlHttpRequest = new XMLHttpRequest();
+    }
+    var shuizhongbianhao = document.getElementById("shuizhongbianhao").value;
+    var shuilvzhi = document.getElementById("shuilvzhi").value;
+    var shuilvmingzi = document.getElementById("shuilvmingzi").value;
+    var shuilvxiane = document.getElementById("shuilvxiane").value;
+    var shuilvbiaozhiwei = document.getElementById("shuilvbiaozhiwei").value;
+    if (null != xmlHttpRequest) {
+        xmlHttpRequest.open("POST", "http://127.0.0.1:8088/MyProject/saveshuilv.action", true);//TRUE为异步传输。。。默认情况下是TRUE
+
+        xmlHttpRequest.onreadystatechange = saveshuilvback;//回调函数
+        //真正向服务器端发送数据，以get提交参数这里必须设置为null。因为post是在请求体里附加参数
+        xmlHttpRequest.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xmlHttpRequest.send("shuizhongbianhao=" + shuizhongbianhao+"&shuilvzhi="+shuilvzhi+"&shuilvmingzi="+shuilvmingzi+"&shuilvxiane="+shuilvxiane+"&shuilvbiaozhiwei="+shuilvbiaozhiwei);//向服务器发送登录的ID,用户手动输入会员编号，根据会员编号注销会员信息
+    }
+}
+function saveshuilvback() {
+    if(xmlHttpRequest.readyState == 4 && xmlHttpRequest.status == 200){
+        var result = xmlHttpRequest.responseText;
+        if(result == "yes"){
+//            alert("税率信息保存成功！");
+        }else if(result == "no"){
+            alert("税率信息保存失败！");
+        }else {
+            alert("税率信息已存在！");
+        }
+    }
+}
+//保存收银员
+function savecashier(){
+    if (window.ActiveXObject) {
+        xmlHttpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    else if (window.XMLHttpRequest) //除IE外的其他浏览器实现
+    {
+        xmlHttpRequest = new XMLHttpRequest();
+    }
+    var shouyinyuanbianhao = document.getElementById("shouyinyuanbianhao").value;
+    var shouyinyuanmingcheng = document.getElementById("shouyinyuanmingcheng").value;
+    var shouyinyuanmima = document.getElementById("shouyinyuanmima").value;
+    var shouyinyuanbiaozhiwei = document.getElementById("shouyinyuanbiaozhiwei").value;
+    if (null != xmlHttpRequest) {
+        xmlHttpRequest.open("POST", "http://127.0.0.1:8088/MyProject/savecashier.action", true);//TRUE为异步传输。。。默认情况下是TRUE
+
+        xmlHttpRequest.onreadystatechange = savecashierback;//回调函数
+        //真正向服务器端发送数据，以get提交参数这里必须设置为null。因为post是在请求体里附加参数
+        xmlHttpRequest.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xmlHttpRequest.send("shouyinyuanbianhao=" + shouyinyuanbianhao+"&shouyinyuanmingcheng="+shouyinyuanmingcheng+"&shouyinyuanmima="+shouyinyuanmima+"&shouyinyuanbiaozhiwei="+shouyinyuanbiaozhiwei);//向服务器发送登录的ID,用户手动输入会员编号，根据会员编号注销会员信息
+    }
+}
+function savecashierback() {
+    if(xmlHttpRequest.readyState == 4 && xmlHttpRequest.status == 200){
+        var result = xmlHttpRequest.responseText;
+        if(result == "yes"){
+//            alert("收银员信息保存成功！");
+        }else if(result == "no"){
+            alert("收银员信息保存失败！");
+        }else {
+            alert("收银员信息已存在！");
+        }
+    }
+}
+//保存发票抬头
+function savefapiaotaitou(){
+//    alert("注册用户");
+    //if (confirm("注销后的零售商不能享受会员待遇,确认要删除？")) {
+    // window.event.returnValue = false;
+    if (window.ActiveXObject) {
+        xmlHttpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    else if (window.XMLHttpRequest) //除IE外的其他浏览器实现
+    {
+        xmlHttpRequest = new XMLHttpRequest();
+    }
+    var fapiaotaitou = document.getElementById("fapiaotaitou").value;
+    var shuihao = document.getElementById("shuihao").value;
+    var dizhi = document.getElementById("dizhi").value;
+    var dianhua = document.getElementById("dianhua").value;
+    var kaihuhang = document.getElementById("kahuhang").value;
+    var yinghangzhanghao = document.getElementById("yinghangzhanghao").value;
+    var qita = document.getElementById("qita").value;
+    var biaozhiwei = document.getElementById("biaozhiwei").value;
+//    alert(biaozhiwei);
+    if (null != xmlHttpRequest) {
+        xmlHttpRequest.open("POST", "http://127.0.0.1:8088/MyProject/savefapiaotaitou.action", true);//TRUE为异步传输。。。默认情况下是TRUE
+
+        xmlHttpRequest.onreadystatechange = savefapiaotaitouback;//回调函数
+        //真正向服务器端发送数据，以get提交参数这里必须设置为null。因为post是在请求体里附加参数
+        xmlHttpRequest.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xmlHttpRequest.send("fapiaotaitou=" + fapiaotaitou+"&shuihao="+shuihao+"&dizhi="+dizhi+"&dianhua="+dianhua+"&kaihuhang="+kaihuhang+"&yinghangzhanghao="+yinghangzhanghao+"&qita="+qita+"&biaozhiwei="+biaozhiwei);//向服务器发送登录的ID,用户手动输入会员编号，根据会员编号注销会员信息
+    }
+}
+function savefapiaotaitouback() {
+    if(xmlHttpRequest.readyState == 4 && xmlHttpRequest.status == 200){
+        var result = xmlHttpRequest.responseText;
+        if(result == "yes"){
+//            alert("发票抬头保存成功！");
+        }else if(result == "no"){
+            alert("发票抬头保存失败！");
+        }else {
+            alert("发票抬头已存在！");
+        }
+    }
+}
+//        报表的选择显示框
+function baobiaoleixin(){
+//    alert("1"); biaobiaoleicxing
+    var obj=document.getElementById("biaobiaoleicxing");
+    var index=obj.selectedIndex; //序号，取当前选中选项的序号
+//    alert(index);
+    var val = obj.options[index].text;
+//    alert(val);
+    if(val=="周期报表"){
+        $("#ribaobiaokuai").hide();
+        $("#zhouqibaobiaokuai").show();
+        $("#zongbaobiaokuai").hide();
+    }else if(val=="总报表"){
+        $("#ribaobiaokuai").hide();
+        $("#zhouqibaobiaokuai").hide();
+        $("#zongbaobiaokuai").show();
+    }else{
+        $("#ribaobiaokuai").show();
+        $("#zhouqibaobiaokuai").hide();
+        $("#zongbaobiaokuai").hide();
+    }
+}
+//        登陆操作
+function loginUser(){
+//    alert("注册用户");
+    //if (confirm("注销后的零售商不能享受会员待遇,确认要删除？")) {
+    // window.event.returnValue = false;
+    if (window.ActiveXObject) {
+        xmlHttpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    else if (window.XMLHttpRequest) //除IE外的其他浏览器实现
+    {
+        xmlHttpRequest = new XMLHttpRequest();
+    }
+    var username = document.getElementById("username").value;//用户登录的ID
+    var password = document.getElementById("password").value;
+    if (null != xmlHttpRequest) {
+//        127.0.0.1
+        xmlHttpRequest.open("POST", "http://127.0.0.1:8088/MyProject/login.action", true);//TRUE为异步传输。。。默认情况下是TRUE
+        xmlHttpRequest.onreadystatechange = loginback;//回调函数
+        //真正向服务器端发送数据，以get提交参数这里必须设置为null。因为post是在请求体里附加参数
+        xmlHttpRequest.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+//        alert(password);
+        xmlHttpRequest.send("username=" + username+"&password="+password);//向服务器发送登录的ID,用户手动输入会员编号，根据会员编号注销会员信息
+    }
+}
+function loginback() {
+    if(xmlHttpRequest.readyState == 4 && xmlHttpRequest.status == 200){
+        var result = xmlHttpRequest.responseText;
+        if(result == "yes"){
+            alert("登陆成功！");
+            login=1;
+//            注册成功后注册栏显示登录状态
+//                $("#loginuser").value="555";
+            loginsuccess2();
+        }else if(result == "no"){
+            alert("登陆失败！");
+        }else {
+//            alert("该用户已存在！");
+        }
+    }
+}
+
+//        登陆成功后的操作
+function loginsuccess2() {
+    $("#p1").hide();
+    $("#p2").hide();
+    $("#p3").hide();
+    var username = document.getElementById("username").value;
+    $("#loginuser").text("用户："+username+" ");
+    $("#p4").show();
+
+}
+function loginsuccess() {
+    $("#p1").hide();
+    $("#p2").hide();
+    $("#p3").hide();
+    var username = document.getElementById("registerusername").value;
+    $("#loginuser").text("用户："+username+" ");
+    $("#p4").show();
+
+}
+//        登陆请求
+var  result=null;//定义全局变量result
+function registerNewUser(){
+    alert("注册用户");
+    //if (confirm("注销后的零售商不能享受会员待遇,确认要删除？")) {
+    // window.event.returnValue = false;
+    if (window.ActiveXObject) {
+        xmlHttpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    else if (window.XMLHttpRequest) //除IE外的其他浏览器实现
+    {
+        xmlHttpRequest = new XMLHttpRequest();
+    }
+    var username = document.getElementById("registerusername").value;//用户登录的ID
+    var password = document.getElementById("registerpassword").value;
+    var email = document.getElementById("registeremail").value;
+    var adress = document.getElementById("registeradress").value;
+    var tel = document.getElementById("registertel").value;
+    if (null != xmlHttpRequest) {
+//        127.0.0.1
+        xmlHttpRequest.open("POST", "http://127.0.0.1:8088/MyProject/register.action", true);//TRUE为异步传输。。。默认情况下是TRUE
+
+        xmlHttpRequest.onreadystatechange = register;//回调函数
+        //真正向服务器端发送数据，以get提交参数这里必须设置为null。因为post是在请求体里附加参数
+        xmlHttpRequest.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xmlHttpRequest.send("username=" + username+"&password="+password+"&email="+email+"&adress="+adress+"&tel="+tel);//向服务器发送登录的ID,用户手动输入会员编号，根据会员编号注销会员信息
+    }
+}
+function register() {
+    if(xmlHttpRequest.readyState == 4 && xmlHttpRequest.status == 200){
+        var result = xmlHttpRequest.responseText;
+        if(result == "yes"){
+            alert("注册成功！");
+            login=1;
+//            注册成功后注册栏显示登录状态
+//                $("#loginuser").value="555";
+            loginsuccess();
+        }else if(result == "no"){
+            alert("注册失败！");
+        }else {
+            alert("该用户已存在！");
+        }
+    }
+}
+
+
+//         设置login全局变量初始值为0，表示未登录。登陆成功则为1
+//         当login为0时不能进行除登陆以外的操作
+        var login=0;
+//         设置netwok全局变量初始值为0，表示未联网。联网则为1
+//         当network为0时，进入本地操作
+        var network=0;
+//        判断是否登陆，没登录情况下提示登录
+        $(document).click(function(e){
+            var ee=$(e.target).attr("id");
+            var username=document.getElementById("username").value;
+            var password=document.getElementById("password").value;
+            //login==0未登录
+            if (login==0&&network==1){
+                if(ee=="userlogin"){
+                    if(username!=""&password!=""){
+                        // 向服务器发送验证请求，验证登陆账号
+//                        alert("确认登录！")
+                        loginUser();
+//                        login=1;
+                    }else{
+                        alert("填写完整的用户名和密码！");
+                    }
+
+                }else if(ee!="username"&ee!="password"&ee!="register"&ee!="registerusername"&ee!="registerpassword"&ee!="registeremail"
+                        &ee!="registeradress"&ee!="registertel" &ee!="submituser"){
+                        alert("填写用户名和密码，确认登录！");
+                    }
+
+                }else{//login==1已经登录
+
+            }
+        });
+
+	 window.onload=function()//用window的onload事件，窗体加载完毕的时候询问是否登录服务器
+	       {
+	        //利用对话框返回的值 （true 或者 false）
+	        if (confirm("是否需要登录服务器？")) {
+// 	           <!--  alert("点击了确定");  -->
+                network=1;
+//                $("#submitbendi").show();
+	        }
+	        else {
+	            alert("进入本地操作");
+                $("#bendichakan").hide();
+	        }
+	       }
+	</script>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            font-family: 宋体;
+            font-size: 16px;
+            min-height: 800px;
+        }
+
+        .title {
+            width: 100%;
+            background-color: #4682B4;
+            border-bottom: #ffffff 2px solid;
+        }
+
+        .title .title_context {
+            line-height: 70px;
+            font-size: 23px;
+            color: white;
+            margin-left: 5%;
+            font-weight: 900;
+            font-family: 幼圆;
+        }
+        .title .title_context a{
+            color: #ffffff;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .title .title_context a:link, a:visited {
+            color: #ffffff;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .title .title_context a:hover, a:active {
+            color: #ffffff;
+            background-color: #4682B4;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /*登录处*/
+        .login a:hover, a:active {
+            /*color: #000000;*/
+            background-color: #4682B4;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .login {
+            margin-top: 15px;
+            float: right;
+            color: white;
+            font-size: 15px;
+        }
+
+        .login div {
+            margin-top: 10px;
+        }
+
+        h3 {
+            color: blue;
+        }
+
+        .center {
+            width: 100%;
+            height: 100%;
+            min-height: inherit;
+            background-color: #F5F5F5;
+        }
+
+        .left {
+            float: left;
+            width: 15%;
+            min-height: inherit;
+            background-color: #4682B4;
+            border-right: #ffffff 2px solid;
+        }
+
+        /*左侧选择区--开始*/
+        .left .choice a {
+            width: 100%;
+            line-height: 50px;
+            margin-bottom: 5px;
+            text-align: center;
+            font-weight: 900;
+            font-size: 18px;
+            display: block;
+            border-bottom: #ffffff 1px solid;
+            color: #ffffff;
+        }
+
+        .left .choice a:link, a:visited {
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .left .choice a:hover, a:active {
+            color: #000000;
+            background-color: #ffffff;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .left .choice .on {
+            background-color: #F5F5F5;
+        }
+
+        .left .choice .on a {
+            color: black;
+        }
+
+        /*左侧选择区--结束*/
+        /*右侧--开始*/
+        .right {
+            float: right;
+            width: 84.7%;
+            min-height: inherit;
+            background-color: #F5F5F5;
+        }
+
+        .list_title {
+            /*font-family: 宋体;*/
+            font-size: 14px;
+            line-height: 22px;
+            font-weight: 600;
+        }
+
+        .part1 table, .part3 table {
+            margin-left: 1px;
+            margin-right: 1px;
+        }
+
+        .part1 table tr, .part3 table tr {
+            height: 40px;
+        }
+
+        .part1 table tr td, .part3 table tr td {
+            width: 130px;
+            text-align: right;
+        }
+
+        .part1 table input, .part3 table input {
+            width: 180px;
+            height: 20px;
+            font-size: 14px;
+        }
+
+        /*设置超链接整个单元格都可点击，块状*/
+        .right .part2 a, .right .part5 a, .right .part6 a {
+            display: block;
+        }
+
+        /*表格内input格式,送检仪器信息修改*/
+        .right .sjyqxxxg input {
+            width: 90%;
+            height: 22px;
+            font-size: 14px;
+        }
+
+        .part2 table, .part4 table, .part5 table, .part6 table {
+            text-align: center;
+            border: 1px solid #000000;
+            border-width: 1px 0px 0px 1px;
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+        .part2 table td, .part4 table td, .part5 table td, .part6 table td {
+            line-height: 22px;
+            font-size: 14px;
+            border: 1px solid #000000;
+            border-width: 0px 1px 1px 0px;
+        }
+
+        .part2 a:link, a:visited, .part4 a:link, a:visited, .part5 a:link, a:visited, .part6 a:link, a:visited {
+            color: #0000FF;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .part2 a:hover, a:active, .part4 a:hover, a:active, .part5 a:hover, a:active, .part6 a:hover, a:active {
+            color: red;
+            font-weight: 900;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /*控制采样数据的文本框*/
+        .part5 .sjyqxxxg .part5_4_1 {
+            width: 66%;
+            float: left;
+            margin-right: 2%;
+        }
+
+        /*控制采样数据的获取数据按钮*/
+        .part5 .sjyqxxxg .part5_4_2 {
+            width: 30%;
+            height: 27px;
+            /*margin-top: 1px;*/
+        }
+
+        /*控制采样数据的文本框cc3*/
+        .part5 .sjyqxxxg .part5_4_3 {
+            width: 59%;
+            float: left;
+            /*margin-right: 1%;*/
+        }
+
+        /*控制采样数据的获取数据按钮cc3*/
+        .part5 .sjyqxxxg .part5_4_4 {
+            width: 37%;
+            height: 27px;
+            /*margin-top: 1px;*/
+        }
+
+        /*控制采样数据的文本框cc4*/
+        .part5 .sjyqxxxg .part5_4_5 {
+            width: 54%;
+            float: left;
+            /*margin-right: 1%;*/
+        }
+
+        /*控制采样数据的获取数据按钮cc4*/
+        .part5 .sjyqxxxg .part5_4_6 {
+            width: 42%;
+            height: 27px;
+            /*margin-top: 1px;*/
+        }
+
+        /*part5部分四个菜单选择区--开始*/
+        .right .part5 .choice2 a {
+            width: 24.8%;
+            line-height: 30px;
+            margin-bottom: 5px;
+            margin-right: 2px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 16px;
+            display: block;
+            border-top: #ffffff 2px solid;
+            color: #ffffff;
+            float: left;
+            background-color: #4682B4;
+        }
+
+        .right .part5 .choice2 a:link, a:visited {
+            text-decoration: none;
+            cursor: pointer;
+
+        }
+
+        .right .part5 .choice2 a:hover, a:active {
+            color: #000000;
+            background-color: #ffffff;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .right .part5 .choice2 .on a {
+            color: black;
+            background-color: #F5F5F5;
+            border-top: #4682B4 2px solid;
+        }
+
+        /*part5部分四个菜单选择区---结束*/
+
+        /*证书生成部分的css--开始*/
+        .part6_2 table {
+            margin-left: 0;
+
+            border-width: 0;
+        }
+
+        .part6_2 table tr {
+            height: 30px;
+            border-width: 0;
+        }
+
+        .part6_2 table tr td {
+            width: 155px;
+            text-align: right;
+            border-width: 0;
+        }
+
+        .part6_2 table input {
+            width: 170px;
+            height: 20px;
+            font-size: 14px;
+        }
+
+        /*证书生成部分的css--结束*/
+        /*定义滚动条轨道 内阴影+圆角*/
+        .context ::-webkit-scrollbar-track {
+            box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.9);
+            -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.9);
+            border-radius: 9px;
+            background-color: #cccccc;
+        }
+
+        /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+        .context ::-webkit-scrollbar {
+            width: 9px;
+            background-color: #F5F5F5;
+        }
+
+        /*定义滑块 内阴影+圆角*/
+        .context ::-webkit-scrollbar-thumb {
+            border-radius: 9px;
+            box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+            -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+            background-color: #4682B4;
+            /*background-image: -webkit-linear-gradient(90deg,transparent, rgba(0, 0, 0, 0.4) 50%,transparent, transparent)*/
+        }
+
+    </style>
+</head>
+<body>
+<div class="title" style="position:fixed;">
+    <span class="title_context">
+        <!--<a href="index.html" title="点击可刷新整个页面">收款机上位机系统</a>-->
+        <a  title="点击可刷新整个页面">收款机上位机系统</a>
+    </span>
+    <div class="login">
+        <div id="p1">
+            用户名:<input id="username" type="text" style="width: 100px">
+            密码:<input id="password" type="password" style="width: 100px">
+            <input id="userlogin" type="submit" value="登录" style="width: 50px;font-size: 13px" />
+                       <input id="register" type="reset" value="注册" style="width: 50px;font-size: 13px"/>
+					    <td>
+					    <select id="leixing2" style="width: 100px ;height: 23px;font-size: 13px">
+					                                <option value="简体中文">简体中文</option>
+					                                <option value="English">English</option>
+					                            </select>
+                        </td>
+                    </div>
+        <div id="p2" style="width: 200px">
+            <span id="successlogin"></span>
+            <a id="loginout" href="" style="color: white">注销</a>
+        </div>
+        <div id="p3">
+            <div>用户名:<input id="registerusername" type="text" style="width: 100px ">
+                登陆密码:<input id="registerpassword" type="password" style="width: 100px">
+				登陆邮箱：<input id="registeremail" type="text" style="width: 100px ">
+				地址：<input id="registeradress" type="text" style="width: 100px ">
+				电话：<input id="registertel" type="text" style="width: 100px ">
+                <input id="submituser" type="submit" value="提交注册" style="width: 100px;font-size: 13px" onclick="registerNewUser()">
+                <a href="index.html" id="submitp32" style="color: white">返回</a></div>
+        </div>
+        <div id="p4" style=display:none>
+                <a id="loginuser"  value="111" style="width: 100px"> </a>
+            &nbsp;
+                <a href="index.html" id="submitp33" style="color: white">退出</a>
+            &nbsp;
+            <td>
+                <select id="leixing3" style="width: 100px ;height: 23px;font-size: 13px">
+                    <option value="简体中文">简体中文</option>
+                    <option value="English">English</option>
+                </select>
+            </td>
+        </div>
+    </div>
+</div>
+<div class="center">
+    <div class="left"  style="position:fixed; top:72px">
+        <div style="margin-top: 45px;border-bottom: #ffffff 1px solid;margin-bottom: 5px;"></div>
+        <div class="choice">
+            <div class=""><a id="songjian">通信设置</a></div>
+            <div class=""><a id="shezhijibenxinxi">基本信息设置</a></div>
+            <div class=""><a id="biaozhun">报表</a></div>
+        </div>
+        <div style="margin-top: 45px;margin-bottom: 1000px;"></div>
+    </div>
+    <div class="right">
+        <div class="context">
+            <div class="part1">
+			<br>
+			<br>
+			<br>
+			<br>
+			<br>
+                <h3>通讯参数：</h3>
+                <table>
+                    <tr>
+                        <td>端&nbsp;&nbsp;口：</td>
+                        <td><input name="duankou" id="duankou" type="text" value="COM1" />
+                            <!--<select id="duankou" style="width: 185px ;height: 23px;font-size: 16px">-->
+                            <!--<option value="COM1">COM1</option>-->
+                            <!--<option value="COM1">COM2</option>-->
+                        <!--</select>-->
+                        </td>
+                        <td>波特率：</td>
+                        <td><select id="botelv" style="width: 185px ;height: 23px;font-size: 16px">
+                            <option value="9600">9600</option>
+                        </select>
+                        </td>
+						</tr>
+						<tr>
+                        <td>数据位：</td>
+                         <td><select id="shujuwei" style="width: 185px ;height: 23px;font-size: 16px">
+                            <option value="8">8</option>
+                        </select>
+                        </td>
+						<td>停止位：</td>
+                         <td><select id="tingzhiwei" style="width: 185px ;height: 23px;font-size: 16px">
+                            <option value="NONE">NONE</option>
+                        </select>
+                        </td>
+                    </tr>
+					</table>
+					<hr>
+					<h3>IP地址以及端口号：</h3>
+					<table>
+                    <tr>
+                        <td>IP地址：</td>
+                        <td><input name="sjyqxxlr" id="ip" type="text" /></td>
+                        <td>端口号：</td>
+                        <td><input name="sjyqxxlr" id="duankouhao" type="text" /></td>
+              
+                    </tr>
+					</table>
+					<hr>
+					<table>
+					<h3>通讯方式：</h3>
+                    <tr>
+                        <td><input id="stop"  type="reset" value="停止" style="width: 60px;height:30px;font-size: 15px"/></td>
+                        <td><input id="start"  type="reset" value="运行" style="width:60px;height:30px;font-size: 15px"/></td>
+                    </tr>
+                        <tr>
+                        </tr>
+                        <tr>
+                            <td> <input type="radio" name="gender" id="x" value="X"></td><td>串口连接成功</td>
+                        <td><input type="radio" name="gender" id="y" value="y"></td><td>网络连接成功</td>
+                    </tr>
+					</table>
+                <hr>
+                <div style="text-align: center">
+                    <!--<input id="submit1" type="submit" style="width: 100px;height: 26px;font-size: 14px" value="确认">-->
+                </div>
+            </div>
+            <div class="part2">
+			<br>
+			<br>
+			<br>
+			<br>
+			<br>
+                <h3>机型选择：</h3>
+                <div >
+                    <div id="part2_1"
+                         style="width: 100%; overflow: scroll;overflow-x: hidden">
+                        <table>
+                            <tr>
+							<td>请选择机型：</td>
+                                 <td><select id="jiqileixing" style="width: 180px ;height: 23px;font-size: 16px">
+                            <option value="machineType">HGT-752</option>
+                            <!--<option value="">...</option>-->
+                        </select>
+                        </td>
+						<td>机器编号：</td>
+                                <td><input id="jiqibianhao" type="text" style="width: 180px "></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div style="width: 100%; overflow: scroll;overflow-x: hidden;">
+                        <!-- <table width="100%">
+                            <col width="5%">
+                            <col width="10%">
+                            <col width="13%">
+                            <col width="15%">
+                            <col width="13%">
+                            <col width="14%">
+                            <col width="16%">
+                            <col width="14%">
+                            <tbody id="list2">
+                            </tbody>
+                        </table> -->
+                        <div style="width: 100%;">
+                            <div>
+                                <hr>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br/>
+                </table>
+					<h3>发票抬头：</h3>
+					<table>
+                    <tr>
+                        <td>发票抬头：</td>
+                        <td><input name="sjyqxxlr" id="fapiaotaitou" type="text" /></td>
+                        <td>税号：</td>
+                        <td><input name="sjyqxxlr" id="shuihao" type="text"/></td>
+						</tr><tr>
+						<td>地址：</td>
+                        <td><input name="sjyqxxlr" id="dizhi" type="text"/></td>
+						<td>电话：</td>
+                        <td><input name="sjyqxxlr" id="dianhua" type="text"/></td>
+                        </tr><tr>
+						<td>开户行：</td>
+                        <td><input name="sjyqxxlr" id="kahuhang" type="text"/></td>
+						<td>银行账号：</td>
+                        <td><input name="sjyqxxlr" id="yinghangzhanghao" type="text"/></td>
+                    </tr><tr><td>其他信息：</td>
+                        <td><input name="sjyqxxlr" id="qita" type="text"/></td><td>标志位：</td>
+                        <td><select id="biaozhiwei" style="width: 180px ;height: 23px;font-size: 16px">
+                            <option value="1">1</option><option value="0">0</option>
+                        </select></td>
+                    </tr>
+					</table> <hr/>
+
+                <h3>收银员</h3>
+				<div  style="width: 100%; overflow: scroll;overflow-x: hidden">
+                <table>
+                    <tr><td>收银员编号：</td>
+                                 <td><input name="sjyqxxxg" id="shouyinyuanbianhao" type="text" value="1～50"/>
+                                     <!--<select id="shouyinyuanbianhao" style="width: 180px ;height: 23px;font-size: 16px">-->
+                            <!--<option value="1">1</option><option value="2">2</option>-->
+                            <!--<option value="3">3</option><option value="4">4</option>-->
+							<!--<option value="5">5</option><option value="6">6</option>-->
+                        <!--</select>-->
+                        </td><td>姓名：</td>
+                        <td><input name="sjyqxxxg" id="shouyinyuanmingcheng" type="text"/></td>
+						</tr><tr>
+                        <td>密码：</td>
+                        <td><input name="sjyqxxxg" id="shouyinyuanmima" type="password" value=""/></td>
+                    <td>标志位：</td>
+                    <td><select id="shouyinyuanbiaozhiwei" style="width: 180px ;height: 23px;font-size: 16px">
+                        <option value="1">1</option><option value="0">0</option>
+                    </select></td>
+                    </tr>
+                </table>
+				</div>
+				<hr/>
+
+                <h3>税率：</h3>
+				<div  style="width: 100%; overflow: scroll;overflow-x: hidden">
+                <table>
+                    <tr><td>税种编号：</td>
+                                 <td><select id="shuizhongbianhao" style="width: 180px ;height: 23px;font-size: 16px">
+                            <option value="1">1</option><option value="2">2</option>
+                            <option value="3">3</option><option value="4">4</option>
+							<option value="5">5</option><option value="6">6</option>
+							<option value="7">7</option><option value="8">8</option>
+                        </select>
+                        </td>
+                        <td>税率值：</td>
+                        <td><input name="shuilvzhi" id="shuilvzhi" type="text" value="0～99"/></td>
+						</tr><tr>
+                        <td>名字：</td>
+                        <td><input name="sjyqxxxg" id="shuilvmingzi" type="text"/></td>
+						<td>限额：</td>
+                        <td><input name="sjyqxxxg" id="shuilvxiane" type="tetx"/></td>
+                    </tr>
+					<tr>
+                        <td>标志位：</td>
+                        <td><select id="shuilvbiaozhiwei" style="width: 180px ;height: 23px;font-size: 16px">
+                            <option value="1">1</option><option value="0">0</option>
+                        </select></td>
+                    </tr>
+                </table>
+				</div>
+				<hr>
+				<h3>部类：</h3>
+				<div  style="width: 100%; overflow: scroll;overflow-x: hidden">
+                <table>
+                    <tr><td>部类编号：</td>
+                                 <td><input name="sjyqxxxg" id="buleibianhao" type="text" value="1～64"/>
+                                     <!--<select id="buleibianhao" style="width: 180px ;height: 23px;font-size: 16px">-->
+                            <!--<option value="1">1</option><option value="2">2</option>-->
+                            <!--<option value="3">3</option><option value="4">4</option>-->
+							<!--<option value="5">5</option><option value="6">6</option>-->
+							<!--<option value="7">7</option><option value="8">8</option>-->
+                        <!--</select>-->
+                        </td>
+                        <td>部类名称：</td>
+                        <td><input name="sjyqxxxg" id="buleimingcheng" type="text"/></td>
+						</tr><tr>
+                        <td>部类价格：</td>
+                        <td><input name="sjyqxxxg" id="buleijiage" type="text" value="0.01～999999.99"/></td>
+						<td>税种索引：</td>
+                        <td><select id="shuizhongsuoyin" style="width: 180px ;height: 23px;font-size: 16px">
+                            <option value="1">1</option><option value="2">2</option>
+                            <option value="3">3</option><option value="4">4</option>
+							<option value="5">5</option><option value="6">6</option>
+							<option value="7">7</option><option value="8">8</option>
+                        </select></td>
+						</tr><tr>
+						<td>标志位：</td>
+                        <td><select id="buleibiaozhiwei" style="width: 180px ;height: 23px;font-size: 16px">
+                            <option value="1">1</option><option value="0">0</option>
+                        </select></td></tr><!-- <tr>
+						<td>限额：</td>
+						                        <td><input name="sjyqxxxg" id="yqmc1_1" type="text"/></td>
+						<td>PLU_No：</td>
+						                        <td><input name="sjyqxxxg" id="yqmc1_1" type="tetx"/></td>
+						</tr><tr>
+						<td>Sub_Group：</td>
+						                        <td><input name="sjyqxxxg" id="yqmc1_1" type="text"/></td>
+						                    </tr> -->
+                </table>
+				</div>
+                <hr><h3>折扣加成及发票限额：</h3>
+				<div  style="width: 100%; overflow: scroll;overflow-x: hidden">
+                <table>
+                    <tr><td>折扣+：</td>
+                                 <td><input name="sjyqxxxg" id="zhekoukoujia" type="text" value="1～99"/>
+                                     <!--<select id="zhekoukoujia" style="width: 180px ;height: 23px;font-size: 16px">-->
+                            <!--<option value="1">1</option><option value="2">2</option>-->
+                            <!--<option value="3">3</option><option value="4">4</option>-->
+							<!--<option value="5">5</option><option value="6">6</option>-->
+							<!--<option value="7">7</option><option value="8">8</option>-->
+                        <!--</select>-->
+                        </td>
+                        <td>折扣-：</td>
+                        <td><input name="sjyqxxxg" id="zhikoujian" type="text" value="1～99"/>
+                            <!--<select id="zhikoujian" style="width: 180px ;height: 23px;font-size: 16px">-->
+                            <!--<option value="1">1</option><option value="2">2</option>-->
+                            <!--<option value="3">3</option><option value="4">4</option>-->
+							<!--<option value="5">5</option><option value="6">6</option>-->
+							<!--<option value="7">7</option><option value="8">8</option>-->
+                        <!--</select>-->
+                        </td>
+						</tr><tr>
+                        <td>发票限额：</td>
+                        <td><input name="sjyqxxxg" id="fapiaoxiane" type="text" value="0～999999.99"/></td>
+                    </tr>
+                </table>
+				</div>
+				<hr>
+				<h3>外币：</h3>
+				<div  style="width: 100%; overflow: scroll;overflow-x: hidden">
+                <table>
+                    <tr><td>外币序号：</td>
+                                 <td><select id="waibixuhao" style="width: 180px ;height: 23px;font-size: 16px">
+                            <option value="1">1</option><option value="2">2</option>
+                            <option value="3">3</option><option value="4">4</option>
+							<option value="5">5</option><option value="6">6</option>
+                        </select>
+                        </td>
+                        <td>外币名称：</td>
+                        <td><input name="sjyqxxxg" id="waibimingcheng" type="text"/></td>
+						</tr><tr>
+                        <td>外币标志符号：</td>
+                        <td><input name="sjyqxxxg" id="waibibiaozhifu" type="text"/></td>
+						<td>符号的方向0/1：</td>
+                        <td><select id="fuhaofangxiang" style="width: 180px ;height: 23px;font-size: 16px">
+                            <option value="1">1</option><option value="2">2</option>
+                        </select></td>
+                    </tr><tr>
+                        <td>汇率：</td>
+                        <td><input name="sjyqxxxg" id="huilv" type="text" value="0.0001～199999.9999"/></td>
+						<td>ASCII码值逗号：</td>
+                        <td><input name="sjyqxxxg" id="asciima" type="text"/></td>
+                    </tr><tr>
+                        <td>小数点后位数：</td>
+                        <td><input name="sjyqxxxg" id="xiaoshudian" type="text" value="2"/></td>
+						<td>标志位：</td>
+                        <td><select id="waibibiaozhiwei" style="width: 180px ;height: 23px;font-size: 16px">
+                            <option value="1">1</option><option value="0">0</option>
+                        </select></td>
+                    </tr>
+                </table>
+				</div>
+				<hr>
+				<h3>单品：</h3>
+				<div  style="width: 100%; overflow: scroll;overflow-x: hidden">
+                <table>
+                    <tr><td>PLU编号：</td>
+                                 <td><input name="sjyqxxxg" id="plubianhao" type="text" value="1～50000"/>
+                                     <!--<select id="plubianhao" style="width: 180px ;height: 23px;font-size: 16px">-->
+                            <!--<option value="1">1</option><option value="2">2</option>-->
+                            <!--<option value="3">3</option><option value="4">4</option>-->
+							<!--<option value="5">5</option><option value="6">6</option>-->
+                        <!--</select>-->
+                        </td>
+                        <td>PLU条码Barcode：</td>
+                        <td><input name="sjyqxxxg" id="plubarcode" type="text" value="0～9999999999999"/></td>
+						</tr><tr>
+                        <td>PLU名称：</td>
+                        <td><input name="sjyqxxxg" id="plumingcheng" type="text"/></td>
+						<td>PLU单价：</td>
+                        <td><input name="sjyqxxxg" id="pludanjia" type="text" value="0～999999.99"/></td>
+                    </tr><tr>
+                        <td>PLU部类：</td>
+                        <td><select id="plubulei" style="width: 180px ;height: 23px;font-size: 16px">
+                            <option value="1">1</option><option value="2">2</option>
+                            <option value="3">3</option><option value="4">4</option>
+							<option value="5">5</option><option value="6">6</option>
+							<option value="7">7</option><option value="8">8</option>
+                        </select></td>
+						<td>PLU子部类：</td>
+                        <td><input name="sjyqxxxg" id="pluzibulei" type="text" value="0～99"/></td>
+                    </tr><tr>
+                        <td>PLU库存总量：</td>
+                        <td><input name="sjyqxxxg" id="plukucunzongliang" type="text" value="0～9999.9999"/></td>
+						<td>库存控制标志：</td>
+                        <td><select id="kucunkongzhibiaozhi" style="width: 180px ;height: 23px;font-size: 16px">
+                            <option value="1">1</option><option value="0">0</option>
+                        </select></td>
+                    </tr><tr>
+						<td>标志位：</td>
+                        <td><select id="danpingbiaozhiwei" style="width: 180px ;height: 23px;font-size: 16px">
+                            <option value="1">1</option><option value="0">0</option>
+                        </select></td>
+                    </tr>
+                </table>
+				</div>
+				<hr>
+                <div style="text-align: center">
+                    <div id="bendichakan"> <input id="submitbendi" type="submit" style="width: 100px;height: 30px;width:200px; font-size: 18px" value="查看并上传本地设置" onclick="readshezhi()" ></div>
+                    <br>
+                    <br>
+                    <input id="submitshezhi" type="submit" style="width: 100px;height: 30px;font-size: 18px" value="提交" onclick="baocunshezhi()">
+                </div>
+                <br>
+                <br>
+                <br>
+                <br>
+            </div>
+
+            <div class="part3">
+			<br>
+			<br>
+			<br>
+			<br>
+			<br>
+                <h3>报表类别：</h3>
+                <select id="biaobiaoleicxing" style="width: 180px ;height: 23px;font-size: 16px" onchange="baobiaoleixin()">
+                <option value="1">日报表</option><option value="2">周期报表</option>
+                <option value="3">总报表</option>
+                </select>
+                <br>
+                <br>
+
+                <div id="ribaobiaokuai">
+                <select id="ribaobiao" style="width: 180px ;height: 23px;font-size: 16px">
+                    <option value="1">部类日报表</option><option value="2">单品日报表</option>
+                    <option value="3">时段报表</option><option value="4">交易日报表</option>
+                    <option value="5">营业员取消日报表</option>
+                    <!--<option value="6">营业员净销售</option><option value="7">营业员不计销售报表</option>-->
+                    <option value="8">营业员退货日报表</option>
+                    <option value="9">营业员更正日报表</option><option value="10">营业员税日报表</option>
+                </select>
+                </div>
+                <div id="zhouqibaobiaokuai" style=display:none>
+                <select id="zhouqibaobiao" style="width: 180px ;height: 23px;font-size: 16px" >
+                    <option value="1">部类周期报表</option><option value="2">单品周期报表</option>
+                    <option value="4">交易周期报表</option>
+                    <option value="5">营业员取消周期报表</option>
+                    <!--<option value="6">营业员净销售</option>-->
+                    <!--<option value="7">营业员不计销售报表</option>-->
+                    <option value="8">营业员退货周期报表</option>
+                    <option value="9">营业员更正周期报表</option><option value="10">营业员税周期报表</option>
+                </select>
+                    </div>
+                <div id="zongbaobiaokuai" style=display:none>
+                <select id="zongbaobiao" style="width: 180px ;height: 23px;font-size: 16px" style=display:none>
+                    <option value="1">部类总报表</option><option value="2">单品总报表</option>
+                    <option value="5">营业员取消总报表</option>
+                    <!--<option value="6">营业员净销售</option>-->
+                    <!--<option value="7">营业员不计销售报表</option>-->
+                    <option value="8">营业员退货总报表</option>
+                    <option value="9">营业员更正总报表</option><option value="10">营业员税总报表</option>
+                </select>
+                </div>
+                <br>
+                <br>
+                <div>
+                    <input id="submitbaobiao" type="submit" style="width: 100px;height: 26px;font-size: 14px" value="查看报表" onclick="searchBaobiao()">
+                </div>
+                <br>
+                <br>
+                <hr>
+                <!--buleibaobiaoshow-->
+                <!--danpingbaobiaoshow-->
+                <!--shiduanbaobiaoshow-->
+                <!--jiaoyibaobiaoshow-->
+                <!--yingyeyuanquxiaobaobiaoshow-->
+                <!--yingyeyuantuihuobaobiaoshow-->
+                <!--yingyeyuangengzhengbaobiaoshow-->
+                <!--shuilvbaobiaoshow-->
+                <!--部类报表-->
+                <div id="buleibaobiaoshow" style=display:none>
+                <table  border="1" >
+                    <thead>
+                    <tr>
+                        <th  colspan="7" >部类报表</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td style="text-align:center">部类编号</td>
+                        <td style="text-align:center">部类名称</td>
+                        <td style="text-align:center">总销量</td>
+                        <td style="text-align:center">总售价</td>
+                        <td style="text-align:center">接受日期</td>
+                    </tr>
+                    </tbody>
+                </table>
+                </div>
+                <!--单品报表-->
+                <div id="danpingbaobiaoshow" style=display:none>
+                    <table  border="1" >
+                        <thead>
+                        <tr>
+                            <th  colspan="7" >单品报表</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td style="text-align:center">单品编号</td>
+                            <td style="text-align:center">单品名称</td>
+                            <td style="text-align:center">总销量</td>
+                            <td style="text-align:center">总售价</td>
+                            <td style="text-align:center">接受日期</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!--时段报表-->
+                <div id="shiduanbaobiaoshow" style=display:none>
+                    <table  border="1" >
+                        <thead>
+                        <tr>
+                            <th  colspan="7" >时段报表</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td style="text-align:center">时段</td>
+                            <td style="text-align:center">总销售数量</td>
+                            <td style="text-align:center">总销量金额</td>
+                            <td style="text-align:center">接受日期</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!--交易报表-->
+                <div id="jiaoyibaobiaoshow" style=display:none>
+                    <table  border="1" >
+                        <thead>
+                        <tr>
+                            <th  colspan="7" >交易报表</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td style="text-align:center">报表名称</td>
+                            <td style="text-align:center">报表序号</td>
+                            <td style="text-align:center">总销售</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!--营业员取消报表-->
+                <div id="yingyeyuanquxiaobaobiaoshow" style=display:none>
+                    <table  border="1" >
+                        <thead>
+                        <tr>
+                            <th  colspan="7" >营业员取消报表</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td style="text-align:center">收银员编号</td>
+                            <td style="text-align:center">收银员名称</td>
+                            <td style="text-align:center">整单取消数量</td>
+                            <td style="text-align:center">整单取消价格</td>
+                            <td style="text-align:center">接受日期</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!--营业员退货报表-->
+                <div id="yingyeyuantuihuobaobiaoshow" style=display:none>
+                    <table  border="1" >
+                        <thead>
+                        <tr>
+                            <th  colspan="7" >营业员退货报表</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td style="text-align:center">收银员编号</td>
+                            <td style="text-align:center">收银员名称</td>
+                            <td style="text-align:center">退货商品数量</td>
+                            <td style="text-align:center">退货商品价格</td>
+                            <td style="text-align:center">接受日期</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!--营业员更正报表-->
+                <div id="yingyeyuangengzhengbaobiaoshow" style=display:none>
+                    <table  border="1" >
+                        <thead>
+                        <tr>
+                            <th  colspan="7" >营业员更正报表</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td style="text-align:center">收银员编号</td>
+                            <td style="text-align:center">收银员名称</td>
+                            <td style="text-align:center">更正商品数量</td>
+                            <td style="text-align:center">更正商品价格</td>
+                            <td style="text-align:center">接受日期</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!--税率报表-->
+                <div id="shuilvbaobiaoshow" style=display:none>
+                    <table  border="1" >
+                        <thead>
+                        <tr>
+                            <th  colspan="7" >税率报表</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td style="text-align:center">收银员编号</td>
+                            <td style="text-align:center">收银员名称</td>
+                            <td style="text-align:center">当天销售金额</td>
+                            <td style="text-align:center">当天税额</td>
+                            <td style="text-align:center">接受日期</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <table style="margin-left: 30%">
+                    <tr>
+                        
+                    </tr>
+                    <tr>
+                        
+                    </tr>
+                    <tr>
+                       
+					</tr>
+                    <tr>
+                        
+                    </tr>
+                    <tr>
+                        
+                    </tr>
+                    <tr>
+                        
+                    </tr>
+                    <tr>
+                        
+                    </tr>
+                </table>
+
+                <hr>
+
+            </div>
+             <!-- 后面的就不用看了 -->
+            <div class="part4">
+                <h3>标准器信息查询</h3>
+                <table  style="background-color: #ffffff; width: 100%">
+                    <col width="12%">
+                    <col width="15%">
+                    <col width="16%">
+                    <col width="9%">
+                    <col width="11%">
+                    <col width="15%">
+                    <col width="11%">
+                    <col width="11%">
+                    <tr>
+                        <td>类&nbsp;&nbsp;型</td>
+                        <td>型&nbsp;&nbsp;号</td>
+                        <td>名&nbsp;&nbsp;称</td>
+                        <td>仪器编号</td>
+                        <td>不确定度</td>
+                        <td>计量标准证书号</td>
+                        <td>有效期至</td>
+                        <td>操作</td>
+                    </tr>
+                    <tbody id="list4">
+                    </tbody>
+                </table>
+                <br/>
+                <hr/>
+                <h3>修改操作如下：（其中型号为主关键字不可修改，否则重新录入）</h3>
+                <table width="100%">
+                    <col width="12%">
+                    <col width="15%">
+                    <col width="16%">
+                    <col width="9%">
+                    <col width="11%">
+                    <col width="15%">
+                    <col width="11%">
+                    <col width="11%">
+                    <tr>
+                        <td>类&nbsp;&nbsp;型</td>
+                        <td>型&nbsp;&nbsp;号</td>
+                        <td>名&nbsp;&nbsp;称</td>
+                        <td>仪器编号</td>
+                        <td>不确定度</td>
+                        <td>计量标准证书号</td>
+                        <td>有效期至</td>
+                        <td>操作</td>
+                    </tr>
+                    <tbody id="list4_4">
+                    <tr>
+                        <td id='leixing3_1'></td>
+                        <td id='xinghao3_1'></td>
+                        <td><input id='mingchen3_1' name='bzqxxmodify' type='text'
+                                   style='width: 90%;height: 22px;font-size: 14px'/></td>
+                        <td><input id='yqbh3_1' name='bzqxxmodify' type='text'
+                                   style='width: 90%;height: 22px;font-size: 14px'/></td>
+                        <td><input id='bqdd3_1' name='bzqxxmodify' type='text'
+                                   style='width: 90%;height: 22px;font-size: 14px'/></td>
+                        <td><input id='jlbzzsh3_1' name='bzqxxmodify' type='text'
+                                   style='width: 90%;height: 22px;font-size: 14px'/></td>
+                        <td><input id='yxqz3_1' name='bzqxxmodify' type='date'
+                                   style='width: 90%;height: 22px;font-size: 14px'/></td>
+                        <td><input class="list_title" id='submit4' type='submit' style='width: 70%;height:24px'
+                                   value="确认提交"/></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="part5">
+                <h3>接地电阻表采样检测&nbsp;&nbsp;
+                    <input id="submit5_0_0" type="submit" style="height: 24px;font-size: 14px" value="隐藏选择区">
+                </h3>
+                <!--送检仪器采样区-->
+                <div id="part5_1" style="background-color: #ffffff">
+                    <div style="width: 100%;overflow: scroll;overflow-x: hidden;">
+                        <!--请选择待检测的送检仪器-->
+                        <table width="100%">
+                            <col width="5%">
+                            <col width="12%">
+                            <col width="14%">
+                            <col width="16%">
+                            <col width="13%">
+                            <col width="14%">
+                            <col width="16%">
+                            <col width="10%">
+                            <tr>
+                                <td colspan="8">请选择待检测的送检仪器</td>
+                            </tr>
+                            <tr>
+                                <td><a>序号</a></td>
+                                <td><a id="leixingorder5">类型</a></td>
+                                <td><a id="xinghaoorder5">型号</a></td>
+                                <td><a id="yqmcorder5">仪器名称</a></td>
+                                <td><a id="jdsjorder5">检定时间</a></td>
+                                <td><a id="sjdworder5">送检单位</a></td>
+                                <td><a id="zsbhorder5">证书编号</a></td>
+                                <td>操作</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div style="width: 100%;height: 350px; overflow: scroll;overflow-x: hidden;">
+                        <!--请选择待检测的送检仪器-->
+                        <table width="100%">
+                            <col width="5%">
+                            <col width="12%">
+                            <col width="14%">
+                            <col width="16%">
+                            <col width="13%">
+                            <col width="14%">
+                            <col width="16%">
+                            <col width="10%">
+                            <tbody id="list5_1">
+                            </tbody>
+                        </table>
+                        <br/>
+                        <br/>
+                        <div style="width: 100%;">
+                            <div>
+                                <hr style=" width: 40%; float: left ;border:1px solid #778899;">
+                            </div>
+                            <div style="width: 19%;font-family: 隶书;text-align: center;float: left;margin-left: auto;margin-right: auto">
+                                <span >已经到最底了</span>
+                            </div>
+                            <div>
+                                <hr style="width: 40%;float: right;border:1px solid #778899">
+                            </div>
+                        </div>
+                        <!--<hr style="width: 45%; float: left ;border:1px solid #778899">-->
+                        <!--<span style="width: 10%;font-family: 隶书">已经到最底了</span>-->
+                        <!--<hr style="width: 45%;float: right;border:1px solid #778899">-->
+                        <br/>
+                        <br/>
+                    </div>
+                </div>
+                <!--已选择的送检仪器-->
+                <table width="100%">
+                    <col width="15%">
+                    <col width="15%">
+                    <col width="15%">
+                    <col width="15%">
+                    <col width="15%">
+                    <col width="25%">
+                    <tr>
+                        <td colspan="6">已选择的送检仪器</td>
+                    </tr>
+                    <tr>
+                        <td>类&nbsp;&nbsp;型</td>
+                        <td>型&nbsp;&nbsp;号</td>
+                        <td>仪器名称</td>
+                        <td>检定时间</td>
+                        <td>送检单位</td>
+                        <td>证书编号</td>
+                    </tr>
+                    <tr>
+                        <td id="leixing5_1"></td>
+                        <td id="xinghao5_1"></td>
+                        <td id="yqmc5_1"></td>
+                        <td id="jdsj5_1"></td>
+                        <td id="sjdw5_1"></td>
+                        <td id="zsbh5_1"></td>
+                    </tr>
+                    <!--<tr>-->
+                    <!--<td colspan="6">-->
+                    <!--<div style="text-align: center">-->
+                    <!--<input id="submit5_0_1" type="submit" style="width: 100px;height: 25px;font-size: 14px"-->
+                    <!--disabled="disabled"-->
+                    <!--value="提交">-->
+                    <!--</div>-->
+                    <!--</td>-->
+                    <!--</tr>-->
+                </table>
+                <br/>
+                <hr/>
+                <!--<h3 id="part5_2"></h3>-->
+                <!--检测采样区-->
+                <div id="part5_4" style="display:none">
+                    <div>
+                        <input id="submit5_1_0" type="submit" style="height: 24px;font-size: 14px" value="检测可用端口">
+                        端口：
+                        <select id="submit5_1_1" style="width: 150px ;height: 24px;font-size: 14px">
+                        </select>
+                        <input id="submit5_1_2" type="submit" style="height: 24px;font-size: 14px" value="开启端口"
+                               disabled="disabled">
+                        <input id="submit5_1_2_0" type="submit" style="height: 24px;font-size: 14px" value="发送密码"
+                               disabled="disabled">
+                        <input id="submit5_1_3" type="submit" style="height: 24px;font-size: 14px" value="关闭端口"
+                               disabled="disabled">
+                        <span id="part5_3" style="color: blue"></span><!--显示端口是否开启 -->
+                        <span id="part5_2" style="color: blue"></span><!--显示密码是否发送成功-->
+                    </div>
+                    <br>
+                    <br>
+                    <!--选择模式AABBCCDD-->
+                    <div class="choice2">
+                        <div class=""><a>AA绝缘电阻菜单</a></div>
+                        <div class=""><a>BB电压菜单</a></div>
+                        <div class=""><a>CC接地电阻菜单</a></div>
+                        <div class=""><a>DD电流菜单</a></div>
+                    </div>
+                    <!--选择模式AABBCCDD对应上面的选择区-->
+                    <div class="context2" style="float: none">
+                        <!--AA绝缘电阻菜单-->
+                        <div>
+                            <!--全检量程区段-->
+                            <table width="48%" class="sjyqxxxg"
+                                   style="float: left ;margin-right: 3%;margin-bottom: 10px ">
+                                <col width="10%">
+                                <col width="52%">
+                                <col width="38%">
+                                <tr>
+                                    <td colspan="3">
+                                        <form>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Part1 全检量程区段&nbsp;&nbsp;&nbsp;
+                                            <label><input id="radio5_1" name="check5_1" style="width: 15px;height: 15px"
+                                                          type="radio" checked="checked" value="6"/>M&Omega;</label>
+                                            <label><input id="radio5_2" name="check5_1" style="width: 15px;height: 15px"
+                                                          type="radio" value="9"/>G&Omega;</label>
+                                            <label><input id="radio5_3" name="check5_1" style="width: 15px;height: 15px"
+                                                          type="radio" value="12"/>T&Omega;</label>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>序号</td>
+                                    <td>标准值RN</td>
+                                    <td>读数值RX</td>
+                                </tr>
+
+                                <tr>
+                                    <td>1</td>
+                                    <td>
+                                        <input name="qj" id="part5_4_1_1_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_1_1_1" type="submit" class="part5_4_2" value="获取数据">
+                                        <!--<input id="submit5_4_1_1_2" type="submit" class="part5_4_2" value="稳定值" style="display: none">-->
+                                    </td>
+                                    <td><input name="qj" id="part5_4_1_1_2" type="text"/></td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>
+                                        <input name="qj" id="part5_4_1_2_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_1_2_1" type="submit" class="part5_4_2" value="获取数据">
+                                    </td>
+                                    <td><input name="qj" id="part5_4_1_2_2" type="text"/></td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>
+                                        <input name="qj" id="part5_4_1_3_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_1_3_1" type="submit" class="part5_4_2" value="获取数据">
+                                    </td>
+                                    <td><input name="qj" id="part5_4_1_3_2" type="text"/></td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>
+                                        <input name="qj" id="part5_4_1_4_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_1_4_1" type="submit" class="part5_4_2" value="获取数据">
+                                    </td>
+                                    <td><input name="qj" id="part5_4_1_4_2" type="text"/></td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td>
+                                        <input name="qj" id="part5_4_1_5_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_1_5_1" type="submit" class="part5_4_2" value="获取数据">
+                                    </td>
+                                    <td><input name="qj" id="part5_4_1_5_2" type="text"/></td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td>
+                                        <input name="qj" id="part5_4_1_6_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_1_6_1" type="submit" class="part5_4_2" value="获取数据">
+                                    </td>
+                                    <td><input name="qj" id="part5_4_1_6_2" type="text"/></td>
+                                </tr>
+                                <tr>
+                                    <td>7</td>
+                                    <td>
+                                        <input name="qj" id="part5_4_1_7_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_1_7_1" type="submit" class="part5_4_2" value="获取数据">
+                                    </td>
+                                    <td><input name="qj" id="part5_4_1_7_2" type="text"/></td>
+                                </tr>
+                                <tr>
+                                    <td>8</td>
+                                    <td>
+                                        <input name="qj" id="part5_4_1_8_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_1_8_1" type="submit" class="part5_4_2" value="获取数据">
+                                    </td>
+                                    <td><input name="qj" id="part5_4_1_8_2" type="text"/></td>
+                                </tr>
+                                <tr>
+                                    <td>9</td>
+                                    <td>
+                                        <input name="qj" id="part5_4_1_9_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_1_9_1" type="submit" class="part5_4_2" value="获取数据">
+                                    </td>
+                                    <td><input name="qj" id="part5_4_1_9_2" type="text"/></td>
+                                </tr>
+                                <tr>
+                                    <td>10</td>
+                                    <td>
+                                        <input name="qj" id="part5_4_1_10_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_1_10_1" type="submit" class="part5_4_2" value="获取数据">
+                                    </td>
+                                    <td><input name="qj" id="part5_4_1_10_2" type="text"/></td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="3">
+                                        <div style="text-align: center">
+                                            <input id="submit5_1" type="submit"
+                                                   style="width: 100px;height: 25px;font-size: 14px"
+                                                   value="提交">
+                                            <input id="submit5_2" type="submit"
+                                                   style="width: 100px;height: 25px;font-size: 14px"
+                                                   value="清除">
+                                            <span id="part5_4_11_1" style="color: blue"></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            <!--非全检量程区段-->
+                            <table width="49%" class="sjyqxxxg" style="float: none">
+                                <col width="10%">
+                                <col width="7%">
+                                <col width="48%">
+                                <col width="35%">
+                                <tr>
+                                    <td colspan="4">Part2 非全检量程区段
+                                        <!--<form>-->
+                                        <!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Part2 非全检量程区段&nbsp;&nbsp;&nbsp;-->
+                                        <!--<label><input id="radio5_4" name="check5_2" style="width: 15px;height: 15px"-->
+                                        <!--type="radio" checked="checked" value="6"/>M&Omega;</label>-->
+                                        <!--<label><input id="radio5_5" name="check5_2" style="width: 15px;height: 15px"-->
+                                        <!--type="radio" value="9"/>G&Omega;</label>-->
+                                        <!--<label><input id="radio5_6" name="check5_2" style="width: 15px;height: 15px"-->
+                                        <!--type="radio" value="12"/>T&Omega;</label>-->
+                                        <!--</form>-->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="5">第一组</td>
+                                    <td>单位</td>
+                                    <td colspan="2">
+                                        <form>
+                                            <label><input id="radio5_4" name="check5_2" style="width: 15px;height: 15px"
+                                                          type="radio" checked="checked" value="6"/>M&Omega;</label>
+                                            <label><input id="radio5_5" name="check5_2" style="width: 15px;height: 15px"
+                                                          type="radio" value="9"/>G&Omega;</label>
+                                            <label><input id="radio5_6" name="check5_2" style="width: 15px;height: 15px"
+                                                          type="radio" value="12"/>T&Omega;</label>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>序号</td>
+                                    <td>标准值RN</td>
+                                    <td>读数值RX</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>
+                                        <input name="fq" id="part5_4_2_1_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_2_1_1" type="submit" class="part5_4_2" value="获取数据">
+                                    </td>
+                                    <td><input name="fq" id="part5_4_2_1_2" type="text"/></td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td><input name="fq" id="part5_4_2_2_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_2_2_1" type="submit" class="part5_4_2" value="获取数据">
+                                    </td>
+                                    <td><input name="fq" id="part5_4_2_2_2" type="text"/></td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td><input name="fq" id="part5_4_2_3_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_2_3_1" type="submit" class="part5_4_2" value="获取数据"></td>
+                                    <td><input name="fq" id="part5_4_2_3_2" type="text"/></td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="5">第二组</td>
+                                    <td>单位</td>
+                                    <td colspan="2">
+                                        <form>
+                                            <label><input id="radio5_4_2" name="check5_2_2"
+                                                          style="width: 15px;height: 15px"
+                                                          type="radio" checked="checked" value="6"/>M&Omega;</label>
+                                            <label><input id="radio5_5_2" name="check5_2_2"
+                                                          style="width: 15px;height: 15px"
+                                                          type="radio" value="9"/>G&Omega;</label>
+                                            <label><input id="radio5_6_2" name="check5_2_2"
+                                                          style="width: 15px;height: 15px"
+                                                          type="radio" value="12"/>T&Omega;</label>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>序号</td>
+                                    <td>标准值RN</td>
+                                    <td>读数值RX</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td><input name="fq" id="part5_4_2_4_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_2_4_1" type="submit" class="part5_4_2" value="获取数据"></td>
+                                    <td><input name="fq" id="part5_4_2_4_2" type="text"/></td>
+                                </tr>
+                                <tr>
+
+                                    <td>2</td>
+                                    <td><input name="fq" id="part5_4_2_5_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_2_5_1" type="submit" class="part5_4_2" value="获取数据"></td>
+                                    <td><input name="fq" id="part5_4_2_5_2" type="text"/></td>
+                                </tr>
+                                <tr>
+
+                                    <td>3</td>
+                                    <td><input name="fq" id="part5_4_2_6_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_2_6_1" type="submit" class="part5_4_2" value="获取数据">
+                                    </td>
+                                    <td><input name="fq" id="part5_4_2_6_2" type="text"/></td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="5">第三组</td>
+                                    <td>单位</td>
+                                    <td colspan="2">
+                                        <form>
+                                            <label><input id="radio5_4_3" name="check5_2_3"
+                                                          style="width: 15px;height: 15px"
+                                                          type="radio" checked="checked" value="6"/>M&Omega;</label>
+                                            <label><input id="radio5_5_3" name="check5_2_3"
+                                                          style="width: 15px;height: 15px"
+                                                          type="radio" value="9"/>G&Omega;</label>
+                                            <label><input id="radio5_6_3" name="check5_2_3"
+                                                          style="width: 15px;height: 15px"
+                                                          type="radio" value="12"/>T&Omega;</label>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>序号</td>
+                                    <td>标准值RN</td>
+                                    <td>读数值RX</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td><input name="fq" id="part5_4_2_7_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_2_7_1" type="submit" class="part5_4_2" value="获取数据"></td>
+                                    <td><input name="fq" id="part5_4_2_7_2" type="text"/></td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td><input name="fq" id="part5_4_2_8_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_2_8_1" type="submit" class="part5_4_2" value="获取数据"></td>
+                                    <td><input name="fq" id="part5_4_2_8_2" type="text"/></td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td><input name="fq" id="part5_4_2_9_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_2_9_1" type="submit" class="part5_4_2" value="获取数据">
+                                    </td>
+                                    <td><input name="fq" id="part5_4_2_9_2" type="text"/></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">
+                                        <div style="text-align: center">
+                                            <input id="submit5_3" type="submit"
+                                                   style="width: 100px;height: 25px;font-size: 14px"
+                                                   value="提交">
+                                            <input id="submit5_4" type="submit"
+                                                   style="width: 100px;height: 25px;font-size: 14px"
+                                                   value="清除">
+                                            <span id="part5_4_11_2" style="color: blue"></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br>
+                        </div>
+                        <!--BB电压菜单-->
+                        <div style="margin-top: 80px;">
+                            <div>
+                                <div style="width: 350px;text-align: right;float: left;line-height:26px">
+                                    <span>开路测量电压（V）：</span>
+                                </div>
+                                <input id="part5_4_3_1_1" type="text" class="part5_4_1"
+                                       style="width: 200px;height: 20px; "/>
+                                <input id="submit5_4_3_1_1" type="submit" class="part5_4_2" value="获取数据"
+                                       style="width: 80px;height: 26px;">
+                            </div>
+                            <div style="margin-top: 20px;">
+                                <div style="width: 350px;text-align: right;float: left;line-height: 26px">
+                                    <span>跌落（中值）电压（V）：</span>
+                                </div>
+                                <input id="part5_4_3_2_1" type="text" class="part5_4_1"
+                                       style="width: 200px;height: 20px;"/>
+                                <input id="submit5_4_3_2_1" type="submit" class="part5_4_2" value="获取数据"
+                                       style="width: 80px;height: 26px;">
+                            </div>
+                            <div style="margin-top: 20px">
+                                <input id="submit5_4_3_3" type="submit" class="part5_4_2" value="提交保存"
+                                       style="width: 80px;height: 25px;margin-left: 450px">
+                            </div>
+                        </div>
+                        <!--CC接地电阻菜单-->
+                        <div>
+                            <!--全检量程区段--><!--CC接地电阻菜单-->
+                            <table width="48%" class="sjyqxxxg"
+                                   style="float: left ;margin-right: 3%;margin-bottom: 10px ">
+                                <col width="10%">
+                                <col width="52%">
+                                <col width="38%">
+                                <tr>
+                                    <td colspan="3">
+                                        <form>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Part1 全检量程区段&nbsp;&nbsp;&nbsp;
+                                            <label><input id="radio5_7" name="check5_3" style="width: 15px;height: 15px"
+                                                          type="radio" value="1"/>m&Omega;</label>
+                                            <label><input id="radio5_8" name="check5_3" style="width: 15px;height: 15px"
+                                                          type="radio" value="2" checked="checked"/>&Omega;</label>
+                                            <label><input id="radio5_9" name="check5_3" style="width: 15px;height: 15px"
+                                                          type="radio" value="3"/>k&Omega;</label>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>序号</td>
+                                    <td>标准值RN</td>
+                                    <td>读数值RX</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>
+                                        <input name="qj1" id="part5_4_6_1_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_6_1_1" type="submit" class="part5_4_2" value="获取数据">
+                                        <!--<input id="submit5_4_6_1_2" type="submit" class="part5_4_2" value="稳定值" style="display: none">-->
+                                    </td>
+                                    <td><input name="qj1" id="part5_4_6_1_2" type="text"/></td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>
+                                        <input name="qj1" id="part5_4_6_2_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_6_2_1" type="submit" class="part5_4_2" value="获取数据">
+                                    </td>
+                                    <td><input name="qj1" id="part5_4_6_2_2" type="text"/></td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>
+                                        <input name="qj1" id="part5_4_6_3_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_6_3_1" type="submit" class="part5_4_2" value="获取数据">
+                                    </td>
+                                    <td><input name="qj1" id="part5_4_6_3_2" type="text"/></td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>
+                                        <input name="qj1" id="part5_4_6_4_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_6_4_1" type="submit" class="part5_4_2" value="获取数据">
+                                    </td>
+                                    <td><input name="qj1" id="part5_4_6_4_2" type="text"/></td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td>
+                                        <input name="qj1" id="part5_4_6_5_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_6_5_1" type="submit" class="part5_4_2" value="获取数据">
+                                    </td>
+                                    <td><input name="qj1" id="part5_4_6_5_2" type="text"/></td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td>
+                                        <input name="qj1" id="part5_4_6_6_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_6_6_1" type="submit" class="part5_4_2" value="获取数据">
+                                    </td>
+                                    <td><input name="qj1" id="part5_4_6_6_2" type="text"/></td>
+                                </tr>
+                                <tr>
+                                    <td>7</td>
+                                    <td>
+                                        <input name="qj1" id="part5_4_6_7_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_6_7_1" type="submit" class="part5_4_2" value="获取数据">
+                                    </td>
+                                    <td><input name="qj1" id="part5_4_6_7_2" type="text"/></td>
+                                </tr>
+                                <tr>
+                                    <td>8</td>
+                                    <td>
+                                        <input name="qj1" id="part5_4_6_8_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_6_8_1" type="submit" class="part5_4_2" value="获取数据">
+                                    </td>
+                                    <td><input name="qj1" id="part5_4_6_8_2" type="text"/></td>
+                                </tr>
+                                <tr>
+                                    <td>9</td>
+                                    <td>
+                                        <input name="qj1" id="part5_4_6_9_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_6_9_1" type="submit" class="part5_4_2" value="获取数据">
+                                    </td>
+                                    <td><input name="qj1" id="part5_4_6_9_2" type="text"/></td>
+                                </tr>
+                                <tr>
+                                    <td>10</td>
+                                    <td>
+                                        <input name="qj1" id="part5_4_6_10_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_6_10_1" type="submit" class="part5_4_2" value="获取数据">
+                                    </td>
+                                    <td><input name="qj1" id="part5_4_6_10_2" type="text"/></td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="3">
+                                        <div style="text-align: center">
+                                            <input id="submit5_10" type="submit"
+                                                   style="width: 100px;height: 25px;font-size: 14px"
+                                                   value="提交">
+                                            <input id="submit5_11" type="submit"
+                                                   style="width: 100px;height: 25px;font-size: 14px"
+                                                   value="清除">
+                                            <span id="part5_4_11_3" style="color: blue"></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            <!--非全检量程区段--><!--CC接地电阻菜单-->
+                            <table width="49%" class="sjyqxxxg" style="float: none">
+                                <col width="10%">
+                                <col width="7%">
+                                <col width="48%">
+                                <col width="35%">
+                                <tr>
+                                    <td colspan="4">Part2 非全检量程区段
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="5">第一组</td>
+                                    <td>单位</td>
+                                    <td colspan="2">
+                                        <form>
+                                            <label><input id="radio5_10" name="check5_4"
+                                                          style="width: 15px;height: 15px" type="radio"
+                                                          value="1"/>m&Omega;</label>
+                                            <label><input id="radio5_11" name="check5_4"
+                                                          style="width: 15px;height: 15px" type="radio" value="2"
+                                                          checked="checked"/>&Omega;</label>
+                                            <label><input id="radio5_12" name="check5_4"
+                                                          style="width: 15px;height: 15px" type="radio"
+                                                          value="3"/>K&Omega;</label>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>序号</td>
+                                    <td>标准值RN</td>
+                                    <td>读数值RX</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>
+                                        <input name="fq1" id="part5_4_7_1_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_7_1_1" type="submit" class="part5_4_2" value="获取数据">
+                                    </td>
+                                    <td><input name="fq1" id="part5_4_7_1_2" type="text"/></td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td><input name="fq1" id="part5_4_7_2_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_7_2_1" type="submit" class="part5_4_2" value="获取数据">
+                                    </td>
+                                    <td><input name="fq1" id="part5_4_7_2_2" type="text"/></td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td><input name="fq1" id="part5_4_7_3_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_7_3_1" type="submit" class="part5_4_2" value="获取数据"></td>
+                                    <td><input name="fq1" id="part5_4_7_3_2" type="text"/></td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="5">第二组</td>
+                                    <td>单位</td>
+                                    <td colspan="2">
+                                        <form>
+                                            <label><input id="radio5_10_2" name="check5_4_2"
+                                                          style="width: 15px;height: 15px" type="radio"
+                                                          value="1"/>m&Omega;</label>
+                                            <label><input id="radio5_11_2" name="check5_4_2"
+                                                          style="width: 15px;height: 15px" type="radio" value="2"
+                                                          checked="checked"/>&Omega;</label>
+                                            <label><input id="radio5_12_2" name="check5_4_2"
+                                                          style="width: 15px;height: 15px" type="radio"
+                                                          value="3"/>K&Omega;</label>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>序号</td>
+                                    <td>标准值RN</td>
+                                    <td>读数值RX</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td><input name="fq1" id="part5_4_7_4_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_7_4_1" type="submit" class="part5_4_2" value="获取数据"></td>
+                                    <td><input name="fq1" id="part5_4_7_4_2" type="text"/></td>
+                                </tr>
+                                <tr>
+
+                                    <td>2</td>
+                                    <td><input name="fq1" id="part5_4_7_5_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_7_5_1" type="submit" class="part5_4_2" value="获取数据"></td>
+                                    <td><input name="fq1" id="part5_4_7_5_2" type="text"/></td>
+                                </tr>
+                                <tr>
+
+                                    <td>3</td>
+                                    <td><input name="fq1" id="part5_4_7_6_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_7_6_1" type="submit" class="part5_4_2" value="获取数据">
+                                    </td>
+                                    <td><input name="fq1" id="part5_4_7_6_2" type="text"/></td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="5">第三组</td>
+                                    <td>单位</td>
+                                    <td colspan="2">
+                                        <form>
+                                            <label><input id="radio5_10_3" name="check5_4_3"
+                                                          style="width: 15px;height: 15px" type="radio"
+                                                          value="1"/>m&Omega;</label>
+                                            <label><input id="radio5_11_3" name="check5_4_3"
+                                                          style="width: 15px;height: 15px" type="radio" value="2"
+                                                          checked="checked"/>&Omega;</label>
+                                            <label><input id="radio5_12_3" name="check5_4_3"
+                                                          style="width: 15px;height: 15px" type="radio"
+                                                          value="3"/>K&Omega;</label>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>序号</td>
+                                    <td>标准值RN</td>
+                                    <td>读数值RX</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td><input name="fq1" id="part5_4_7_7_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_7_7_1" type="submit" class="part5_4_2" value="获取数据"></td>
+                                    <td><input name="fq1" id="part5_4_7_7_2" type="text"/></td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td><input name="fq1" id="part5_4_7_8_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_7_8_1" type="submit" class="part5_4_2" value="获取数据"></td>
+                                    <td><input name="fq1" id="part5_4_7_8_2" type="text"/></td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td><input name="fq1" id="part5_4_7_9_1" type="text" class="part5_4_1"/>
+                                        <input id="submit5_4_7_9_1" type="submit" class="part5_4_2" value="获取数据">
+                                    </td>
+                                    <td><input name="fq1" id="part5_4_7_9_2" type="text"/></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" height="55px">
+                                        <div style="text-align: center">
+                                            <input id="submit5_12" type="submit"
+                                                   style="width: 100px;height: 25px;font-size: 14px"
+                                                   value="提交">
+                                            <input id="submit5_13" type="submit"
+                                                   style="width: 100px;height: 25px;font-size: 14px"
+                                                   value="清除">
+                                            <span id="part5_4_11_4" style="color: blue"></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br>
+                            <!--位置影响试验--><!--CC接地电阻菜单-->
+                            <table width="100%" class="sjyqxxxg">
+                                <col width="4%">
+                                <col width="13%">
+                                <col width="18%">
+                                <col width="18%">
+                                <col width="18%">
+                                <col width="18%">
+                                <tr>
+                                    <td colspan="6">Part3 位置影响试验</td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="3">第一组</td>
+                                    <td colspan="5" style="text-align: left">
+                                        <form>单位
+                                            <label><input id="radio5_13_1" name="check5_5_1"
+                                                          style="width: 15px;height: 15px" type="radio"
+                                                          value="1"/>m&Omega;</label>
+                                            <label><input id="radio5_14_1" name="check5_5_1"
+                                                          style="width: 15px;height: 15px" type="radio" value="2"
+                                                          checked="checked"/>&Omega;</label>
+                                            <label><input id="radio5_15_1" name="check5_5_1"
+                                                          style="width: 15px;height: 15px" type="radio"
+                                                          value="3"/>K&Omega;</label>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>量程</td>
+                                    <td>前</td>
+                                    <td>后</td>
+                                    <td>左</td>
+                                    <td>右</td>
+                                </tr>
+                                <tr>
+                                    <td><input name="wz" id="part5_4_8_1_1" type="text"/>
+                                    </td>
+                                    <td><input name="wz" id="part5_4_8_1_2" type="text" class="part5_4_3"/>
+                                        <input id="submit5_4_8_1_2" type="submit" class="part5_4_4" value="获取数据">
+                                    </td>
+                                    <td><input name="wz" id="part5_4_8_1_3" type="text" class="part5_4_3"/>
+                                        <input id="submit5_4_8_1_3" type="submit" class="part5_4_4" value="获取数据">
+                                    </td>
+                                    <td><input name="wz" id="part5_4_8_1_4" type="text" class="part5_4_3"/>
+                                        <input id="submit5_4_8_1_4" type="submit" class="part5_4_4" value="获取数据">
+                                    </td>
+                                    <td><input name="wz" id="part5_4_8_1_5" type="text" class="part5_4_3"/>
+                                        <input id="submit5_4_8_1_5" type="submit" class="part5_4_4" value="获取数据">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="3">第二组</td>
+                                    <td colspan="5" style="text-align: left">
+                                        <form>单位
+                                            <label><input id="radio5_13_2" name="check5_5_2"
+                                                          style="width: 15px;height: 15px" type="radio"
+                                                          value="1"/>m&Omega;</label>
+                                            <label><input id="radio5_14_2" name="check5_5_2"
+                                                          style="width: 15px;height: 15px" type="radio" value="2"
+                                                          checked="checked"/>&Omega;</label>
+                                            <label><input id="radio5_15_2" name="check5_5_2"
+                                                          style="width: 15px;height: 15px" type="radio"
+                                                          value="3"/>K&Omega;</label>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>量程</td>
+                                    <td>前</td>
+                                    <td>后</td>
+                                    <td>左</td>
+                                    <td>右</td>
+                                </tr>
+                                <tr>
+                                    <td><input name="wz" id="part5_4_8_2_1" type="text"/>
+                                    </td>
+                                    <td><input name="wz" id="part5_4_8_2_2" type="text" class="part5_4_3"/>
+                                        <input id="submit5_4_8_2_2" type="submit" class="part5_4_4" value="获取数据">
+                                    </td>
+                                    <td><input name="wz" id="part5_4_8_2_3" type="text" class="part5_4_3"/>
+                                        <input id="submit5_4_8_2_3" type="submit" class="part5_4_4" value="获取数据">
+                                    </td>
+                                    <td><input name="wz" id="part5_4_8_2_4" type="text" class="part5_4_3"/>
+                                        <input id="submit5_4_8_2_4" type="submit" class="part5_4_4" value="获取数据">
+                                    </td>
+                                    <td><input name="wz" id="part5_4_8_2_5" type="text" class="part5_4_3"/>
+                                        <input id="submit5_4_8_2_5" type="submit" class="part5_4_4" value="获取数据">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="3">第三组</td>
+                                    <td colspan="5" style="text-align: left">
+                                        <form>单位
+                                            <label><input id="radio5_13_3" name="check5_5_3"
+                                                          style="width: 15px;height: 15px" type="radio"
+                                                          value="1"/>m&Omega;</label>
+                                            <label><input id="radio5_14_3" name="check5_5_3"
+                                                          style="width: 15px;height: 15px" type="radio" value="2"
+                                                          checked="checked"/>&Omega;</label>
+                                            <label><input id="radio5_15_3" name="check5_5_3"
+                                                          style="width: 15px;height: 15px" type="radio"
+                                                          value="3"/>K&Omega;</label>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>量程</td>
+                                    <td>前</td>
+                                    <td>后</td>
+                                    <td>左</td>
+                                    <td>右</td>
+                                </tr>
+                                <tr>
+                                    <td><input name="wz" id="part5_4_8_3_1" type="text"/>
+                                    </td>
+                                    <td><input name="wz" id="part5_4_8_3_2" type="text" class="part5_4_3"/>
+                                        <input id="submit5_4_8_3_2" type="submit" class="part5_4_4" value="获取数据">
+                                    </td>
+                                    <td><input name="wz" id="part5_4_8_3_3" type="text" class="part5_4_3"/>
+                                        <input id="submit5_4_8_3_3" type="submit" class="part5_4_4" value="获取数据">
+                                    </td>
+                                    <td><input name="wz" id="part5_4_8_3_4" type="text" class="part5_4_3"/>
+                                        <input id="submit5_4_8_3_4" type="submit" class="part5_4_4" value="获取数据">
+                                    </td>
+                                    <td><input name="wz" id="part5_4_8_3_5" type="text" class="part5_4_3"/>
+                                        <input id="submit5_4_8_3_5" type="submit" class="part5_4_4" value="获取数据">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6">
+                                        <div style="text-align: center">
+                                            <input id="submit5_5" type="submit"
+                                                   style="width: 100px;height: 25px;font-size: 14px"
+                                                   value="提交">
+                                            <input id="submit5_6" type="submit"
+                                                   style="width: 100px;height: 25px;font-size: 14px"
+                                                   value="清除">
+                                            <span id="part5_4_11_5" style="color: blue"></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br>
+                            <br>
+                            <!--辅助接地电阻影响试验--><!--CC接地电阻菜单-->
+                            <table width="100%" class="sjyqxxxg">
+                                <col width="5%">
+                                <col width="10%">
+                                <col width="15%">
+                                <col width="15%">
+                                <col width="15%">
+                                <col width="15%">
+                                <col width="15%">
+                                <tr>
+                                    <td colspan="7">Part4 辅助接地电阻影响试验</td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="3">第一组</td>
+                                    <td colspan="6" style="text-align: left">
+                                        <form>单位
+                                            <label><input id="radio5_16_1" name="check5_6_1"
+                                                          style="width: 15px;height: 15px" type="radio"
+                                                          value="1"/>m&Omega;</label>
+                                            <label><input id="radio5_17_1" name="check5_6_1"
+                                                          style="width: 15px;height: 15px" type="radio" value="2"
+                                                          checked="checked"/>&Omega;</label>
+                                            <label><input id="radio5_18_1" name="check5_6_1"
+                                                          style="width: 15px;height: 15px" type="radio"
+                                                          value="3"/>K&Omega;</label>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>各量程实际值</td>
+                                    <td>0</td>
+                                    <td>500</td>
+                                    <td>1000</td>
+                                    <td>2000</td>
+                                    <td>5000</td>
+                                </tr>
+                                <tr>
+                                    <td><input name="fz" id="part5_4_9_1_1" type="text"/>
+                                    </td>
+                                    <td><input name="fz" id="part5_4_9_1_2" type="text" class="part5_4_5"/>
+                                        <input id="submit5_4_9_1_2" type="submit" class="part5_4_6" value="获取数据">
+                                    </td>
+                                    <td><input name="fz" id="part5_4_9_1_3" type="text" class="part5_4_5"/>
+                                        <input id="submit5_4_9_1_3" type="submit" class="part5_4_6" value="获取数据">
+                                    </td>
+                                    <td><input name="fz" id="part5_4_9_1_4" type="text" class="part5_4_5"/>
+                                        <input id="submit5_4_9_1_4" type="submit" class="part5_4_6" value="获取数据">
+                                    </td>
+                                    <td><input name="fz" id="part5_4_9_1_5" type="text" class="part5_4_5"/>
+                                        <input id="submit5_4_9_1_5" type="submit" class="part5_4_6" value="获取数据">
+                                    </td>
+                                    <td><input name="fz" id="part5_4_9_1_6" type="text" class="part5_4_5"/>
+                                        <input id="submit5_4_9_1_6" type="submit" class="part5_4_6" value="获取数据">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="3">第二组</td>
+                                    <td colspan="6" style="text-align: left">
+                                        <form>单位
+                                            <label><input id="radio5_16_2" name="check5_6_2"
+                                                          style="width: 15px;height: 15px" type="radio"
+                                                          value="1"/>m&Omega;</label>
+                                            <label><input id="radio5_17_2" name="check5_6_2"
+                                                          style="width: 15px;height: 15px" type="radio" value="2"
+                                                          checked="checked"/>&Omega;</label>
+                                            <label><input id="radio5_18_2" name="check5_6_2"
+                                                          style="width: 15px;height: 15px" type="radio"
+                                                          value="3"/>K&Omega;</label>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>各量程实际值</td>
+                                    <td>0</td>
+                                    <td>500</td>
+                                    <td>1000</td>
+                                    <td>2000</td>
+                                    <td>5000</td>
+                                </tr>
+                                <tr>
+                                    <td><input name="fz" id="part5_4_9_2_1" type="text"/>
+                                    </td>
+                                    <td><input name="fz" id="part5_4_9_2_2" type="text" class="part5_4_5"/>
+                                        <input id="submit5_4_9_2_2" type="submit" class="part5_4_6" value="获取数据">
+                                    </td>
+                                    <td><input name="fz" id="part5_4_9_2_3" type="text" class="part5_4_5"/>
+                                        <input id="submit5_4_9_2_3" type="submit" class="part5_4_6" value="获取数据">
+                                    </td>
+                                    <td><input name="fz" id="part5_4_9_2_4" type="text" class="part5_4_5"/>
+                                        <input id="submit5_4_9_2_4" type="submit" class="part5_4_6" value="获取数据">
+                                    </td>
+                                    <td><input name="fz" id="part5_4_9_2_5" type="text" class="part5_4_5"/>
+                                        <input id="submit5_4_9_2_5" type="submit" class="part5_4_6" value="获取数据">
+                                    </td>
+                                    <td><input name="fz" id="part5_4_9_2_6" type="text" class="part5_4_5"/>
+                                        <input id="submit5_4_9_2_6" type="submit" class="part5_4_6" value="获取数据">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="3">第三组</td>
+                                    <td colspan="6" style="text-align: left">
+                                        <form>单位
+                                            <label><input id="radio5_16_3" name="check5_6_3"
+                                                          style="width: 15px;height: 15px" type="radio"
+                                                          value="1"/>m&Omega;</label>
+                                            <label><input id="radio5_17_3" name="check5_6_3"
+                                                          style="width: 15px;height: 15px" type="radio" value="2"
+                                                          checked="checked"/>&Omega;</label>
+                                            <label><input id="radio5_18_3" name="check5_6_3"
+                                                          style="width: 15px;height: 15px" type="radio"
+                                                          value="3"/>K&Omega;</label>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>各量程实际值</td>
+                                    <td>0</td>
+                                    <td>500</td>
+                                    <td>1000</td>
+                                    <td>2000</td>
+                                    <td>5000</td>
+                                </tr>
+                                <tr>
+                                    <td><input name="fz" id="part5_4_9_3_1" type="text"/>
+                                    </td>
+                                    <td><input name="fz" id="part5_4_9_3_2" type="text" class="part5_4_5"/>
+                                        <input id="submit5_4_9_3_2" type="submit" class="part5_4_6" value="获取数据">
+                                    </td>
+                                    <td><input name="fz" id="part5_4_9_3_3" type="text" class="part5_4_5"/>
+                                        <input id="submit5_4_9_3_3" type="submit" class="part5_4_6" value="获取数据">
+                                    </td>
+                                    <td><input name="fz" id="part5_4_9_3_4" type="text" class="part5_4_5"/>
+                                        <input id="submit5_4_9_3_4" type="submit" class="part5_4_6" value="获取数据">
+                                    </td>
+                                    <td><input name="fz" id="part5_4_9_3_5" type="text" class="part5_4_5"/>
+                                        <input id="submit5_4_9_3_5" type="submit" class="part5_4_6" value="获取数据">
+                                    </td>
+                                    <td><input name="fz" id="part5_4_9_3_6" type="text" class="part5_4_5"/>
+                                        <input id="submit5_4_9_3_6" type="submit" class="part5_4_6" value="获取数据">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7">
+                                        <div style="text-align: center">
+                                            <input id="submit5_7" type="submit"
+                                                   style="width: 100px;height: 25px;font-size: 14px"
+                                                   value="提交">
+                                            <input id="submit5_8" type="submit"
+                                                   style="width: 100px;height: 25px;font-size: 14px"
+                                                   value="清除">
+                                            <span id="part5_4_11_6" style="color: blue"></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br>
+                            <br>
+                            <br>
+                        </div>
+                        <!--DD电流菜单-->
+                        <div><span style="margin-left: 100px;">电流值（mA）：</span>
+                            <input id="part5_4_10_1_1" type="text" class="part5_4_1"
+                                   style="width: 200px;height: 20px;margin-top: 50px; "/>
+                            <input id="submit5_4_10_1_1" type="submit" class="part5_4_2" value="获取数据"
+                                   style="width: 80px;height: 25px;">
+                        </div>
+                        <!--默认显示区-->
+                        <div style="float: none"><h1 style="font-style: italic;margin-top: 60px;">&nbsp;请选择菜单（务必确保和下位机此刻属于相同菜单）！</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="part6">
+                <h3>证书处理&nbsp;&nbsp;
+                    <input id="submit6_0_0" type="submit" style="height: 24px;font-size: 14px;" value="隐藏选择区">
+                    <input id="openlocaldisk" type="submit" value="打开证书所在目录" title="证书所在目录：D:\电阻表模板和证书"
+                           style="margin-left: 500px;height: 24px;font-size: 14px"/>
+                </h3>
+                <!--送检仪器选择区-->
+                <div id="part6_1" style="background-color: #ffffff">
+                    <div style="width: 100%; overflow: scroll;overflow-x: hidden;">
+                        <table width="100%">
+                            <col width="5%">
+                            <col width="12%">
+                            <col width="14%">
+                            <col width="16%">
+                            <col width="13%">
+                            <col width="14%">
+                            <col width="16%">
+                            <col width="10%">
+                            <tr>
+                                <td colspan="8">请选择待生成报告的仪器</td>
+                            </tr>
+                            <tr>
+                                <td><a>序号</a></td>
+                                <td><a id="leixingorder6">类型</a></td>
+                                <td><a id="xinghaoorder6">型号</a></td>
+                                <td><a id="yqmcorder6">仪器名称</a></td>
+                                <td><a id="jdsjorder6">检定时间</a></td>
+                                <td><a id="sjdworder6">送检单位</a></td>
+                                <td><a id="zsbhorder6">证书编号</a></td>
+                                <td>操作</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div style="width: 100%;height: 350px;overflow: scroll;overflow-x: hidden;">
+                        <table width="100%">
+                            <col width="5%">
+                            <col width="12%">
+                            <col width="14%">
+                            <col width="16%">
+                            <col width="13%">
+                            <col width="14%">
+                            <col width="16%">
+                            <col width="10%">
+                            <tbody id="list6_1">
+                            </tbody>
+                        </table>
+                        <br/>
+                        <br/>
+                        <div style="width: 100%;">
+                            <div>
+                                <hr style=" width: 40%; float: left ;border:1px solid #778899;">
+                            </div>
+                            <div style="width: 19%;font-family: 隶书;text-align: center;float: left;margin-left: auto;margin-right: auto">
+                                <span >已经到最底了</span>
+                            </div>
+                            <div>
+                                <hr style="width: 40%;float: right;border:1px solid #778899">
+                            </div>
+                        </div>
+                        <!--<hr style="width: 45%; float: left ;border:1px solid #778899">-->
+                        <!--<span style="width: 10%;font-family: 隶书">已经到最底了</span>-->
+                        <!--<hr style="width: 45%;float: right;border:1px solid #778899">-->
+                        <br/>
+                        <br/>
+                    </div>
+                </div>
+                <br>
+                <!--已选择的送检仪器-->
+                <table width="100%" id="table6_2">
+                    <col width="15%">
+                    <col width="15%">
+                    <col width="15%">
+                    <col width="15%">
+                    <col width="15%">
+                    <col width="25%">
+                    <tr>
+                        <td colspan="6">已选择待生成报告的仪器</td>
+                    </tr>
+                    <tr>
+                        <td>类&nbsp;&nbsp;型</td>
+                        <td>型&nbsp;&nbsp;号</td>
+                        <td>仪器名称</td>
+                        <td>检定时间</td>
+                        <td>送检单位</td>
+                        <td>证书编号</td>
+                    </tr>
+                    <tr>
+                        <td id="leixing6_1"></td>
+                        <td id="xinghao6_1"></td>
+                        <td id="yqmc6_1"></td>
+                        <td id="jdsj6_1"></td>
+                        <td id="sjdw6_1"></td>
+                        <td id="zsbh6_1"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">
+                            <div style="text-align: center">
+                                <input id="submit6_0_1" type="submit" style="height: 25px;font-size: 14px;"
+                                       disabled="disabled"
+                                       value="生成绝缘电阻表原始记录证书">&nbsp;
+                                <input id="submit6_0_2" type="submit" style="height: 25px;font-size: 14px;"
+                                       disabled="disabled"
+                                       value="生成绝缘电阻表检定证书记录">&nbsp;
+                                <input id="submit6_0_3" type="submit" style="height: 25px;font-size: 14px;"
+                                       disabled="disabled"
+                                       value="生成接地电阻表原始记录证书">&nbsp;
+                                <input id="submit6_0_4" type="submit" style="height: 25px;font-size: 14px;"
+                                       disabled="disabled"
+                                       value="生成接地电阻表检定证书记录">
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <br>
+                <hr>
+                <!--绝缘电阻表原始记录证书1-->
+                <div id="part6_2" class="part6_2" style="display: none">
+                    <h3>绝缘电阻表原始记录证书--检定结果</h3>
+                    <table>
+                        <tr>
+                            <td>外观：</td>
+                            <td><input name="" id="wg1" type="text"/></td>
+                            <td>绝缘电阻(M&Omega;)：</td>
+                            <td><input name="" id="jydz1" type="text"/></td>
+                            <td>绝缘强度：</td>
+                            <td><input name="" id="jyqd1" type="text"/></td>
+                        </tr>
+                        <tr>
+                            <td>显示能力：</td>
+                            <td><input name="" id="xsnl1" type="text"/></td>
+                            <td>开路测量电压(V)：</td>
+                            <td><input name="" id="klcldy1" type="text"/></td>
+                            <td>跌落(中值)电压(V)：</td>
+                            <td><input name="" id="dldy1" type="text"/></td>
+                        </tr>
+                        <tr>
+                            <td>端钮电压稳定性：</td>
+                            <td><input name="" id="dndywdx1" type="text"/></td>
+                            <td>倾斜影响检验：</td>
+                            <td><input name="" id="qxyyjy1" type="text"/></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                    <hr style="border:1px dashed #DCDCDC">
+                    <div style="text-align: center">
+                        <input id="submit6_2_1" type="submit" style="width: 120px;height: 25px;font-size: 14px"
+                               value="提交生成证书">
+                    </div>
+                    <hr>
+                </div>
+                <!--绝缘电阻表检定证书记录2-->
+                <div id="part6_3" class="part6_2" style="display: none">
+                    <h3>绝缘电阻表检定证书记录--检定结果</h3>
+                    <table>
+                        <tr>
+                            <td>外观：</td>
+                            <td><input name="" id="wg2" type="text"/></td>
+                            <td>绝缘电阻(M&Omega;)：</td>
+                            <td><input name="" id="jydz2" type="text"/></td>
+                            <td>绝缘强度：</td>
+                            <td><input name="" id="jyqd2" type="text"/></td>
+                        </tr>
+                        <tr>
+                            <td>显示能力：</td>
+                            <td><input name="" id="xsnl2" type="text"/></td>
+                            <td>开路测量电压(V)：</td>
+                            <td><input name="" id="klcldy2" type="text"/></td>
+                            <td>跌落(中值)电压(V)：</td>
+                            <td><input name="" id="dldy2" type="text"/></td>
+                        </tr>
+                        <tr>
+                            <td>端钮电压稳定性：</td>
+                            <td><input name="" id="dndywdx2" type="text"/></td>
+                            <td>倾斜影响检验：</td>
+                            <td><input name="" id="qxyyjy2" type="text"/></td>
+                            <td>检定结论:</td>
+                            <td><input name="" id="jdjl2" type="text"/></td>
+                        </tr>
+                    </table>
+                    <hr style="border:1px dashed #DCDCDC">
+                    <div style="text-align: center">
+                        <input id="submit6_2_2" type="submit" style="width: 120px;height: 25px;font-size: 14px"
+                               value="提交生成证书">
+                    </div>
+                    <hr>
+                </div>
+                <!--接地电阻表原始记录证书3-->
+                <!--style="display: none"-->
+                <div id="part6_4" class="part6_2" style="display: none">
+                    <h3>接地电阻表原始记录证书--检定结果</h3>
+                    <table>
+                        <tr>
+                            <td>外观：</td>
+                            <td><input name="" id="wg3" type="text"/></td>
+                            <td>绝缘电阻(M&Omega;)：</td>
+                            <td><input name="" id="jydz3" type="text"/></td>
+                            <td>绝缘强度：</td>
+                            <td><input name="" id="jyqd3" type="text"/></td>
+                        </tr>
+                        <tr>
+                            <td>通电检查：</td>
+                            <td><input name="" id="tdjc3" type="text"/></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                    <hr style="border:1px dashed #DCDCDC">
+                    <div style="text-align: center">
+                        <input id="submit6_2_3" type="submit" style="width: 120px;height: 25px;font-size: 14px"
+                               value="提交生成证书">
+                    </div>
+                    <hr>
+                </div>
+                <!--接地电阻表检定证书记录4-->
+                <div id="part6_5" class="part6_2" style="display: none">
+                    <h3>接地电阻表检定证书记录--检定结果</h3>
+                    <table>
+                        <tr>
+                            <td>外观：</td>
+                            <td><input id="wg4" type="text"/></td>
+                            <td>绝缘电阻(M&Omega;)：</td>
+                            <td><input name="" id="jydz4" type="text"/></td>
+                            <td>绝缘强度：</td>
+                            <td><input name="" id="jyqd4" type="text"/></td>
+                        </tr>
+                        <tr>
+                            <td>通电检查：</td>
+                            <td><input name="" id="tdjc4" type="text"/></td>
+                            <td>位置影响试验：</td>
+                            <td><input name="" id="wzyxsy4" type="text"/></td>
+                            <td>辅助接地电阻影响试验:</td>
+                            <td><input name="" id="fzjddzyxsy4" type="text"/></td>
+                        </tr>
+                        <tr>
+                            <td>检定结论：</td>
+                            <td><input name="" id="jdjl4" type="text"/></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                    <hr style="border:1px dashed #DCDCDC">
+                    <div style="text-align: center">
+                        <input id="submit6_2_4" type="submit" style="width: 120px;height: 25px;font-size: 14px"
+                               value="提交生成证书">
+                    </div>
+                    <hr>
+                </div>
+                <!--进度条-->
+                <div id="part6_6" style="width: 100%;display: none;">
+                    <div style="width: 1000px; height: 40px; border: solid 1px #000; padding: 1px;float: left">
+                        <div id="processbar"
+                             style="background-image: -webkit-gradient(linear, 0% 0%, 100% 100%,
+                         from(rgb(77, 156, 65)),
+                         color-stop(0.8, rgb(84, 222, 93)),
+                          to(rgb(25, 145, 29))); width: 0; height: 40px;"></div>
+                    </div>
+                    <div style="float: left;line-height:40px;margin-left: 5px;font-size: 22px;font-weight: 900; font-family: 幼圆"><span
+                            id="span_s">0</span><span>%</span></div>
+                    <br>
+                    <br>
+                    <br>
+                    <!--<input type="submit" value="开始" id="submit6_3_1" style="float: none"/>-->
+                    <!--<input type="submit" value="暂停" id="submit6_3_2"/>-->
+                    <!--<br>-->
+                    <!--<br>-->
+                    <br>
+                    <br>
+                </div>
+            </div>
+            <div class="part7"><h1 style="font-style: italic">
+			<br>
+			<br>
+			
+			&nbsp;欢迎使用收款机上位机系统！</h1>
+                <!--测试区-->
+                <div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/2002/xmlspec/dtd/2.10/xmlspec.dtd">
+<c3p0-config>
+<!-- 所有数据都存放在一个数据库中 -->
+  <named-config name="CashMachine">
+    <!--用户名-->
+    <property name="user">root</property>
+    <!--密码-->
+    <property name="password"></property>
+    <!--部署在阿里云上用到以下密码-->
+    <!-- <property name="password">1236547</property> -->
+    <!-- mysql连接方式 -->
+    <property name="driverClass">org.gjt.mm.mysql.Driver</property>
+   <!--  本地测试时用以下数据库 -->
+    <property name="jdbcUrl">jdbc:mysql://localhost:3306/taxmastercomputer</property>
+    <!--  部署在阿里云上用以下数据库 -->
+    <!-- <property name="jdbcUrl">jdbc:mysql://47.93.232.64:3306/taxmastercomputer</property> -->
+    
+<!-- 	<property name="driverClass">org.sqlite.JDBC</property> -->
+<!-- 	<property name="jdbcUrl">jdbc:sqlite:E:\\DB\\programmingDB.db</property> -->
+    
+    <!--当连接池中的连接耗尽的时候c3p0一次同时获取的连接数。Default: 3 -->
+    <property name="acquireIncrement">5</property>
+    
+    <!--初始化时获取三个连接，取值应在minPoolSize与maxPoolSize之间。Default: 3 -->
+    <property name="initialPoolSize">10</property>
+    
+    <property name="minPoolSize">50</property>
+    
+    <!--连接池中保留的最大连接数。Default: 15 -->
+    <property name="maxPoolSize">200</property>
+    
+	<!--JDBC的标准参数，用以控制数据源内加载的PreparedStatements数量。但由于预缓存的statements
+属于单个connection而不是整个连接池。所以设置这个参数需要考虑到多方面的因素。
+如果maxStatements与maxStatementsPerConnection均为0，则缓存被关闭。Default: 0-->
+    <property name="maxStatements">200</property> 
+    
+    <!--maxStatementsPerConnection定义了连接池内单个连接所拥有的最大缓存statements数。Default: 0 -->
+    <property name="maxStatementsPerConnection">20</property>
+  </named-config>
+</c3p0-config>
