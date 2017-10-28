@@ -8,5 +8,6 @@ public class Test {
         BaseDAO_Sqlite a = new BaseDAO_Sqlite();
 
 		System.out.println(a.getForJson(sql));
+		System.out.println();
 	}
 }
