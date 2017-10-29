@@ -13,35 +13,35 @@
             padding: 0;
             margin: 0;
             font-family: PmingLiu;
-            font-size: 16px;
+            font-size: 14px;
             width: 100%;
             height: 100%;
-            overflow: hidden;
+            overflow: auto;
             overflow-x: auto;
+            filter: progid:DXImageTransform.Microsoft.Gradient(startColorStr='#f5f5f5', endColorStr='#4682B4', gradientType=0); /* IE < 10 */
+            background: -ms-linear-gradient(top, #f5f5f5, #4682B4); /* IE 10 */
+            background: -webkit-gradient(linear, 0 0, 0 bottom, from(#f5f5f5), to(#4682B4)); /* Webkit: Safari 5.1+, Chrome 10+ */
         }
 
         .box {
             width: 100%;
             height: 100%;
-            filter: progid:DXImageTransform.Microsoft.Gradient(startColorStr='#ffffff', endColorStr='#4682B4', gradientType=0); /* IE < 10 */
-            background: -ms-linear-gradient(top, #ffffff, #4682B4); /* IE 10 */
-            background: -webkit-gradient(linear, 0 0, 0 bottom, from(#ffffff), to(#4682B4)); /* Webkit: Safari 5.1+, Chrome 10+ */
-            margin-top: 30px;
-            padding-top: 100px;
+            /*以下为控制位于此div中的模块垂直和水平居中*/
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .box-content {
-            width: 400px;
-            height: 300px;
-            margin-left: auto;
-            margin-right: auto;
-            /*margin-top: auto;*/
-            /*margin-bottom: auto;*/
-            padding-top: 60px;
-            padding-left: 30px;
-            padding-right: 30px;
+            width: 460px;
+            padding: 50px 50px;
             background: rgba(0, 0, 0, 0.2);
             border-radius: 10px;
+        }
+        a {
+            color: #000000;
+            text-decoration: underline;
+            cursor: pointer;
         }
     </style>
     <script type="text/javascript">
@@ -85,7 +85,7 @@
                             }
                         },
                         error: function (jqXHR) {
-                            $("#modal-content").html("The operation failed, please try again. Possible causes:：" + jqXHR.status + "！");
+                            $("#modal-content").html("The operation failed, please try again. Possible causes:" + jqXHR.status + "！");
                             $("#button_login").val("Login");
                             $("#myModal").modal();
                         }
@@ -101,8 +101,12 @@
     </script>
 </head>
 <body>
-<h1 style="font-family: PmingLiu;">&nbsp;Fiscal cash register host computer system, please login!</h1>
+<div style="height: 50px;width: 100%;position: absolute;">
+    <h1 style="font-family: PmingLiu;">&nbsp;Fiscal cash host computer system, please login!</h1>
+</div>
+<!--box为蓝色渐变区-->
 <div class="box">
+    <!--输入框区-->
     <div class="box-content">
         <div class="input-group">
             <span class="input-group-addon"><i class="icon icon-user"></i></span>
@@ -120,10 +124,10 @@
         <!--<input id="button_login_clear" class="btn btn-danger" type="button" style="margin-left: 50px" value="Reset">-->
         <br>
         <br>
-        <div style="width: 100%;font-size: 14px">
+        <div style="width: 100%;font-size: 14px;font-weight: 600">
             <a href="download/comm.jar">Client Download</a>&nbsp;&nbsp;|&nbsp;
             <a href="register.html">Register</a>&nbsp;&nbsp;|&nbsp;
-            <a href="backpassword.html">Forgot Password？</a>
+            <a href="backpassword.html">Forget Password？</a>
         </div>
     </div>
 </div>
