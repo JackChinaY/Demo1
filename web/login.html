@@ -33,8 +33,8 @@
         }
 
         .box-content {
-            width: 460px;
-            padding: 50px 50px;
+            width: 380px;
+            padding: 80px 50px;
             background: rgba(0, 0, 0, 0.2);
             border-radius: 10px;
         }
@@ -49,14 +49,20 @@
             //登录
             $("#button_login").click(function () {
                 if ($("#username").val() == "" && $("#password").val() == "") {
-                    $("#modal-content").html("Username and Password cannot be empty!");
-                    $("#myModal").modal();
+                    new $.zui.Messager('Username and Password cannot be empty！', {
+                        type: 'danger',
+                        placement: 'top' // 定义显示位置
+                    }).show();
                 } else if ($("#username").val() == "") {
-                    $("#modal-content").html("Username cannot be empty!");
-                    $("#myModal").modal();
+                    new $.zui.Messager('Username cannot be empty！', {
+                        type: 'danger',
+                        placement: 'top'
+                    }).show();
                 } else if ($("#password").val() == "") {
-                    $("#modal-content").html("Password cannot be empty!");
-                    $("#myModal").modal();
+                    new $.zui.Messager('Password cannot be empty！', {
+                        type: 'danger',
+                        placement: 'top'
+                    }).show();
                 }
                 else {
                     $("#button_login").val("Login...");
@@ -124,7 +130,7 @@
         <!--<input id="button_login_clear" class="btn btn-danger" type="button" style="margin-left: 50px" value="Reset">-->
         <br>
         <br>
-        <div style="width: 100%;font-size: 14px;font-weight: 600">
+        <div style="font-size: 14px;font-weight: 600;margin-left: -40px;margin-right: -40px">
             <a href="download/comm.jar">Client Download</a>&nbsp;&nbsp;|&nbsp;
             <a href="register.html">Register</a>&nbsp;&nbsp;|&nbsp;
             <a href="backpassword.html">Forget Password？</a>
