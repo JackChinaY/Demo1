@@ -13,9 +13,7 @@ public class BaseDAO_Sqlite {
     private Connection conn = null;
     private PreparedStatement ps = null;//使用PreparedStatement便于向sql语句中动态赋值
     private ResultSet rs = null;
-
 //    private static String url = "jdbc:sqlite:E:/DB/Internet.db";//数据源URL，如果数据库不存在，那么它就会被创建
-
     //程序运行期间只加载一次
     static {
         try {
