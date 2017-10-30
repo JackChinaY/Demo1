@@ -15,6 +15,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
 /**
+ * 在intellij快捷键：ctrl+/:注释及反注释；alt+L是格式化代码，ctrl+X删除行，sout、psvm是全拼
  * return返回值规定：
  * 0表示受影响行数为0 数据库出错;
  * 1表示受影响行数为1或者是成功的标志;
