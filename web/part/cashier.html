@@ -82,6 +82,7 @@
             </div>
         </div>
     </form>
+
     <div style="background-color: white ;"
          class="table-responsive">
         <!--height: 400px;overflow: scroll; overflow-x: hidden-->
@@ -149,6 +150,84 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--对话框 新增商品-->
+<div class="modal fade" id="myModal_2_1_1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title">新增商品信息</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-3">商品编号</label>
+                        <label id="value2_1_1" class="col-sm-3" style="font-size: 16px"></label>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3">名称</label>
+                        <div class="col-sm-6">
+                            <input id="value2_1_2" type="text" class="form-control" placeholder="请输入商品名称">
+                        </div>
+                        <strong>*</strong>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3">条形码</label>
+                        <div class="col-sm-6">
+                            <input id="value2_1_3" type="number" class="form-control" placeholder="请输入条形码">
+                        </div>
+                        <strong>*</strong>
+                        <label id="value2_1_8"></label>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3">单价</label>
+                        <div class="col-sm-6">
+                            <input id="value2_1_4" type="number" class="form-control" placeholder="保留小数点后2位">
+                        </div>
+                        <strong>*</strong>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3">税种索引</label>
+                        <div class="col-sm-6">
+                            <select id="value2_1_5" class="form-control">
+                            </select>
+                        </div>
+                        <strong>*</strong>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3">库存控制标志</label>
+                        <div class="col-sm-6">
+                            <select id="value2_1_6" class="form-control">
+                                <option value="0" selected="selected">0</option>
+                                <option value="1">1</option>
+                            </select>
+                        </div>
+                        <span class="label label-badge">1启用，0不启用</span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3">库存总量</label>
+                        <div class="col-sm-6">
+                            <input id="value2_1_7" type="number" class="form-control" placeholder="保留小数点后4位">
+                        </div>
+                        <strong id="value2_1_9"></strong>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button id="submit2_1_1_1" class="btn btn-primary" type="button" style="margin-left: 90px">
+                                Submit
+                            </button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal"
+                                    style="margin-left: 30px">Cancel
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
