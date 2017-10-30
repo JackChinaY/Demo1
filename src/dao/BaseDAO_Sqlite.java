@@ -14,7 +14,7 @@ public class BaseDAO_Sqlite {
     private PreparedStatement ps = null;//使用PreparedStatement便于向sql语句中动态赋值
     private ResultSet rs = null;
 
-    private static String url = "jdbc:sqlite:E:/DB/Internet.db";//数据源URL，如果数据库不存在，那么它就会被创建
+//    private static String url = "jdbc:sqlite:E:/DB/Internet.db";//数据源URL，如果数据库不存在，那么它就会被创建
 
     //程序运行期间只加载一次
     static {
@@ -33,7 +33,7 @@ public class BaseDAO_Sqlite {
      * @param args 给sql语句中的？赋值的参数列表
      * @return 符合条件的记录数 0或1/2/3实际值  或者返回字段的最大值比如1000，如果没值就返回0
      */
-    public int getCount(String sql, Object... args) {
+    public int getCount(String sql, String url, Object... args) {
         try {
             //连接数据库
             conn = DriverManager.getConnection(url);
@@ -63,7 +63,7 @@ public class BaseDAO_Sqlite {
      * @param args 给sql语句中的？赋值的参数列表
      * @return 字段的值, 如果没值的话就返回null，比如返回Name字段的值张三
      */
-    public String getOneRecard(String sql, Object... args) {
+    public String getOneRecard(String sql, String url, Object... args) {
         try {
             conn = DriverManager.getConnection(url);
             ps = conn.prepareStatement(sql);
@@ -89,7 +89,7 @@ public class BaseDAO_Sqlite {
      * @param args 给sql语句中的？赋值的参数列表
      * @return 要查询的类的集合，返回Json，如果没值就返回空数组[ ]
      */
-    public String getForJson(String sql, Object... args) {
+    public String getForJson(String sql, String url, Object... args) {
         try {
             conn = DriverManager.getConnection(url);
             ps = conn.prepareStatement(sql);
@@ -129,7 +129,7 @@ public class BaseDAO_Sqlite {
      * @param args 要赋值的参数列表
      * @return 操作结果，正数是成功，是受影响的行数，0为失败
      */
-    public int saveOrUpdateOrDelete(String sql, Object... args) {
+    public int saveOrUpdateOrDelete(String sql, String url, Object... args) {
         try {
             conn = DriverManager.getConnection(url);
             ps = conn.prepareStatement(sql);
