@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/image/favicon.ico"/>
+    <link rel="stylesheet" href="../zui/zui.css">
+    <script src="../javascript/jquery-2.0.3.min.js"></script>
+    <script src="../javascript/jquery.cookie.js"></script>
+    <script src="../zui/zui.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            //保存外币
+            $("#submit1_7").click(function () {
+                if ($("#waibixuhao").val() == "" || $("#waibimingcheng").val() == "" || $("#waibibiaozhifu").val() == "" || $("#fuhaofangxiang").val() == ""
+                    || $("#huilv").val() == "" || $("#asciima").val() == "" || $("#asciipoint").val() == "" || $("#xiaoshudian").val() == "" || $("#waibibiaozhiwei").val() == "") {
+                    new $.zui.Messager('存在部分数据未填写！', {
+                        type: 'danger',
+                        placement: 'top' // 定义显示位置
+                    }).show();
+                }
+                else {
+                    $.ajax({
+                        type: "POST",
+                        url: "Action_saveForeignCurrency.action",
+                        contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                        data: {
+                            "value1": $("#waibixuhao").val(),
+                            "value2": $("#waibimingcheng").val(),
+                            "value3": $("#waibibiaozhifu").val(),
+                            "value4": $("#fuhaofangxiang").val(),
+                            "value5": $("#huilv").val(),
+                            "value6": $("#asciima").val(),
+                            "value7": $("#asciipoint").val(),
+                            "value8": $("#xiaoshudian").val(),
+                            "value9": $("#waibibiaozhiwei").val()
+                        },
+                        dataType: "json",
+                        cache: false,
+                        success: function (data) {
+                            if (data.jsonObject == "1") {
+                                $("#modal-content").html("提交成功!");
+                                $("#myModal").modal();
+                            } else {
+                                $("#modal-content").html("提交失败！");
+                                $("#myModal").modal();
+                            }
+                        },
+                        error: function (jqXHR) {
+                            $("#modal-content").html("发生错误代码：" + jqXHR.status + "，数据未加载成功！");
+                            $("#myModal").modal();
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+    <style>
+        html, body {
+            padding: 0;
+            margin: 0;
+            font-family: Arial;
+            font-size: 14px;
+            /*min-height: 500px;*/
+            /*min-width: 500px;*/
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+<!--外币-->
+<div id="part1_7">
+    <span class="label label-badge label-primary label-define">外币</span>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-2">外币序号</label>
+            <div class="col-sm-3">
+                <select id="waibixuhao" class="form-control">
+                    <option value="1" selected="selected">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                </select>
+            </div>
+            <span class="label label-badge">1-6</span>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2">外币名称</label>
+            <div class="col-sm-3">
+                <input id="waibimingcheng" type="text" class="form-control" placeholder="请输入外币名称">
+            </div>
+            <span class="label label-badge">9个字符以内</span>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2">外币标志符号</label>
+            <div class="col-sm-3">
+                <input id="waibibiaozhifu" type="text" class="form-control" placeholder="请输入外币标志符号">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2">符号的方向</label>
+            <div class="col-sm-3">
+                <select id="fuhaofangxiang" class="form-control">
+                    <option value="1" selected="selected">1</option>
+                    <option value="0">0</option>
+                </select>
+            </div>
+            <span class="label label-badge">1表示符号在前，0表示符号在后</span>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2">汇率</label>
+            <div class="col-sm-3">
+                <input id="huilv" type="number" class="form-control" placeholder="请输入汇率">
+            </div>
+            <span class="label label-badge">0.0001～199999.9999</span>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2">ASCII码值逗号</label>
+            <div class="col-sm-3">
+                <input id="asciima" type="text" class="form-control" placeholder="请输入ASCII码值逗号">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2">ASCII码值点</label>
+            <div class="col-sm-3">
+                <input id="asciipoint" type="text" class="form-control" placeholder="请输入ASCII码值点">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2">小数点后位数</label>
+            <div class="col-sm-3">
+                <input id="xiaoshudian" type="number" class="form-control" placeholder="请输入小数点后位数">
+            </div>
+            <span class="label label-badge">默认为 2</span>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2">标志位</label>
+            <div class="col-sm-3">
+                <select id="waibibiaozhiwei" class="form-control">
+                    <option value="1" selected="selected">1</option>
+                    <option value="0">0</option>
+                </select>
+            </div>
+            <span class="label label-badge">1表示有效，0表示无效</span>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <input id="submit1_7" class="btn btn-primary" type="button" style="margin-left: 70px"
+                       value="提交">
+            </div>
+        </div>
+    </form>
+</div>
+<!--对话框-->
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title">Messages</h4>
+            </div>
+            <div class="modal-body">
+                <p id="modal-content" style="font-weight: 800"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

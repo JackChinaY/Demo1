@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>cashier</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/image/favicon.ico"/>
+    <link rel="stylesheet" href="../zui/zui.css">
+    <script src="../javascript/jquery-2.0.3.min.js"></script>
+    <script src="../javascript/jquery.cookie.js"></script>
+    <script src="../zui/zui.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            //保存收银员
+            $("#submit1_3").click(function () {
+                if ($("#shouyinyuanbianhao").val() == "" || $("#shouyinyuanmingcheng").val() == ""
+                    || $("#shouyinyuanmima").val() == "" || $("#shouyinyuanbiaozhiwei").val() == "") {
+                    new $.zui.Messager('存在部分数据未填写！', {
+                        type: 'danger',
+                        placement: 'top' // 定义显示位置
+                    }).show();
+                }
+                else {
+                    $.ajax({
+                        type: "POST",
+                        url: "Action_saveCashier.action",
+                        contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                        data: {
+                            "value1": $("#shouyinyuanbianhao").val(),
+                            "value2": $("#shouyinyuanmingcheng").val(),
+                            "value3": $("#shouyinyuanmima").val(),
+                            "value4": $("#shouyinyuanbiaozhiwei option:selected").val()
+                        },
+                        dataType: "json",
+                        cache: false,
+                        success: function (data) {
+                            if (data.jsonObject == "1") {
+                                $("#modal-content").html("提交成功!");
+                                $("#myModal").modal();
+                            } else {
+                                $("#modal-content").html("提交失败！");
+                                $("#myModal").modal();
+                            }
+                        },
+                        error: function (jqXHR) {
+                            $("#modal-content").html("发生错误代码：" + jqXHR.status + "，数据未加载成功！");
+                            $("#myModal").modal();
+                        }
+                    });
+                }
+            });
+
+            });
+    </script>
+    <style>
+        html,body {
+            padding: 0;
+            margin: 0;
+            font-family: Arial;
+            font-size: 14px;
+            /*min-height: 500px;*/
+            /*min-width: 500px;*/
+            width: 100%;
+            height:100%;
+            overflow: auto;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+<!--收银员-->
+<div id="part1_3">
+    <span class="label label-badge label-primary label-define">收银员</span>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-2">收银员编号</label>
+            <div class="col-sm-3">
+                <input id="shouyinyuanbianhao" type="text" class="form-control" placeholder="请输入收银员编号">
+            </div>
+            <span class="label label-badge">1-50</span>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2">姓名</label>
+            <div class="col-sm-3">
+                <input id="shouyinyuanmingcheng" type="text" class="form-control" placeholder="请输入姓名">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2">密码</label>
+            <div class="col-sm-3">
+                <input id="shouyinyuanmima" type="text" class="form-control" placeholder="请输入密码">
+            </div>
+            <span class="label label-badge">0000-9999</span>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2">标志位</label>
+            <div class="col-sm-3">
+                <select id="shouyinyuanbiaozhiwei" class="form-control">
+                    <option value="1" selected="selected">1</option>
+                    <option value="0">0</option>
+                </select>
+            </div>
+            <span class="label label-badge">1表示有效，0表示无效</span>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <input id="submit1_3" class="btn btn-primary" type="button" style="margin-left: 70px"
+                       value="提交">
+            </div>
+        </div>
+    </form>
+</div>
+<!--对话框-->
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title">Messages</h4>
+            </div>
+            <div class="modal-body">
+                <p id="modal-content" style="font-weight: 800"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

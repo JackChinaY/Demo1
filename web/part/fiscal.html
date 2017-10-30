@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/image/favicon.ico"/>
+    <link rel="stylesheet" href="../zui/zui.css">
+    <script src="../javascript/jquery-2.0.3.min.js"></script>
+    <script src="../javascript/jquery.cookie.js"></script>
+    <script src="../zui/zui.js"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            //保存税率
+            $("#submit1_4").click(function () {
+                if ($("#shuizhongbianhao").val() == "" || $("#shuilvzhi").val() == ""
+                    || $("#shuilvmingzi").val() == "" || $("#shuilvxiane").val() == "" || $("#shuilvbiaozhiwei").val() == "") {
+                    new $.zui.Messager('存在部分数据未填写！', {
+                        type: 'danger',
+                        placement: 'top' // 定义显示位置
+                    }).show();
+                }
+                else {
+                    $.ajax({
+                        type: "POST",
+                        url: "Action_saveTax.action",
+                        contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                        data: {
+                            "value1": $("#shuizhongbianhao").val(),
+                            "value2": $("#shuilvmingzi").val(),
+                            "value3": $("#shuilvzhi").val(),
+                            "value4": $("#shuilvxiane").val(),
+                            "value5": $("#shuilvbiaozhiwei option:selected").val()
+                        },
+                        dataType: "json",
+                        cache: false,
+                        success: function (data) {
+                            if (data.jsonObject == "1") {
+                                $("#modal-content").html("提交成功!");
+                                $("#myModal").modal();
+                            } else {
+                                $("#modal-content").html("提交失败！");
+                                $("#myModal").modal();
+                            }
+                        },
+                        error: function (jqXHR) {
+                            $("#modal-content").html("发生错误代码：" + jqXHR.status + "，数据未加载成功！");
+                            $("#myModal").modal();
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+    <style>
+        html,body {
+            padding: 0;
+            margin: 0;
+            font-family: Arial;
+            font-size: 14px;
+            /*min-height: 500px;*/
+            /*min-width: 500px;*/
+            width: 100%;
+            height:100%;
+            overflow: auto;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+<!--税率-->
+<div id="part1_4">
+    <span class="label label-badge label-primary label-define">税率</span>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-2">税种编号</label>
+            <div class="col-sm-3">
+                <select id="shuizhongbianhao" class="form-control">
+                    <option value="1" selected="selected">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                </select>
+            </div>
+            <span class="label label-badge">1-8</span>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2">名字</label>
+            <div class="col-sm-3">
+                <input id="shuilvmingzi" type="text" class="form-control" placeholder="请输入名字">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2">税率值</label>
+            <div class="col-sm-3">
+                <input id="shuilvzhi" type="text" class="form-control" placeholder="请输入税率值">
+            </div>
+            <span class="label label-badge">0-99</span>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2">限额</label>
+            <div class="col-sm-3">
+                <input id="shuilvxiane" type="number" class="form-control" placeholder="请输入限额">
+            </div>
+            <span class="label label-badge">单位：元</span>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2">标志位</label>
+            <div class="col-sm-3">
+                <select id="shuilvbiaozhiwei" class="form-control">
+                    <option value="1" selected="selected">1</option>
+                    <option value="0">0</option>
+                </select>
+            </div>
+            <span class="label label-badge">1表示有效，0表示无效</span>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <input id="submit1_4" class="btn btn-primary" type="button" style="margin-left: 70px"
+                       value="提交">
+            </div>
+        </div>
+    </form>
+</div>
+<!--对话框-->
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title">Messages</h4>
+            </div>
+            <div class="modal-body">
+                <p id="modal-content" style="font-weight: 800"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
