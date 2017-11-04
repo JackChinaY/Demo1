@@ -1,5 +1,7 @@
 package entity;
 
+import java.math.BigDecimal;
+
 public class PLU {
 	/**
 	 * 单品
@@ -8,29 +10,20 @@ public class PLU {
 	 * Stock_Control库存控制标志；flag 标志位；Total_Sales_Qty；Total_Sales_Amount
 	 * Id,Number,Name,Barcode,Price,Tax_Index,Stock_Control,Stock_Amount
 	 */
-		private String id;
+		private Integer id;
 		private String number;
 		private String name;
 		private String barcode;
 		private String price;
+	    private String rrp;
 		private String tax_Index;
 		private String stock_Control;
 		private String stock_Amount;
-		private String userId;
-		public PLU() {
-			this.id = "";
-			this.number = "";
-			this.name = "";
-			this.barcode = "";
-			this.price = "";
-			this.stock_Control = "";
-			this.stock_Amount = "";
-			this.userId = "";
-		}
-		public String getId() {
+
+		public Integer getId() {
 			return id;
 		}
-		public void setId(String id) {
+		public void setId(Integer id) {
 			this.id = id;
 		}
 		public String getNumber() {
@@ -57,6 +50,12 @@ public class PLU {
 		public void setPrice(String price) {
 			this.price = price;
 		}
+	    public String getRRP() {
+		return rrp;
+	}
+	    public void setRRP(String rrp) {
+		this.rrp = rrp;
+	}
 		public String getTax_Index() {
 			return tax_Index;
 		}
@@ -75,19 +74,13 @@ public class PLU {
 		public void setStock_Amount(String stock_Amount) {
 			this.stock_Amount = stock_Amount;
 		}
-		public String getUserId() {
-			return userId;
-		}
-		public void setUserId(String userId) {
-			this.userId = userId;
-		}
 		@Override
 		public String toString() {
 			return "PLU [id=" + id + ", number=" + number + ", name=" + name
 					+ ", barcode=" + barcode + ", price=" + price
-					+ ", tax_Index=" + tax_Index + ", stock_Control="
-					+ stock_Control + ", stock_Amount=" + stock_Amount
-					+ ", userId=" + userId + "]";
+					+ ", tax_Index=" + tax_Index
+					+ ", stock_Control=" + stock_Control + ", stock_Amount=" + stock_Amount
+					+ "]";
 		}
 		
 		
