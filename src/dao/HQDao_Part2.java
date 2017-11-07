@@ -56,9 +56,10 @@ public class HQDao_Part2 extends BaseDAO_Sqlite {
 	public boolean saveGoods(PLU plu) throws Exception {
 		String sql = "INSERT INTO goods_info (Number,Name,Barcode,Price,RRP,Tax_Index,Stock_Control,Stock_Amount) VALUES (?,?,?,?,?,?,?,?)";
 		String url = URL+"cbb418cc-8520-459f-ab02-ae3516388eb5/"+"goodsDB.db";
-		int result = this.saveOrUpdateOrDelete(sql,url, plu.getName(), plu.getBarcode(),
+		int result = this.saveOrUpdateOrDelete(sql,url, plu.getNumber(),
+				plu.getName(), plu.getBarcode(),
 				plu.getPrice(), plu.getRRP(), plu.getTax_Index(),
-				plu.getStock_Control(), plu.getStock_Amount(),plu.getNumber());
+				plu.getStock_Control(), plu.getStock_Amount());
 		if (result > 0)
 			return true;
 		else
@@ -100,11 +101,11 @@ public class HQDao_Part2 extends BaseDAO_Sqlite {
 	 * 方法序号：4_8 修改一个商品
 	 */
 	public boolean updateOneGoods(PLU plu) throws Exception {
-		String sql = "UPDATE goods_info SET Name=?,Barcode=?,Price=?,Tax_Index=?,Stock_Control=?,Stock_Amount=? where Number=? ";
+		String sql = "UPDATE goods_info SET Name=?,Barcode=?,Price=?,Tax_Index=?,RRP=?,Stock_Control=?,Stock_Amount=? where Number=? ";
 		String url = URL+"cbb418cc-8520-459f-ab02-ae3516388eb5/"+"goodsDB.db";
 		int result = this.saveOrUpdateOrDelete(sql,url, plu.getName(),
 				plu.getBarcode(), plu.getPrice(),
-				plu.getTax_Index(), plu.getStock_Control(),
+				plu.getTax_Index(),plu.getRRP(), plu.getStock_Control(),
 				plu.getStock_Amount(),plu.getNumber()
 				);
 		if (result > 0)
@@ -113,4 +114,79 @@ public class HQDao_Part2 extends BaseDAO_Sqlite {
 			return false;
 	}
 
+	/**
+	 * 方法序号： 4_9 按商品编号查询商品信息
+	 * Id,Number,Name,Barcode,Price,Tax_Index,Stock_Control,Stock_Amount
+	 *
+	 * @return json数组
+	 */
+	public String findGoodsInfByNumber(String GoodsNumber)
+			throws Exception {
+		String sql = "SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4,RRP ASvalue5, Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8 from Goods_Info where Number=? ";
+		String url=URL+"cbb418cc-8520-459f-ab02-ae3516388eb5/"+"goodsDB.db";
+		return this.getForJson(sql,url);
+	}
+
+	/**
+	 * 方法序号： 4_10 按商品名称查询商品信息
+	 * Id,Number,Name,Barcode,Price,Tax_Index,Stock_Control,Stock_Amount
+	 *
+	 * @return json数组
+	 */
+	public String findGoodsInfByName(String GoodsName)
+			throws Exception {
+		String sql = "SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4,RRP ASvalue5, Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8 from Goods_Info where Name=? ";
+		String url=URL+"cbb418cc-8520-459f-ab02-ae3516388eb5/"+"goodsDB.db";
+		return this.getForJson(sql,url);
+	}
+	/**
+	 * 方法序号： 4_11 按商品条形码查询商品信息
+	 * Id,Number,Name,Barcode,Price,Tax_Index,Stock_Control,Stock_Amount
+	 *
+	 * @return json数组
+	 */
+	public String findGoodsInfByBarcode(String GoodsBarcode)
+			throws Exception {
+		String sql = "SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4,RRP ASvalue5, Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8 from Goods_Info where Barcode=? ";
+		String url=URL+"cbb418cc-8520-459f-ab02-ae3516388eb5/"+"goodsDB.db";
+		return this.getForJson(sql,url);
+	}
+
+	/**
+	 * 方法序号： 5_1 查询所有部门信息
+	 * Id,Dept_No,PLU_No
+	 *
+	 * @return json数组
+	 */
+	public String findAllDeptInf() throws Exception {
+		String sql = "SELECT id AS value1, Dept_No AS value2, PLU_No AS value3 from Department_Associate ORDER BY id ASC";
+		String url=URL+"cbb418cc-8520-459f-ab02-ae3516388eb5/"+"goodsDB.db";
+		return this.getForJson(sql,url);
+	}
+
+	/**
+	 * 方法序号： 5_2 查询商品信息
+	 * Id,Number,Name,Barcode,Price,Tax_Index,Stock_Control,Stock_Amount
+	 *
+	 * @return json数组
+	 */
+	public String findAllGoodsInf()
+			throws Exception {
+		String sql = "SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4,RRP ASvalue5, Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8 from Goods_Info ORDER BY Number ASC";
+		String url=URL+"cbb418cc-8520-459f-ab02-ae3516388eb5/"+"goodsDB.db";
+		return this.getForJson(sql,url);
+	}
+
+	/**
+	 * 方法序号：5_3 修改一个部门关联信息
+	 */
+	public boolean updateOneDeptInf(String Dept_No,String PLU_No,Integer Id) throws Exception {
+		String sql = "UPDATE Department_Associate SET Dept_No=?,PLU_No=? where id=? ";
+		String url = URL+"cbb418cc-8520-459f-ab02-ae3516388eb5/"+"goodsDB.db";
+		int result = this.saveOrUpdateOrDelete(sql,url,Dept_No,PLU_No,Id);
+		if (result > 0)
+			return true;
+		else
+			return false;
+	}
 }

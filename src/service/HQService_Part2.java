@@ -126,20 +126,86 @@ public class HQService_Part2 extends BaseService {
 		}
 		return false;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+	/**
+	 * 方法序号：4_9 按商品编号查询商品信息
+	 */
+	public String findGoodsInfByNumber(String goodsNumber) {
+		try {
+			return this.hqDao_part2.findGoodsInfByNumber(goodsNumber);
+		} catch (Exception e) {
+			System.out.println("4_9 按商品编号查询商品信息时出错！");
+			e.printStackTrace();
+			return null;//程序运行出错，服务器出错
+		}
+	}
+
+	/**
+	 * 方法序号：4_10 按商品名称查询商品信息
+	 */
+	public String findGoodsInfByName(String goodsName) {
+		try {
+			return this.hqDao_part2.findGoodsInfByName(goodsName);
+		} catch (Exception e) {
+			System.out.println("4_9 按商品编号查询商品信息时出错！");
+			e.printStackTrace();
+			return null;//程序运行出错，服务器出错
+		}
+	}
+
+	/**
+	 * 方法序号：4_11 按商品名称查询商品信息
+	 */
+	public String findGoodsInfByBarcode(String goodsBarcode) {
+		try {
+			return this.hqDao_part2.findGoodsInfByBarcode(goodsBarcode);
+		} catch (Exception e) {
+			System.out.println("4_9 按商品编号查询商品信息时出错！");
+			e.printStackTrace();
+			return null;//程序运行出错，服务器出错
+		}
+	}
+
+	/**
+	 * 方法序号：5_1 查询所有商品
+	 * @return json数组字符串
+	 */
+	public String findAllDeptInf() {
+		try {
+			return this.hqDao_part2.findAllDeptInf();
+		} catch (Exception e) {
+			System.out.println("5_1 查询所有部门信息时出错！");
+			e.printStackTrace();
+			return null;//程序运行出错，服务器出错
+		}
+	}
+
+	/**
+	 * 方法序号：5_2 查询所有商品
+	 * @return json数组字符串
+	 */
+	public String findAllGoodsInf() {
+		try {
+			return this.hqDao_part2.findAllGoodsInf();
+		} catch (Exception e) {
+			System.out.println("5_2 查询所有商品信息时出错！");
+			e.printStackTrace();
+			return null;//程序运行出错，服务器出错
+		}
+	}
+
+	/**
+	 * 方法序号：5_2 查询所有商品
+	 * @return json数组字符串
+	 */
+	public boolean updateOneDeptInf(String Dept_No,String PLU_No,Integer Id) {
+		try {
+			return this.hqDao_part2.updateOneDeptInf(Dept_No,PLU_No,Id);
+		} catch (Exception e) {
+			System.out.println("5_3 更新部门关联信息时出错！");
+			e.printStackTrace();
+			return false;//程序运行出错，服务器出错
+		}
+	}
+
 }
