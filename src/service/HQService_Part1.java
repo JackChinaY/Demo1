@@ -2,6 +2,7 @@ package service;
 
 import dao.HQDao_Part1;
 import entity.Cashier;
+import entity.ForeignCurrency;
 import entity.PLU;
 
 /**
@@ -65,6 +66,7 @@ public class HQService_Part1 extends BaseService {
         }
         return "-1";
     }
+
     /**
      * 方法序号： 1_5 保存收银员
      */
@@ -77,6 +79,7 @@ public class HQService_Part1 extends BaseService {
         }
         return "-1";
     }
+
     /**
      * 方法序号： 1_6 保存修改后的收银员
      */
@@ -89,6 +92,7 @@ public class HQService_Part1 extends BaseService {
         }
         return "-1";
     }
+
     /**
      * 方法序号： 1_7 删除收银员
      */
@@ -101,83 +105,41 @@ public class HQService_Part1 extends BaseService {
         }
         return "-1";
     }
-//	/**
-//	 * 方法序号： 4_2 查询商品总记录数
-//	 */
-//	public int getGoodsCount(String id) {
-//		try {
-//			 return this.hqDao_part2.getGoodsCount(id);
-//		} catch (Exception e) {
-//			System.out.println("4_2 查询商品总记录数时出错！");
-//			e.printStackTrace();
-//		}
-//		return -1;
-//	}
 
-
-//	/**
-//	 * 方法序号：4_5 保存单品
-//	 */
-//	public boolean saveGoods(PLU plu) {
-//		try {
-//			return this.hqDao_part2.saveGoods(plu);// 添加
-//		} catch (Exception e) {
-//			System.out.println("4_5 保存单品时出错！");
-//			e.printStackTrace();
-//		}
-//		return false;
-//	}
-//	/**
-//	 * 方法序号：4_6 查询所有税种税目索引
-//	 * @return json数组字符串
-//	 */
-//	public String getGoodsTaxTariff(String userId) {
-//		try {
-//			return this.hqDao_part2.getGoodsTaxTariff(userId);
-//		} catch (Exception e) {
-//			System.out.println("4_6 查询所有税种税目索引时出错！");
-//			e.printStackTrace();
-//			return null;//程序运行出错，服务器出错
-//		}
-//	}
-//	/**
-//	 * 方法序号：4_6_1 查询所有税种税目记录
-//	 * @return json数组字符串
-//	 */
-//	public String getAllGoodsTaxTariff() {
-//		try {
-//			return this.hqDao_part2.getAllGoodsTaxTariff();
-//		} catch (Exception e) {
-//			System.out.println("4_6_1 查询所有税种税记录时出错！");
-//			e.printStackTrace();
-//			return null;//程序运行出错，服务器出错
-//		}
-//	}
-//	/**
-//	 * 方法序号：4_7 删除一条商品
-//	 */
-//	public int deleteOneGoods(String goodsId) {
-//		try {
-//			return this.hqDao_part2.deleteOneGoods(goodsId);
-//		} catch (Exception e) {
-//			System.out.println("4_7 删除一条商品时出错！");
-//			e.printStackTrace();
-//			return -1;//程序运行出错，服务器出错
-//		}
-//	}
-//	/**
-//	 * 方法序号：4_8 修改一个商品
-//	 */
-//	public boolean updateOneGoods(PLU plu) {
-//		try {
-//			return this.hqDao_part2.updateOneGoods(plu);// 添加
-//		} catch (Exception e) {
-//			System.out.println("4_8 修改一个商品时出错！");
-//			e.printStackTrace();
-//		}
-//		return false;
-//	}
-//
-
-
+    /**
+     * 方法序号：2_1 查询所有税率
+     */
+    public String findAllFiscals(String databaseUrl) {
+        try {
+            return this.hqDao_part1.findAllFiscals(databaseUrl);
+        } catch (Exception e) {
+            System.out.println("2_1 查询所有税率时出错！");
+            e.printStackTrace();
+            return "-1";//程序运行出错，服务器出错
+        }
+    }
+    /**
+     * 方法序号：3_1 查询所有外汇
+     */
+    public String findAllCurrency(String databaseUrl) {
+        try {
+            return this.hqDao_part1.findAllCurrency(databaseUrl);
+        } catch (Exception e) {
+            System.out.println("3_1 查询所有外汇时出错！");
+            e.printStackTrace();
+            return "-1";//程序运行出错，服务器出错
+        }
+    }
+    /**
+     * 方法序号： 3_2 保存修改后的外汇
+     */
+    public String modifyAbbreviation(String databaseUrl, ForeignCurrency currency) {
+        try {
+            return this.hqDao_part1.modifyAbbreviation(databaseUrl, currency);
+        } catch (Exception e) {
+            System.out.println("3_2 保存修改后的外汇时出错！");
+            e.printStackTrace();
+        }
+        return "-1";
+    }
 }

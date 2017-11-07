@@ -21,14 +21,24 @@
 //            $("#submit2").click(function () {
 //                findAllTax1();
 //                $("#submit2").popover('show');
-            $("#submit2").popover({
-                html: true,
-                title: "123",
-                content: '<table id="table1" class="table table-striped table-hover table-bordered"><thead id="thead1"></thead><tbody id="tbody1"></tbody></table>',
 
-            });
 //            });
-
+            var abb = ["CNY", "USD", "GBP", "EUR", "JPY", "HKD", "DEM", "CHF", "FRF", "NLG", "ATS", "BEF", "ITL", "CAD", "AUD", "SEK", "DKK", "NOK", "FIM", "KRW", "THB", "PHP", "INR", "SUR", "BUK", "NZD", "SGD"];
+            findAllAbbreviation();
+            //组合成所有外币
+            function findAllAbbreviation() {
+                var html = '<div><table class="table table-striped table-hover table-bordered">' +
+                    '<thead><tr><th>ID</th><th>Abbreviation</th><th>Choose</th></tr></thead><tbody>';
+//                alert(abbreviationArray.length);
+                for (var i = 0; i < abb.length; i++) {
+                    html += '<tr><td>' + i  + '</td>'
+                        + '<td class="abbreviation">' + abb[i] + '</td>'
+                        + '<td><a name="abbreviation" href="#" data-toggle="tooltip" data-tip-class="tooltip-primary" title="Choose"><i class="icon icon-pencil"></i></a></td></tr>';
+                }
+                html += '</tbody></table></div>';
+                alert(html);
+                return html;
+            }
         })
     </script>
 </head>
@@ -37,72 +47,5 @@
         class="icon icon-plus"></i> 弹出
 </button>
 
-<div>
-    <table id="table1" class="table table-striped table-hover table-bordered">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Tax Code</th>
-            <th>Tax Name</th>
-            <th>Tax Rate</th>
-            <th>Choose</th>
-        </tr>
-        </thead>
-        <tbody id="tbody1">
-        <tr>
-            <td class="Number">1</td>
-            <td class="TaxCode">A</td>
-            <td class="TaxName">Standard VAT</td>
-            <td class="TaxRate">1600</td>
-            <td><a name="chooseTaxIndex1" href="#" data-toggle="tooltip" data-tip-class="tooltip-primary"
-                   title="Choose"><i class="icon icon-pencil"></i></a></td>
-        </tr>
-        <tr>
-            <td class="Number">2</td>
-            <td class="TaxCode">B</td>
-            <td class="TaxName">MTV</td>
-            <td class="TaxRate">1600</td>
-            <td><a name="chooseTaxIndex1" href="#" data-toggle="tooltip" data-tip-class="tooltip-primary"
-                   title="Choose"><i class="icon icon-pencil"></i></a></td>
-        </tr>
-        <tr>
-            <td class="Number">3</td>
-            <td class="TaxCode">C</td>
-            <td class="TaxName">Standard VAT</td>
-            <td class="TaxRate">0</td>
-            <td><a name="chooseTaxIndex1" href="#" data-toggle="tooltip" data-tip-class="tooltip-primary"
-                   title="Choose"><i class="icon icon-pencil"></i></a></td>
-        </tr>
-        <tr>
-            <td class="Number">4</td>
-            <td class="TaxCode">D</td>
-            <td class="TaxName">Standard VAT</td>
-            <td class="TaxRate">1250</td>
-            <td><a name="chooseTaxIndex1" href="#" data-toggle="tooltip" data-tip-class="tooltip-primary"
-                   title="Choose"><i class="icon icon-pencil"></i></a></td>
-        </tr>
-        <tr>
-            <td class="Number">5</td>
-            <td class="TaxCode">E</td>
-            <td class="TaxName">EXEMPT VAT</td>
-            <td class="TaxRate">0</td>
-            <td><a name="chooseTaxIndex1" href="#" data-toggle="tooltip" data-tip-class="tooltip-primary"
-                   title="Choose"><i class="icon icon-pencil"></i></a></td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-
-<div id="my" class="popover right">
-    <div class="arrow"></div>
-    <h3 class="popover-title">从上方弹出</h3>
-    <div class="popover-content">
-        <h4>江雪
-            <small>唐·柳宗元</small>
-        </h4>
-        <p>千山鸟飞绝，万径人踪灭。</p>
-        <p>孤舟蓑笠翁，独钓寒江雪。</p>
-    </div>
-</div>
 </body>
 </html>

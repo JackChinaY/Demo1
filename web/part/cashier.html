@@ -16,6 +16,7 @@
                 var loginTimeout = "Login timeout, please login again !";
                 var serverError = "possible reasons：server error !";
                 /*******************************************************************************************/
+                //页面加载时自动执行的函数，生成表格
                 findAllCashiers();
                 /*******************************************************************************************/
                 //增加按钮，添加收银员
@@ -194,7 +195,7 @@
                         });
                     }
                 });
-                //保存收银员
+                //保存新增的收银员
                 $("#submit1_1").click(function () {
                     if ($("#code").val() == "") {
                         new $.zui.Messager('The Code can not be empty!', {
@@ -269,7 +270,12 @@
                             type: 'danger',
                             placement: 'top'
                         }).show();
-                    } else {
+                    } else if ($("#code_info").text() == "0") {
+                        new $.zui.Messager('The Code already existed in the database. Please re-enter it !', {
+                            type: 'danger',
+                            placement: 'top'
+                        }).show();
+                    }else {
                         $.ajax({
                             type: "POST",
                             url: "ActionPart1_saveCashier.action",
@@ -400,7 +406,7 @@
                     });
                 };
                 /*******************************************************************************************/
-                //修改按钮，添加收银员
+                //修改按钮，修改收银员
                 $("#tbody").on("click", "a[name='update']", function () {
                     //数据初始化
                     $("#number2").html($(this).parents("tr").find(".Id").text());
