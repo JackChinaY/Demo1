@@ -20,6 +20,12 @@
 		<!-- 用户的请求 -->
 		<action name="Action_*" class="control.HQAction" method="{1}">
 		</action>
+		<!--高瑞负责的-->
+		<action name="ActionPart1_*" class="control.HQAction_Part1" method="{1}">
+		</action>
+		<!--汪旭洋负责的-->
+		<action name="ActionPart2_*" class="control.HQAction_Part2" method="{1}">
+		</action>
 		<!-- 管理员的请求 -->
 		<action name="ActionAdmin_*" class="control.HQAction_Admin" method="{1}">
 		</action>

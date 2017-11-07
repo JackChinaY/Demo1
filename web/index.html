@@ -67,13 +67,14 @@
             //成功登陆后加载用户信息
             function loginsuccess() {
                 if ($.cookie("username") != null) {
-                    $("#successlogin").html("欢迎" + $.cookie("username") + "！");
+                    $("#successlogin").html( '  ' + $.cookie("username")+ '  ' );
                 } else {
                     location.href = "login.html";
                 }
             }
 
-//            loginsuccess();
+            loginsuccess();
+
             //注销
             $("#loginout").click(function () {
                 if ($.cookie("username") != null) {
@@ -219,15 +220,16 @@
     </span>
     <div class="login">
         <div id="p1">
+            <i class="icon icon-user"></i>
             <span id="successlogin" class="label label-badge " style="font-size: 16px"></span>
             <input id="loginout" class="btn btn-link" style="font-weight: 800" type="button" value="Log off">
             <!--<div class="dropdown" style="float: right">-->
-                <!--<button class="btn" type="button" data-toggle="dropdown">language&nbsp;<span class="caret"></span>-->
-                <!--</button>-->
-                <!--<ul class="dropdown-menu pull-right">-->
-                    <!--<li><a href="">English</a></li>-->
-                    <!--&lt;!&ndash;<li><a href="">简体中文</a></li>&ndash;&gt;-->
-                <!--</ul>-->
+            <!--<button class="btn" type="button" data-toggle="dropdown">language&nbsp;<span class="caret"></span>-->
+            <!--</button>-->
+            <!--<ul class="dropdown-menu pull-right">-->
+            <!--<li><a href="">English</a></li>-->
+            <!--&lt;!&ndash;<li><a href="">简体中文</a></li>&ndash;&gt;-->
+            <!--</ul>-->
             <!--</div>-->
         </div>
     </div>
