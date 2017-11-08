@@ -24,6 +24,7 @@
                 getBuyersMaxNumber();
                 $("#myModal1").modal();   //显示对话框
             });
+
             //查询客户最大编号，并填充加1后的数值
             function getBuyersMaxNumber() {
                 $.ajax({
@@ -65,6 +66,7 @@
                     }
                 });
             }
+
             //验证客户TPIN是否存在
             $("#tpin").blur(function () {
                 if ($("#tpin").val() == "") {
@@ -81,7 +83,7 @@
                     }).show();
                     $("#code_flag1").hide();//对号
                     $("#code_flag2").show();//叉号
-                }  else {
+                } else {
                     $.ajax({
                         type: "POST",
                         url: "ActionPart1_verifyBuyerTPIN.action",
@@ -168,7 +170,7 @@
                         type: 'danger',
                         placement: 'top'
                     }).show();
-                }  else if ($("#vat").val() == "") {
+                } else if ($("#vat").val() == "") {
                     new $.zui.Messager('The VAT ACC Name can not be empty!', {
                         type: 'danger',
                         placement: 'top'
@@ -178,7 +180,7 @@
                         type: 'danger',
                         placement: 'top'
                     }).show();
-                }else {
+                } else {
                     $.ajax({
                         type: "POST",
                         url: "ActionPart1_saveBuyer.action",
@@ -275,6 +277,7 @@
                     }
                 }
             }
+
             //首页按钮
             $("#firstPage").click(function () {
                 $("#pageIndex").text(1);
@@ -300,6 +303,7 @@
             $("#submit2").click(function () {
                 findAllBuyers();
             });
+
             //查询所有客户 无参
             function findAllBuyers() {
                 //查询客户总记录数
@@ -412,6 +416,7 @@
                     }
                 });
             }
+
             /*******************************************************************************************/
             //修改按钮，修改客户
             $("#tbody").on("click", "a[name='update']", function () {
@@ -450,7 +455,7 @@
                     }).show();
                     $("#code_flag3").show();//对号
                     $("#code_flag4").hide();//叉号
-                }  else {
+                } else {
                     $.ajax({
                         type: "POST",
                         url: "ActionPart1_verifyBuyerTPIN.action",
@@ -537,7 +542,7 @@
                         type: 'danger',
                         placement: 'top'
                     }).show();
-                }  else if ($("#vat2").val() == "") {
+                } else if ($("#vat2").val() == "") {
                     new $.zui.Messager('The VAT ACC Name can not be empty!', {
                         type: 'danger',
                         placement: 'top'
@@ -668,6 +673,7 @@
                 });
             });
             /*******************************************************************************************/
+
             //数据补全函数，如1，保留为001，num为待操作数，length为最终保留的长度
             function buquan(num, length) {
                 var numstr = num.toString();
@@ -680,6 +686,7 @@
                 }
                 return numstr;
             }
+
             /*******************************************************************************************/
         });
     </script>
@@ -781,9 +788,10 @@
                         </div>
                         <strong>*</strong>
                         <label style="padding-left: 10px"><i id="code_flag1" class="icon icon-check"
-                                                             style="color: green" hidden="hidden"></i> <i id="code_flag2"
-                                                                                          class="icon icon-times"
-                                                                                          style="color: red" hidden="hidden"></i></label>
+                                                             style="color: green" hidden="hidden"></i> <i
+                                id="code_flag2"
+                                class="icon icon-times"
+                                style="color: red" hidden="hidden"></i></label>
                         <label id="code_info" hidden="hidden"></label>
                     </div>
                     <div class="form-group">
@@ -853,9 +861,10 @@
                         </div>
                         <strong>*</strong>
                         <label style="padding-left: 10px"><i id="code_flag3" class="icon icon-check"
-                                                             style="color: green" hidden="hidden"></i> <i id="code_flag4"
-                                                                                                          class="icon icon-times"
-                                                                                                          style="color: red" hidden="hidden"></i></label>
+                                                             style="color: green" hidden="hidden"></i> <i
+                                id="code_flag4"
+                                class="icon icon-times"
+                                style="color: red" hidden="hidden"></i></label>
                         <label id="code_info2" hidden="hidden"></label>
                     </div>
                     <div class="form-group">

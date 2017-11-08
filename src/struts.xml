@@ -1,33 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE struts PUBLIC
-    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
-    "http://struts.apache.org/dtds/struts-2.0.dtd">
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
 
 <struts>
-	<!-- 配置为开发模式 -->
-<!-- 	<constant name="struts.devMode" value="true" /> -->
-<!-- 	配置扩展名为action ? -->
-	<constant name="struts.action.extension" value="action" />
-	<constant name="struts.multipart.saveDir" value="/temp/"/>
-	<!-- 配置文件上传 -->
-	<bean type= "org.apache.struts2.dispatcher.multipart.MultiPartRequest" name= "myRequestParser" class= "control.RequestParseWrapper" scope= "default" optional= "true" />
-	<constant name= "struts.multipart.handler" value= "myRequestParser" />
-	<!-- 配置主题 -->
-<!-- 	<constant name="struts.ui.theme" value="simple" /> -->
+    <!-- 配置为开发模式 -->
+    <!-- 	<constant name="struts.devMode" value="true" /> -->
+    <!-- 	配置扩展名为action ? -->
+    <constant name="struts.action.extension" value="action"/>
+    <constant name="struts.multipart.saveDir" value="/temp/"/>
 
-	<package name="default" namespace="/" extends="struts-default"></package>
-	<package name="CashMachine" namespace="/" extends="struts-default">
-		<!-- 用户的请求 -->
-		<action name="Action_*" class="control.HQAction" method="{1}">
-		</action>
-		<!--高瑞负责的-->
-		<action name="ActionPart1_*" class="control.HQAction_Part1" method="{1}">
-		</action>
-		<!--汪旭洋负责的-->
-		<action name="ActionPart2_*" class="control.HQAction_Part2" method="{1}">
-		</action>
-		<!-- 管理员的请求 -->
-		<action name="ActionAdmin_*" class="control.HQAction_Admin" method="{1}">
-		</action>
-	</package>
+    <!-- 配置文件上传 -->
+    <!--<bean type= "org.apache.struts2.dispatcher.multipart.MultiPartRequest" name= "myRequestParser" class= "control.RequestParseWrapper" scope= "default" optional= "true" />-->
+    <!--<constant name= "struts.multipart.handler" value= "myRequestParser" />-->
+
+    <!-- 配置主题 -->
+    <!-- 	<constant name="struts.ui.theme" value="simple" /> -->
+
+    <!--各种请求-->
+    <package name="default" namespace="/" extends="struts-default"></package>
+    <package name="CashMachine" namespace="/" extends="struts-default">
+        <!-- 用户的请求 -->
+        <action name="Action_*" class="control.HQAction" method="{1}">
+        </action>
+        <!--高瑞负责的-->
+        <action name="ActionPart1_*" class="control.HQAction_Part1" method="{1}">
+        </action>
+        <!--汪旭洋负责的-->
+        <action name="ActionPart2_*" class="control.HQAction_Part2" method="{1}">
+        </action>
+        <!-- 管理员的请求 -->
+        <action name="ActionAdmin_*" class="control.HQAction_Admin" method="{1}">
+        </action>
+    </package>
 </struts>

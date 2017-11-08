@@ -59,8 +59,12 @@
             //验证机器编号是否为正品
             $("#machineId").blur(function () {
                 if ($("#machineId").val() == "") {
-                    $("#checkinfo1").text("Cannot be empty");
-                    $("#checkinfo1").css("color", "#FF0000");
+                    new $.zui.Messager('The Machine Id can not be empty!', {
+                        type: 'danger',
+                        placement: 'top' // 定义显示位置
+                    }).show();
+                    $("#check_flag1").hide();//对号
+                    $("#check_flag2").show();//叉号
                 } else {
                     $.ajax({
                         type: "POST",
@@ -74,17 +78,28 @@
                         cache: false,
                         success: function (data) {
                             if (data.jsonObject == "1") {
-                                $("#checkinfo1").text("genuine");
-                                $("#checkinfo1").css("color", "#008000");
-                                $("#submit1").attr('disabled', false);
+                                new $.zui.Messager('This machine is genuine!', {
+                                    type: 'success',
+                                    placement: 'top' // 定义显示位置
+                                }).show();
+                                $("#check_flag1").show();//对号
+                                $("#check_flag2").hide();//叉号
+                                $("#check_info1").html(1);//0代表不存在，1代表正品
                             } else if (data.jsonObject == "0") {
-                                $("#checkinfo1").text("does not exist");
-                                $("#checkinfo1").css("color", "#FF0000");
+                                new $.zui.Messager('This Machine ID does not exist, please re-enter it !', {
+                                    type: 'danger',
+                                    placement: 'top' // 定义显示位置
+                                }).show();
+                                $("#check_flag1").hide();//对号
+                                $("#check_flag2").show();//叉号
+                                $("#check_info1").html(0);//0代表不存在，1代表正品
                             }
                         },
                         error: function (jqXHR) {
-                            $("#modal-content").html("The operation failed, please try again. Possible causes:" + jqXHR.status + "！");
-                            $("#myModal").modal();
+                            new $.zui.Messager("Operation failed, possible causes：" + jqXHR.status, {
+                                type: 'danger',
+                                placement: 'top' // 定义显示位置
+                            }).show();
                         }
                     });
                 }
@@ -92,8 +107,19 @@
             //验证用户名是否存在
             $("#username").blur(function () {
                 if ($("#username").val() == "") {
-                    $("#checkinfo2").text("Cannot be empty");
-                    $("#checkinfo2").css("color", "#FF0000");
+                    new $.zui.Messager('The Username can not be empty!', {
+                        type: 'danger',
+                        placement: 'top' // 定义显示位置
+                    }).show();
+                    $("#check_flag3").hide();//对号
+                    $("#check_flag4").show();//叉号
+                } else if ($("#username").val().trim() == "") {
+                    new $.zui.Messager('The Username can not be all spaces!', {
+                        type: 'danger',
+                        placement: 'top'
+                    }).show();
+                    $("#check_flag3").hide();//对号
+                    $("#check_flag4").show();//叉号
                 } else {
                     $.ajax({
                         type: "POST",
@@ -106,17 +132,28 @@
                         cache: false,
                         success: function (data) {
                             if (data.jsonObject == "0") {
-                                $("#checkinfo2").text("available");
-                                $("#checkinfo2").css("color", "#008000");
-                                $("#submit1").attr('disabled', false);
+                                new $.zui.Messager('The Username is available!', {
+                                    type: 'success',
+                                    placement: 'top' // 定义显示位置
+                                }).show();
+                                $("#check_flag3").show();//对号
+                                $("#check_flag4").hide();//叉号
+                                $("#check_info2").html(0);//0代表不存在，1代表存在
                             } else if (data.jsonObject == "1") {
-                                $("#checkinfo2").text("unavailable");
-                                $("#checkinfo2").css("color", "#FF0000");
+                                new $.zui.Messager('The Username already exists, please re-enter it !', {
+                                    type: 'danger',
+                                    placement: 'top' // 定义显示位置
+                                }).show();
+                                $("#check_flag3").hide();//对号
+                                $("#check_flag4").show();//叉号
+                                $("#check_info2").html(1);//0代表不存在，1代表存在
                             }
                         },
                         error: function (jqXHR) {
-                            $("#modal-content").html("The operation failed, please try again. Possible causes:" + jqXHR.status + "！");
-                            $("#myModal").modal();
+                            new $.zui.Messager("Operation failed, possible causes：" + jqXHR.status, {
+                                type: 'danger',
+                                placement: 'top' // 定义显示位置
+                            }).show();
                         }
                     });
                 }
@@ -124,18 +161,34 @@
 
             //注册
             $("#submituser").click(function () {
-                if ($("#username").val() == "") {
-                    new $.zui.Messager('Username cannot be empty！', {
+                if ($("#machineId").val() == "") {
+                    new $.zui.Messager('The Machine Id can not be empty!', {
                         type: 'danger',
-                        placement: 'center' // 定义显示位置
+                        placement: 'top' // 定义显示位置
                     }).show();
-                } else if ($("#checkinfo1").text() == "does not exist！") {
-                    new $.zui.Messager('the machine id does not exist！', {
+                    $("#check_flag1").hide();//对号
+                    $("#check_flag2").show();//叉号
+                } else if ($("#check_info1").text() == "0") {
+                    new $.zui.Messager('This Machine ID does not exist, please re-enter it ！', {
                         type: 'danger',
                         placement: 'center'
                     }).show();
-                } else if ($("#checkinfo2").text() == "unavailable！") {
-                    new $.zui.Messager('This Username is already in use. Please fill in the Username again！', {
+                } else if ($("#username").val() == "") {
+                    new $.zui.Messager('The Username can not be empty!', {
+                        type: 'danger',
+                        placement: 'top' // 定义显示位置
+                    }).show();
+                    $("#check_flag3").hide();//对号
+                    $("#check_flag4").show();//叉号
+                } else if ($("#username").val().trim() == "") {
+                    new $.zui.Messager('The Username can not be all spaces!', {
+                        type: 'danger',
+                        placement: 'top'
+                    }).show();
+                    $("#check_flag3").hide();//对号
+                    $("#check_flag4").show();//叉号
+                } else if ($("#check_info2").text() == "1") {
+                    new $.zui.Messager('The Username already exists, please re-enter it ！', {
                         type: 'danger',
                         placement: 'center'
                     }).show();
@@ -144,20 +197,41 @@
                         type: 'danger',
                         placement: 'center'
                     }).show();
+                } else if ($("#password").val().indexOf(" ") != -1) {
+                    new $.zui.Messager('The Password can not contain space!', {
+                        type: 'danger',
+                        placement: 'top'
+                    }).show();
                 } else if ($("#confirm_password").val() == "") {
                     new $.zui.Messager('RePassword cannot be empty！', {
                         type: 'danger',
                         placement: 'center'
                     }).show();
-                } else if ($("#email").val() == "") {
-                    new $.zui.Messager('E-mail cannot be empty！', {
+                } else if ($("#confirm_password").val().indexOf(" ") != -1) {
+                    new $.zui.Messager('The RePassword can not contain space!', {
                         type: 'danger',
-                        placement: 'center'
+                        placement: 'top'
                     }).show();
                 } else if ($("#password").val() != $("#confirm_password").val()) {
                     new $.zui.Messager('The Password and Confirm Password are inconsistent！', {
                         type: 'danger',
                         placement: 'center'
+                    }).show();
+                }
+                else if ($("#email").val() == "") {
+                    new $.zui.Messager('E-mail cannot be empty！', {
+                        type: 'danger',
+                        placement: 'center'
+                    }).show();
+                } else if ($("#email").val().indexOf(" ") != -1) {
+                    new $.zui.Messager('The E-mail can not contain space!', {
+                        type: 'danger',
+                        placement: 'top'
+                    }).show();
+                }else if ($("#email").val().indexOf("@") == -1) {
+                    new $.zui.Messager('The format of the E-mail is incorrect, please re-enter it !', {
+                        type: 'danger',
+                        placement: 'top'
                     }).show();
                 } else {
                     $.ajax({
@@ -179,30 +253,34 @@
                             if (data.jsonObject == "1") {
                                 $("#modal-content").html("Congratulations on your successful registration!");
                                 $("#myModal").modal();
+                                clearAll();
                             } else {
                                 $("#modal-content").html("Registration failed. Please re register!");
                                 $("#myModal").modal();
                             }
                         },
                         error: function (jqXHR) {
-                            $("#modal-content").html("The operation failed, please try again. Possible causes:" + jqXHR.status + "！");
-                            $("#myModal").modal();
+                            new $.zui.Messager("Operation failed, possible causes：" + jqXHR.status, {
+                                type: 'danger',
+                                placement: 'top' // 定义显示位置
+                            }).show();
                         }
                     });
                 }
             });
 
             // 将name=login的文本框清空，以便重新输入
-            $("#button_login_clear").click(function () {
+            function clearAll() {
                 $(".form-control").val("");
-            });
+            };
         })
     </script>
 </head>
 <body>
 <div style="height: 100px;width: 100%;position: absolute;">
     <div style="float: left"><h1 style="font-family: Arial;">&nbsp;&nbsp;&nbsp;Welcome to register!</h1></div>
-    <div style="float: right;margin-right: 50px;margin-top: 10px"><a type="submit" href="login.html" style="font-weight: 900;font-size: 20px;font-family: Arial">Login</a>
+    <div style="float: right;margin-right: 50px;margin-top: 10px"><a type="submit" href="login.html"
+                                                                     style="font-weight: 900;font-size: 20px;font-family: Arial">Login</a>
     </div>
 </div>
 <div class="box">
@@ -221,7 +299,13 @@
                 <div class="col-sm-6">
                     <input id="machineId" type="text" class="form-control" placeholder="please enter the Machine Id">
                 </div>
-                *
+                <strong>*</strong>
+                <label style="padding-left: 10px"><i id="check_flag1" class="icon icon-check"
+                                                     style="color: green" hidden="hidden"></i> <i id="check_flag2"
+                                                                                                  class="icon icon-times"
+                                                                                                  style="color: red"
+                                                                                                  hidden="hidden"></i></label>
+                <label id="check_info1" hidden="hidden"></label>
                 <span id="checkinfo1"></span>
             </div>
             <div class="form-group">
@@ -229,7 +313,13 @@
                 <div class="col-sm-6">
                     <input id="username" type="text" class="form-control" placeholder="please enter the Username">
                 </div>
-                *
+                <strong>*</strong>
+                <label style="padding-left: 10px"><i id="check_flag3" class="icon icon-check"
+                                                     style="color: green" hidden="hidden"></i> <i id="check_flag4"
+                                                                                                  class="icon icon-times"
+                                                                                                  style="color: red"
+                                                                                                  hidden="hidden"></i></label>
+                <label id="check_info2" hidden="hidden"></label>
                 <span id="checkinfo2"></span>
             </div>
             <div class="form-group">
