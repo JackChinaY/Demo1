@@ -1,9 +1,7 @@
 package service;
 
 import dao.HQDao_Part1;
-import entity.Cashier;
-import entity.ForeignCurrency;
-import entity.PLU;
+import entity.*;
 
 /**
  * return返回值规定：0表示受影响行数为0，数据库出错；1表示受影响行数为1，
@@ -118,6 +116,7 @@ public class HQService_Part1 extends BaseService {
             return "-1";//程序运行出错，服务器出错
         }
     }
+
     /**
      * 方法序号：3_1 查询所有外汇
      */
@@ -130,6 +129,7 @@ public class HQService_Part1 extends BaseService {
             return "-1";//程序运行出错，服务器出错
         }
     }
+
     /**
      * 方法序号： 3_2 保存修改后的外汇
      */
@@ -138,6 +138,93 @@ public class HQService_Part1 extends BaseService {
             return this.hqDao_part1.modifyAbbreviation(databaseUrl, currency);
         } catch (Exception e) {
             System.out.println("3_2 保存修改后的外汇时出错！");
+            e.printStackTrace();
+        }
+        return "-1";
+    }
+
+    /**
+     * 方法序号：4_1 查询客户总记录数
+     */
+    public String getBuyersCount(String databaseUrl) {
+        try {
+            return this.hqDao_part1.getBuyersCount(databaseUrl);
+        } catch (Exception e) {
+            System.out.println("4_1 查询客户总记录数时出错！");
+            e.printStackTrace();
+            return "-1";//程序运行出错，服务器出错
+        }
+    }
+
+    /**
+     * 方法序号：4_2 查询所有客户
+     */
+    public String findAllBuyers(String databaseUrl, Page page) {
+        try {
+            return this.hqDao_part1.findAllBuyers(databaseUrl, page);
+        } catch (Exception e) {
+            System.out.println("4_2 查询所有客户时出错！");
+            e.printStackTrace();
+            return "-1";//程序运行出错，服务器出错
+        }
+    }
+    /**
+     * 方法序号： 4_3 查询客户最大编号
+     */
+    public String getBuyersMaxNumber(String databaseUrl) {
+        try {
+            return this.hqDao_part1.getBuyersMaxNumber(databaseUrl);
+        } catch (Exception e) {
+            System.out.println("4_3 查询客户最大编号时出错！");
+            e.printStackTrace();
+        }
+        return "-1";
+    }
+    /**
+     * 方法序号： 4_4 验证客户TPIN是否存在
+     */
+    public String verifyBuyerTPIN(String databaseUrl, String tpin) {
+        try {
+            return this.hqDao_part1.verifyBuyerTPIN(databaseUrl, tpin);
+        } catch (Exception e) {
+            System.out.println("4_4 验证客户TPIN是否存在时出错！");
+            e.printStackTrace();
+        }
+        return "-1";
+    }
+    /**
+     * 方法序号： 4_5 保存客户
+     */
+    public String saveBuyer(String databaseUrl, Buyer buyer) {
+        try {
+            return this.hqDao_part1.saveBuyer(databaseUrl, buyer);
+        } catch (Exception e) {
+            System.out.println("4_5 保存客户时出错！");
+            e.printStackTrace();
+        }
+        return "-1";
+    }
+    /**
+     * 方法序号： 4_6 保存修改后的客户
+     */
+    public String modifyBuyer(String databaseUrl, Buyer buyer) {
+        try {
+            return this.hqDao_part1.modifyBuyer(databaseUrl, buyer);
+        } catch (Exception e) {
+            System.out.println("4_6 保存修改后的客户时出错！");
+            e.printStackTrace();
+        }
+        return "-1";
+    }
+
+    /**
+     * 方法序号： 4_7 删除客户
+     */
+    public String deleteOneBuyer(String databaseUrl,Buyer buyer) {
+        try {
+            return this.hqDao_part1.deleteOneBuyer(databaseUrl, buyer);
+        } catch (Exception e) {
+            System.out.println("4_7 删除客户时出错！");
             e.printStackTrace();
         }
         return "-1";

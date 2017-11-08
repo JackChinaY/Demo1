@@ -1,13 +1,9 @@
 package control;
 
-import entity.Cashier;
-import entity.ForeignCurrency;
-import entity.PLU;
-import org.json.JSONArray;
+import entity.*;
 import org.json.JSONException;
 import org.json.JSONObject;
 import service.HQService_Part1;
-import service.HQService_Part2;
 
 import java.io.IOException;
 
@@ -32,6 +28,8 @@ public class HQAction_Part1 extends BaseAction {
     private String databaseUrl = "jdbc:sqlite:D:/database/";  //sqlite数据库基础路径
     private String programmingDB = "/programmingDB.db";  //连接的是programmingDB.db
     private String systemDB = "/systemDB.db";  //连接的是systemDB.db
+    private String buyerDB = "/buyerDB.db";  //连接的是buyerDB.db
+
     /**
      * 方法序号：1_1 查询所有收银员
      */
@@ -199,6 +197,7 @@ public class HQAction_Part1 extends BaseAction {
             returnJsonObject(result);//可能的返回值：-1，[],json数组字符串
         }
     }
+
     /**
      * 方法序号：3_1 查询所有外汇
      */
@@ -214,6 +213,7 @@ public class HQAction_Part1 extends BaseAction {
             returnJsonObject(result);//可能的返回值：-1，[],json数组字符串
         }
     }
+
     /**
      * 方法序号：3_2 保存修改后的外汇
      */
@@ -230,6 +230,139 @@ public class HQAction_Part1 extends BaseAction {
             currency.setExchangeRate(this.getRequest().getParameter("value3"));
             String userId = this.getSession().getAttribute("userId").toString();//获取用户userId
             String result = hqService_part1.modifyAbbreviation(databaseUrl + userId + programmingDB, currency);// 0表示0条记录，1表示有1条记录
+            returnJsonObject(result);//可能的返回值：-1,0,1
+        }
+    }
+
+    /**
+     * 方法序号：4_1 查询客户总记录数
+     */
+    public void getBuyersCount() throws IOException, JSONException {
+        //如果用户登录超时，则需要重新登录
+        if (this.getSession().getAttribute("userId") == null) {
+            connectionTimeOut();
+        }
+        //登录未超时
+        else {
+
+            String userId = this.getSession().getAttribute("userId").toString();//获取用户UserId
+            String result = hqService_part1.getBuyersCount(databaseUrl + userId + buyerDB);
+            returnJsonObject(result);//可能的返回值：-1，0,具体数量
+        }
+    }
+
+    /**
+     * 方法序号：4_2 查询所有客户
+     */
+    public void findAllBuyers() throws IOException, JSONException {
+        //如果用户登录超时，则需要重新登录
+        if (this.getSession().getAttribute("userId") == null) {
+            connectionTimeOut();
+        }
+        //登录未超时
+        else {
+            Page page = new Page();
+//            System.out.println(this.getRequest().getParameter("value1"));
+            page.setPageIndex(Integer.parseInt(this.getRequest().getParameter("value1")));
+            page.setPageSize(Integer.parseInt(this.getRequest().getParameter("value2")));
+            String userId = this.getSession().getAttribute("userId").toString();//获取用户UserId
+            String result = hqService_part1.findAllBuyers(databaseUrl + userId + buyerDB, page);
+            returnJsonObject(result);//可能的返回值：-1，[],json数组字符串
+        }
+    }
+    /**
+     * 方法序号：4_3 查询客户最大编号
+     */
+    public void getBuyersMaxNumber() throws IOException, JSONException {
+        //如果用户登录超时，则需要重新登录
+        if (this.getSession().getAttribute("userId") == null) {
+            connectionTimeOut();//返回值：-3
+        }
+        //登录未超时
+        else {
+            String userId = this.getSession().getAttribute("userId").toString();//获取用户userId
+            String result = hqService_part1.getBuyersMaxNumber(databaseUrl + userId + buyerDB);// 0表示0条记录，1表示有1条记录
+            if (result == null) {
+                result = "null";
+            }
+            returnJsonObject(result);//可能的返回值：-1,null
+        }
+    }
+    /**
+     * 方法序号：4_4 验证客户TPIN是否存在
+     */
+    public void verifyBuyerTPIN() throws IOException, JSONException {
+        //如果用户登录超时，则需要重新登录
+        if (this.getSession().getAttribute("userId") == null) {
+            connectionTimeOut();//返回值：-3
+        }
+        //登录未超时
+        else {
+            String tpin = this.getRequest().getParameter("value1");
+            String userId = this.getSession().getAttribute("userId").toString();//获取用户userId
+            String result = hqService_part1.verifyBuyerTPIN(databaseUrl + userId + buyerDB, tpin);// 0表示0条记录，1表示有1条记录
+            returnJsonObject(result);//可能的返回值：-1,0,1
+        }
+    }
+    /**
+     * 方法序号：4_5 保存客户
+     */
+    public void saveBuyer() throws IOException, JSONException {
+        //如果用户登录超时，则需要重新登录
+        if (this.getSession().getAttribute("userId") == null) {
+            connectionTimeOut();//返回值：-3
+        }
+        //登录未超时
+        else {
+            Buyer buyer = new Buyer();
+            buyer.setNumber(this.getRequest().getParameter("value1"));
+            buyer.setName(this.getRequest().getParameter("value2"));
+            buyer.setTpin(this.getRequest().getParameter("value3"));
+            buyer.setVat(this.getRequest().getParameter("value4"));
+            buyer.setTel(this.getRequest().getParameter("value5"));
+            buyer.setAddress(this.getRequest().getParameter("value6"));
+            String userId = this.getSession().getAttribute("userId").toString();//获取用户userId
+            String result = hqService_part1.saveBuyer(databaseUrl + userId + buyerDB, buyer);// 0表示0条记录，1表示有1条记录
+            returnJsonObject(result);//可能的返回值：-1,0,1
+        }
+    }
+    /**
+     * 方法序号：4_6 保存修改后的客户
+     */
+    public void modifyBuyer() throws IOException, JSONException {
+        //如果用户登录超时，则需要重新登录
+        if (this.getSession().getAttribute("userId") == null) {
+            connectionTimeOut();//返回值：-3
+        }
+        //登录未超时
+        else {
+            Buyer buyer = new Buyer();
+            buyer.setNumber(this.getRequest().getParameter("value1"));
+            buyer.setName(this.getRequest().getParameter("value2"));
+            buyer.setTpin(this.getRequest().getParameter("value3"));
+            buyer.setVat(this.getRequest().getParameter("value4"));
+            buyer.setTel(this.getRequest().getParameter("value5"));
+            buyer.setAddress(this.getRequest().getParameter("value6"));
+            String userId = this.getSession().getAttribute("userId").toString();//获取用户userId
+            String result = hqService_part1.modifyBuyer(databaseUrl + userId + buyerDB, buyer);// 0表示0条记录，1表示有1条记录
+            returnJsonObject(result);//可能的返回值：-1,0,1
+        }
+    }
+
+    /**
+     * 方法序号：4_7 删除客户
+     */
+    public void deleteOneBuyer() throws IOException, JSONException {
+        //如果用户登录超时，则需要重新登录
+        if (this.getSession().getAttribute("userId") == null) {
+            connectionTimeOut();//返回值：-3
+        }
+        //登录未超时
+        else {
+            Buyer buyer = new Buyer();
+            buyer.setNumber(this.getRequest().getParameter("value1"));
+            String userId = this.getSession().getAttribute("userId").toString();//获取用户userId
+            String result = hqService_part1.deleteOneBuyer(databaseUrl + userId + buyerDB, buyer);// 0表示0条记录，1表示有1条记录
             returnJsonObject(result);//可能的返回值：-1,0,1
         }
     }
