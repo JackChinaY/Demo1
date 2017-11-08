@@ -270,12 +270,7 @@
                             type: 'danger',
                             placement: 'top'
                         }).show();
-                    } else if ($("#code_info").text() == "0") {
-                        new $.zui.Messager('The Code already existed in the database. Please re-enter it !', {
-                            type: 'danger',
-                            placement: 'top'
-                        }).show();
-                    }else {
+                    } else {
                         $.ajax({
                             type: "POST",
                             url: "ActionPart1_saveCashier.action",
@@ -404,7 +399,7 @@
                             $("#myModal").modal();
                         }
                     });
-                };
+                }
                 /*******************************************************************************************/
                 //修改按钮，修改收银员
                 $("#tbody").on("click", "a[name='update']", function () {
