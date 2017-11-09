@@ -115,5 +115,16 @@ public class HQService extends BaseService {
         }
     }
 
-
+    /**
+     * 方法序号：5_3 保存修改后用户密码
+     */
+    public String saveNewPassword(User user) {
+        try {
+            return this.hqDao.saveNewPassword(user);
+        } catch (Exception e) {
+            System.out.println("5_3 保存修改后用户密码时出错！");
+            e.printStackTrace();
+            return "-1";//程序运行出错，服务器出错
+        }
+    }
 }
