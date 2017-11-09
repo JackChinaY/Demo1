@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import service.HQService;
+import util.FileOperation;
 import util.SendEmail;
 import util.UtilsAll;
 
@@ -30,16 +31,16 @@ public class HQAction extends BaseAction {
     /**
      * 序列化
      */
-    private static final long serialVersionUID = 415712263988003225L;
+//    private static final long serialVersionUID = 415712263988003225L;
     private HQService hqService = new HQService();
-    private String currentUserId = "cbb418cc-8520-459f-ab02-ae3516388eb5";  //当前用户名Id，软件发布的时候把该字符内容删除掉
+//    private String currentUserId = "cbb418cc-8520-459f-ab02-ae3516388eb5";  //当前用户名Id，软件发布的时候把该字符内容删除掉
 
     /**
      * 方法序号：1_1 登录
      *
      * @throws NoSuchAlgorithmException
      */
-    public String login() throws IOException, JSONException {
+    public void login() throws IOException, JSONException {
         String username = this.getRequest().getParameter("username");
         String password = DigestUtils.md5Hex(this.getRequest().getParameter("password"));//对密码进行加密
 //		System.out.println("用户id1："+ this.getSession().getAttribute("userId"));
@@ -58,7 +59,6 @@ public class HQAction extends BaseAction {
         jo.put("username", username);
         this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
         this.getResponse().getWriter().print(jo);// 向前台发送json数据
-        return null;
     }
 
     /**
@@ -76,7 +76,7 @@ public class HQAction extends BaseAction {
     /**
      * 方法序号：1_3 注册
      */
-    public String register() throws IOException, JSONException {
+    public void register() throws IOException, JSONException {
         User user = new User();
         user.setId(UUID.randomUUID().toString());
         user.setUsername(this.getRequest().getParameter("username"));
@@ -91,6 +91,8 @@ public class HQAction extends BaseAction {
         String flag;
         if (result) {
             flag = "1";//注册成功
+            //注册成功后创建数据该用户的数据库
+            FileOperation.copyFolder("database", "D:\\database\\" + user.getId());
         } else {
             flag = "0";//注册失败
         }
@@ -98,13 +100,12 @@ public class HQAction extends BaseAction {
         jo.put("jsonObject", flag);
         this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
         this.getResponse().getWriter().print(jo);// 向前台发送json数据
-        return null;
     }
 
     /**
      * 方法序号：1_4 找回密码
      */
-    public String callbackPassword() throws IOException, JSONException {
+    public void callbackPassword() throws IOException, JSONException {
         User user = new User();
         user.setUsername(this.getRequest().getParameter("username"));
         user.setEmail(this.getRequest().getParameter("email"));
@@ -115,7 +116,7 @@ public class HQAction extends BaseAction {
         int result = hqService.verifyUsernameIsExist(user);
         String flag;
         if (result == 0) {//该用户不存在
-            flag = "该用户账号不存在或其他信息填写不正确！";
+            flag = "The user account does not exist or other information is incorrectly filled in ！";//该用户账号不存在或其他信息填写不正确
         } else if (result == 1) {//该用户存在 TODO
             String newPassword = UtilsAll.getRandomString(8);//随机生成8位新密码
             user.setPassword(DigestUtils.md5Hex(newPassword));
@@ -127,41 +128,40 @@ public class HQAction extends BaseAction {
             boolean resultOfReset = hqService.resetPassord(user);
             System.out.println(newPassword);
             if (resultOfReset) {
-                flag = "您用户密码已重置成功，请到您的注册邮箱：" + user.getEmail() + "查看新密码！";
+                //找回成功
+                flag = "Your password has been reset successfully. Please go to your registered mailbox：" + user.getEmail() + ",to view the new password！";
             } else {
-                flag = "密码重置失败！";
+                //找回失败
+                flag = "Password reset failed！";
             }
         } else {
-            flag = "该账号存在多个用户！";
+            flag = "There are multiple users in this account！";//该账号存在多个用户
         }
         JSONObject jo = new JSONObject();
         jo.put("jsonObject", flag);
         this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
         this.getResponse().getWriter().print(jo);// 向前台发送json数据
-        return null;
     }
 
     /**
      * 方法序号：1_5 注销
      */
-    public String loginOut() throws IOException, JSONException {
+    public void loginOut() throws IOException, JSONException {
         HttpSession session = this.getRequest().getSession(false);//防止创建Session
         if (session == null) {
             this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
             this.getResponse().getWriter().print("1");// 向前台发送json数据
-            return null;
         }
         session.removeAttribute("userId");
         session.invalidate();//清除session
         this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
         this.getResponse().getWriter().print("1");// 向前台发送json数据
-        return null;
     }
 
     /**
      * 方法序号：1_6  验证验证机器是否为正品
      */
-    public String verifyMachine() throws IOException, JSONException {
+    public void verifyMachine() throws IOException, JSONException {
         String machineType = this.getRequest().getParameter("machineType");
         String machineId = this.getRequest().getParameter("machineId");
 //		System.out.println(machineType+machineId);
@@ -170,9 +170,63 @@ public class HQAction extends BaseAction {
         jo.put("jsonObject", result);
         this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
         this.getResponse().getWriter().print(jo);// 向前台发送json数据
-        return null;
     }
 
+    /**
+     * 方法序号：5_1 查询用户个人信息
+     */
+    public void findUserInfo() throws IOException, JSONException {
+        //如果用户登录超时，则需要重新登录
+        if (this.getSession().getAttribute("userId") == null) {
+            connectionTimeOut();
+        }
+        //登录未超时
+        else {
+            String userId = this.getSession().getAttribute("userId").toString();//获取用户UserId
+            String result = hqService.findUserInfo(userId);
+            returnJsonObject(result);//可能的返回值：-1，[],json数组字符串
+        }
+    }
+
+    /**
+     * 方法序号：5_2 保存修改后用户个人信息
+     */
+    public void saveUserInfo() throws IOException, JSONException {
+        //如果用户登录超时，则需要重新登录
+        if (this.getSession().getAttribute("userId") == null) {
+            connectionTimeOut();
+        }
+        //登录未超时
+        else {
+            User user = new User();
+            user.setEmail(this.getRequest().getParameter("email"));
+            user.setTel(this.getRequest().getParameter("tel"));
+            user.setAdress(this.getRequest().getParameter("address"));
+            user.setId(this.getSession().getAttribute("userId").toString());//获取用户UserId
+            String result = hqService.saveUserInfo(user);
+            returnJsonObject(result);//可能的返回值：-1，0,1
+        }
+    }
+
+    /**
+     * 如果用户登录超时，则需要重新登录
+     */
+    public void connectionTimeOut() throws IOException, JSONException {
+        JSONObject jo = new JSONObject();
+        jo.put("jsonObject", -3);//-3为登录超时
+        this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
+        this.getResponse().getWriter().print(jo);// 向前台发送json数据
+    }
+
+    /**
+     * 统一向前台返回数据，返回的是jsonObject
+     */
+    public void returnJsonObject(String result) throws IOException, JSONException {
+        JSONObject jo = new JSONObject();
+        jo.put("jsonObject", result);
+        this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
+        this.getResponse().getWriter().print(jo);// 向前台发送json数据
+    }
 
 //    /**后续功能，暂此不删
 //     * 方法序号：3_1_1查询部类日报表
@@ -258,7 +312,5 @@ public class HQAction extends BaseAction {
 ////		this.getResponse().getWriter().print(jo);// 向前台发送json数据
 ////		return null;
 ////	}
-
-
 
 }

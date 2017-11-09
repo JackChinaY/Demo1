@@ -103,9 +103,10 @@ public class HQDao_Part1 extends BaseDAO_Sqlite {
      */
     public String findAllBuyers(String databaseUrl, Page page) throws Exception {
         String sql = "SELECT Number AS value1,Name AS value2,BPN AS value3,VAT AS value4,Address AS value5,Tel AS value6 FROM " +
-                "(SELECT * FROM Buyer_Info ORDER BY Number ASC LIMIT ?) LIMIT @pageSize offset ?;";
+                "(SELECT * FROM Buyer_Info ORDER BY Number ASC LIMIT ?) LIMIT ? offset ?;";
         return this.getForJson(sql, databaseUrl, page.getPageSize() * page.getPageIndex(), page.getPageSize(), page.getPageSize() * (page.getPageIndex() - 1));
     }
+
     /**
      * 方法序号：4_3 查询客户最大编号
      */
@@ -113,6 +114,7 @@ public class HQDao_Part1 extends BaseDAO_Sqlite {
         String sql = " SELECT MAX(Number) AS MAXNUM FROM Buyer_Info";
         return this.getOneRecard(sql, databaseUrl);
     }
+
     /**
      * 方法序号：4_4 验证客户TPIN是否存在
      */
@@ -120,13 +122,15 @@ public class HQDao_Part1 extends BaseDAO_Sqlite {
         String sql = " SELECT COUNT(*) AS COUNTS FROM Buyer_Info WHERE BPN=?";
         return Integer.toString(this.getCount(sql, databaseUrl, tpin));
     }
+
     /**
      * 方法序号：4_5 保存客户
      */
     public String saveBuyer(String databaseUrl, Buyer buyer) throws Exception {
         String sql = "INSERT INTO Buyer_Info (Number,Name,BPN,VAT,Address,Tel,Bank_Account_No,Remark,Reserved) VALUES (?,?,?,?,?,?,?,?,?)";
-        return Integer.toString(this.saveOrUpdateOrDelete(sql, databaseUrl, buyer.getNumber(),buyer.getName(),buyer.getTpin(),buyer.getVat(),buyer.getAddress(),buyer.getTel(),buyer.getBankAccount(),buyer.getRemark(),buyer.getReserved()));
+        return Integer.toString(this.saveOrUpdateOrDelete(sql, databaseUrl, buyer.getNumber(), buyer.getName(), buyer.getTpin(), buyer.getVat(), buyer.getAddress(), buyer.getTel(), buyer.getBankAccount(), buyer.getRemark(), buyer.getReserved()));
     }
+
     /**
      * 方法序号：4_6 保存修改后的客户
      */
@@ -142,4 +146,30 @@ public class HQDao_Part1 extends BaseDAO_Sqlite {
         String sql = "DELETE FROM Buyer_Info WHERE Number=?";
         return Integer.toString(this.saveOrUpdateOrDelete(sql, databaseUrl, buyer.getNumber()));
     }
+
+    /**
+     * 方法序号： 4_8 查询所有客户 按条件查询 按number
+     */
+    public String findAllBuyersByOption_ByNumber(String databaseUrl, String key) throws Exception {
+        String sql = "SELECT Number AS value1,Name AS value2,BPN AS value3,VAT AS value4,Address AS value5,Tel AS value6 FROM Buyer_Info WHERE Number LIKE ?";
+        return this.getForJson(sql, databaseUrl, "%" + key + "%");
+    }
+
+    /**
+     * 方法序号： 4_8 查询所有客户 按条件查询 按Name
+     */
+    public String findAllBuyersByOption_ByName(String databaseUrl, String key) throws Exception {
+        String sql = "SELECT Number AS value1,Name AS value2,BPN AS value3,VAT AS value4,Address AS value5,Tel AS value6 FROM Buyer_Info WHERE Name LIKE ?";
+        return this.getForJson(sql, databaseUrl, "%" + key + "%");
+    }
+
+    /**
+     * 方法序号： 4_8 查询所有客户 按条件查询 按TPIN
+     */
+    public String findAllBuyersByOption_ByTPIN(String databaseUrl, String key) throws Exception {
+        String sql = "SELECT Number AS value1,Name AS value2,BPN AS value3,VAT AS value4,Address AS value5,Tel AS value6 FROM Buyer_Info WHERE BPN LIKE ?";
+        return this.getForJson(sql, databaseUrl, "%" + key + "%");
+    }
+
+
 }

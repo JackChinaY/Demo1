@@ -89,14 +89,16 @@
                             $.cookie("username", null, {expires: -1});//删除cookie信息
                         },
                         error: function (jqXHR) {
-                            $("#modal-content").html("发生错误代码：" + jqXHR.status + "，数据未加载成功！");
-                            $("#myModal").modal();
+                            new $.zui.Messager("Operation failed, possible causes：" + jqXHR.status, {
+                                type: 'danger',
+                                placement: 'top' // 定义显示位置
+                            }).show();
+                            location.href = "login.html";
                         }
                     });
 
                 } else {
-                    $("#modal-content").html("退出失败!");
-                    $("#myModal").modal();
+                    location.href = "login.html";
                 }
             });
         })
@@ -220,9 +222,13 @@
     </span>
     <div class="login">
         <div id="p1">
-            <i class="icon icon-user"></i>
-            <span id="successlogin" class="label label-badge " style="font-size: 16px"></span>
-            <input id="loginout" class="btn btn-link" style="font-weight: 800" type="button" value="Log off">
+            <button class="btn btn-link" type="button"
+                    style="font-weight: 800"><i class="icon icon-user"></i>
+            </button>
+            <span id="successlogin" class="label label-badge " style="font-size: 16px;"></span>
+            <button id="loginout" class="btn btn-link" type="button"
+                    style="float: right;font-weight: 800"><i class="icon icon-off"></i> Log off
+            </button>
             <!--<div class="dropdown" style="float: right">-->
             <!--<button class="btn" type="button" data-toggle="dropdown">language&nbsp;<span class="caret"></span>-->
             <!--</button>-->
@@ -260,6 +266,12 @@
                 <li class="open"><a href="#"><i class="icon icon-group"></i>Buyers Management</a>
                     <ul>
                         <li><a href="part/buyers.html" target="mainbox"><i class="icon icon-circle-blank"></i>Buyers
+                            Management</a></li>
+                    </ul>
+                </li>
+                <li class="open"><a href="#"><i class="icon icon-user"></i>User Center</a>
+                    <ul>
+                        <li><a href="part/user.html" target="mainbox"><i class="icon icon-circle-blank"></i>Buyers
                             Management</a></li>
                     </ul>
                 </li>

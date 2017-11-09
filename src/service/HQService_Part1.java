@@ -168,6 +168,7 @@ public class HQService_Part1 extends BaseService {
             return "-1";//程序运行出错，服务器出错
         }
     }
+
     /**
      * 方法序号： 4_3 查询客户最大编号
      */
@@ -180,6 +181,7 @@ public class HQService_Part1 extends BaseService {
         }
         return "-1";
     }
+
     /**
      * 方法序号： 4_4 验证客户TPIN是否存在
      */
@@ -192,6 +194,7 @@ public class HQService_Part1 extends BaseService {
         }
         return "-1";
     }
+
     /**
      * 方法序号： 4_5 保存客户
      */
@@ -204,6 +207,7 @@ public class HQService_Part1 extends BaseService {
         }
         return "-1";
     }
+
     /**
      * 方法序号： 4_6 保存修改后的客户
      */
@@ -220,7 +224,7 @@ public class HQService_Part1 extends BaseService {
     /**
      * 方法序号： 4_7 删除客户
      */
-    public String deleteOneBuyer(String databaseUrl,Buyer buyer) {
+    public String deleteOneBuyer(String databaseUrl, Buyer buyer) {
         try {
             return this.hqDao_part1.deleteOneBuyer(databaseUrl, buyer);
         } catch (Exception e) {
@@ -229,4 +233,27 @@ public class HQService_Part1 extends BaseService {
         }
         return "-1";
     }
+
+    /**
+     * 方法序号：4_8 查询所有客户 按条件查询
+     */
+    public String findAllBuyersByOption(String databaseUrl, String option, String key) {
+        try {
+//            查询类型：number、name、tpin
+            if (option.equals("number")) {
+                return this.hqDao_part1.findAllBuyersByOption_ByNumber(databaseUrl, key);
+            } else if (option.equals("name")) {
+                return this.hqDao_part1.findAllBuyersByOption_ByName(databaseUrl, key);
+            } else if (option.equals("tpin")) {
+                return this.hqDao_part1.findAllBuyersByOption_ByTPIN(databaseUrl, key);
+            }
+        } catch (Exception e) {
+            System.out.println("4_8 查询所有客户 按条件查询时出错！");
+            e.printStackTrace();
+            return "-1";//程序运行出错，服务器出错
+        }
+        return "[]";
+    }
+
+
 }

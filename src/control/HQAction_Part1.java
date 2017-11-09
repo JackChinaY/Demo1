@@ -163,26 +163,6 @@ public class HQAction_Part1 extends BaseAction {
     }
 
     /**
-     * 如果用户登录超时，则需要重新登录
-     */
-    public void connectionTimeOut() throws IOException, JSONException {
-        JSONObject jo = new JSONObject();
-        jo.put("jsonObject", -3);//-3为登录超时
-        this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
-        this.getResponse().getWriter().print(jo);// 向前台发送json数据
-    }
-
-    /**
-     * 统一向前台返回数据，返回的是jsonObject
-     */
-    public void returnJsonObject(String result) throws IOException, JSONException {
-        JSONObject jo = new JSONObject();
-        jo.put("jsonObject", result);
-        this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
-        this.getResponse().getWriter().print(jo);// 向前台发送json数据
-    }
-
-    /**
      * 方法序号：2_1 查询所有税率
      */
     public void findAllFiscals() throws IOException, JSONException {
@@ -270,6 +250,7 @@ public class HQAction_Part1 extends BaseAction {
             returnJsonObject(result);//可能的返回值：-1，[],json数组字符串
         }
     }
+
     /**
      * 方法序号：4_3 查询客户最大编号
      */
@@ -288,6 +269,7 @@ public class HQAction_Part1 extends BaseAction {
             returnJsonObject(result);//可能的返回值：-1,null
         }
     }
+
     /**
      * 方法序号：4_4 验证客户TPIN是否存在
      */
@@ -304,6 +286,7 @@ public class HQAction_Part1 extends BaseAction {
             returnJsonObject(result);//可能的返回值：-1,0,1
         }
     }
+
     /**
      * 方法序号：4_5 保存客户
      */
@@ -326,6 +309,7 @@ public class HQAction_Part1 extends BaseAction {
             returnJsonObject(result);//可能的返回值：-1,0,1
         }
     }
+
     /**
      * 方法序号：4_6 保存修改后的客户
      */
@@ -366,4 +350,43 @@ public class HQAction_Part1 extends BaseAction {
             returnJsonObject(result);//可能的返回值：-1,0,1
         }
     }
+
+    /**
+     * 方法序号：4_8 查询所有客户 按条件查询
+     */
+    public void findAllBuyersByOption() throws IOException, JSONException {
+        //如果用户登录超时，则需要重新登录
+        if (this.getSession().getAttribute("userId") == null) {
+            connectionTimeOut();
+        }
+        //登录未超时
+        else {
+            String option = this.getRequest().getParameter("value1");//查询类型：number、name、tpin
+            String key = this.getRequest().getParameter("value2");//查询关键字
+//            System.out.println(option+"  "+key);
+            String userId = this.getSession().getAttribute("userId").toString();//获取用户UserId
+            String result = hqService_part1.findAllBuyersByOption(databaseUrl + userId + buyerDB, option, key);
+            returnJsonObject(result);//可能的返回值：-1，[],json数组字符串
+        }
+    }
+    /**
+     * 如果用户登录超时，则需要重新登录
+     */
+    public void connectionTimeOut() throws IOException, JSONException {
+        JSONObject jo = new JSONObject();
+        jo.put("jsonObject", -3);//-3为登录超时
+        this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
+        this.getResponse().getWriter().print(jo);// 向前台发送json数据
+    }
+
+    /**
+     * 统一向前台返回数据，返回的是jsonObject
+     */
+    public void returnJsonObject(String result) throws IOException, JSONException {
+        JSONObject jo = new JSONObject();
+        jo.put("jsonObject", result);
+        this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
+        this.getResponse().getWriter().print(jo);// 向前台发送json数据
+    }
+
 }

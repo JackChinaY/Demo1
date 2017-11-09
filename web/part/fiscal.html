@@ -16,15 +16,15 @@
             var loginTimeout = "Login timeout, please login again !";
             var serverError = "possible reasons：server error !";
             /*******************************************************************************************/
-            //查询所有收银员 点击事件
+            //查询所有税率 点击事件
             $("#submit2").click(function () {
                 findAllFiscals();
             });
             //自动加载数据
             findAllFiscals();
-            //查询所有收银员 无参
+            //查询所有税率 无参
             function findAllFiscals() {
-                //查询所有收银员
+                //查询所有税率
                 $.ajax({
                     type: "GET",
                     url: "ActionPart1_findAllFiscals.action",

@@ -17,287 +17,7 @@
             var serverError = "possible reasons：server error !";
             /*******************************************************************************************/
             //页面加载时自动执行的函数，生成表格
-            findAllBuyers();
-            /*******************************************************************************************/
-            //增加按钮，添加客户
-            $("#submit1").click(function () {
-                getBuyersMaxNumber();
-                $("#myModal1").modal();   //显示对话框
-            });
-
-            //查询客户最大编号，并填充加1后的数值
-            function getBuyersMaxNumber() {
-                $.ajax({
-                    type: "POST",
-                    url: "ActionPart1_getBuyersMaxNumber.action",
-                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                    dataType: "json",
-                    cache: false,
-                    success: function (data) {
-                        //登录超时，请重新登录
-                        if (data.jsonObject == "-3") {
-                            new $.zui.Messager(loginTimeout, {
-                                type: 'danger',
-                                placement: 'top' // 定义显示位置
-                            }).show();
-                            setTimeout(function () {
-                                location.href = "../login.html";//重定向
-                            }, 2000);
-                        }
-                        //可能原因：服务器出错
-                        else if (data.jsonObject == "-1") {
-                            new $.zui.Messager(serverError, {
-                                type: 'danger',
-                                placement: 'top' // 定义显示位置
-                            }).show();
-                        } else if (data.jsonObject == "null") {
-                            //null代表数据表为空，编号从1开始
-                            $("#number").html(1);
-                        } else {
-                            $("#number").html(parseInt(data.jsonObject) + 1);//商品编号最大值加1
-                        }
-                    },
-                    error: function (jqXHR) {
-                        //操作失败，可能原因
-                        new $.zui.Messager("Operation failed, possible causes：" + jqXHR.status, {
-                            type: 'danger',
-                            placement: 'top' // 定义显示位置
-                        }).show();
-                    }
-                });
-            }
-
-            //验证客户TPIN是否存在
-            $("#tpin").blur(function () {
-                if ($("#tpin").val() == "") {
-                    new $.zui.Messager('The TPIN can not be empty!', {
-                        type: 'danger',
-                        placement: 'top' // 定义显示位置
-                    }).show();
-                    $("#code_flag1").hide();//对号
-                    $("#code_flag2").show();//叉号
-                } else if ($("#tpin").val().length != 10) {
-                    new $.zui.Messager('The length of the TPIN is fixed 10 numbers!', {
-                        type: 'danger',
-                        placement: 'top' // 定义显示位置
-                    }).show();
-                    $("#code_flag1").hide();//对号
-                    $("#code_flag2").show();//叉号
-                } else {
-                    $.ajax({
-                        type: "POST",
-                        url: "ActionPart1_verifyBuyerTPIN.action",
-                        contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                        data: {
-                            "value1": $("#tpin").val()
-                        },
-                        dataType: "json",
-                        cache: false,
-                        success: function (data) {
-                            //登录超时，请重新登录
-                            if (data.jsonObject == "-3") {
-                                new $.zui.Messager(loginTimeout, {
-                                    type: 'danger',
-                                    placement: 'top' // 定义显示位置
-                                }).show();
-                                setTimeout(function () {
-                                    location.href = "../login.html";//重定向
-                                }, 2000);
-                            }
-                            //服务器出错
-                            else if (data.jsonObject == "-1") {
-                                new $.zui.Messager(serverError, {
-                                    type: 'danger',
-                                    placement: 'top' // 定义显示位置
-                                }).show();
-                            }
-                            //正确传输过来数据
-                            else {
-                                if (data.jsonObject == "0") {
-                                    $("#code_flag1").show();//对号
-                                    $("#code_flag2").hide();//叉号
-                                    $("#code_info").html(1);//0代表已存在，1代表可用
-                                } else if (data.jsonObject == "1") {
-                                    $("#code_flag1").hide();//对号
-                                    $("#code_flag2").show();//叉号
-                                    $("#code_info").html(0);//0代表已存在，1代表可用
-                                    new $.zui.Messager('The Code already existed in the database. Please re-enter it !', {
-                                        type: 'danger',
-                                        placement: 'top' // 定义显示位置
-                                    }).show();
-                                }
-                            }
-                        },
-                        error: function (jqXHR) {
-                            new $.zui.Messager("Operation failed, possible causes：" + jqXHR.status, {
-                                type: 'danger',
-                                placement: 'top' // 定义显示位置
-                            }).show();
-                        }
-                    });
-                }
-            });
-            //保存新增的客户
-            $("#submit1_1").click(function () {
-                if ($("#tpin").val() == "") {
-                    new $.zui.Messager('The TPIN can not be empty!', {
-                        type: 'danger',
-                        placement: 'top' // 定义显示位置
-                    }).show();
-                    $("#code_flag1").hide();//对号
-                    $("#code_flag2").show();//叉号
-                } else if ($("#tpin").val().length != 10) {
-                    new $.zui.Messager('The length of the TPIN is fixed 10 numbers!', {
-                        type: 'danger',
-                        placement: 'top' // 定义显示位置
-                    }).show();
-                    $("#code_flag1").hide();//对号
-                    $("#code_flag2").show();//叉号
-                } else if ($("#code_info").text() == "0") {
-                    new $.zui.Messager('The TPIN already existed in the database. Please re-enter it !', {
-                        type: 'danger',
-                        placement: 'top'
-                    }).show();
-                    $("#code_flag1").hide();//对号
-                    $("#code_flag2").show();//叉号
-                } else if ($("#name").val() == "") {
-                    new $.zui.Messager('The Name can not be empty!', {
-                        type: 'danger',
-                        placement: 'top'
-                    }).show();
-                } else if ($("#name").val().trim() == "") {
-                    new $.zui.Messager('The Name can not be all spaces!', {
-                        type: 'danger',
-                        placement: 'top'
-                    }).show();
-                } else if ($("#vat").val() == "") {
-                    new $.zui.Messager('The VAT ACC Name can not be empty!', {
-                        type: 'danger',
-                        placement: 'top'
-                    }).show();
-                } else if ($("#vat").val().trim() == "") {
-                    new $.zui.Messager('The VAT ACC Name can not be all spaces!', {
-                        type: 'danger',
-                        placement: 'top'
-                    }).show();
-                } else {
-                    $.ajax({
-                        type: "POST",
-                        url: "ActionPart1_saveBuyer.action",
-                        contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                        data: {
-                            "value1": $("#number").text(),
-                            "value2": $("#name").val(),
-                            "value3": $("#tpin").val(),
-                            "value4": $("#vat").val(),
-                            "value5": $("#tel").val(),
-                            "value6": $("#address").val()
-                        },
-                        dataType: "json",
-                        cache: false,
-                        success: function (data) {
-                            //登录超时，请重新登录
-                            if (data.jsonObject == "-3") {
-                                new $.zui.Messager(loginTimeout, {
-                                    type: 'danger',
-                                    placement: 'top' // 定义显示位置
-                                }).show();
-                                setTimeout(function () {
-                                    location.href = "../login.html";//重定向
-                                }, 2000);
-                            }
-                            //服务器出错
-                            else if (data.jsonObject == "-1") {
-                                new $.zui.Messager(serverError, {
-                                    type: 'danger',
-                                    placement: 'top' // 定义显示位置
-                                }).show();
-                            }
-                            //正确传输过来数据
-                            else {
-                                if (data.jsonObject == "0") {
-                                    new $.zui.Messager('Submission failure. Please re-enter it !', {
-                                        type: 'danger',
-                                        placement: 'top' // 定义显示位置
-                                    }).show();
-                                } else if (data.jsonObject == "1") {
-                                    new $.zui.Messager('Submit successfully !', {
-                                        type: 'success',
-                                        placement: 'top' // 定义显示位置
-                                    }).show();
-                                    $("#myModal1").modal('hide');   //显示对话框
-                                    findAllBuyers();//刷新页面
-                                    //将原输入框内容置零
-                                    $("#name").val("");
-                                    $("#tpin").val("");
-                                    $("#vat").val("");
-                                    $("#tel").val("");
-                                    $("#address").val("");
-                                    $("#code_flag1").hide();//对号
-                                    $("#code_flag2").hide();//叉号
-                                }
-                            }
-                        },
-                        error: function (jqXHR) {
-                            new $.zui.Messager("Operation failed, possible causes：" + jqXHR.status, {
-                                type: 'danger',
-                                placement: 'top' // 定义显示位置
-                            }).show();
-                        }
-                    });
-                }
-            });
-            /*******************************************************************************************/
-            var pageIndex = 1;// 当前页码
-            var pageSize = 100;// 分页大小
-            var totalCount = 0;// 记录总数
-            var pageCount = 0;// 总页数
-            //确定分页按钮的是否可用
-            function SetPageButtonEnabled() {
-                if (parseFloat($("#pageCount").text()) <= 1) {
-                    $("#pageDown").addClass("disabled");
-                    $("#pageUp").addClass("disabled");
-                    $("#endPage").addClass("disabled");
-                }
-                else {
-                    if (parseFloat($("#pageIndex").text()) == parseFloat($("#pageCount").text())) {
-                        $("#pageDown").addClass("disabled");
-                        $("#pageUp").removeClass("disabled");
-                        $("#endPage").addClass("disabled");
-                    }
-                    else if (parseFloat($("#pageIndex").text()) <= 1) {
-                        $("#pageDown").removeClass("disabled");
-                        $("#pageUp").addClass("disabled");
-                        $("#endPage").removeClass("disabled");
-                    }
-                    else {
-                        $("#pageDown").removeClass("disabled");
-                        $("#pageUp").removeClass("disabled");
-                        $("#endPage").removeClass("disabled");
-                    }
-                }
-            }
-
-            //首页按钮
-            $("#firstPage").click(function () {
-                $("#pageIndex").text(1);
-                findAllBuyers();//查询
-            });
-            //下一页按钮
-            $("#pageDown").click(function () {
-                $("#pageIndex").text(parseFloat($("#pageIndex").text()) + 1);
-                findAllBuyers();//查询
-            });
-            //上一页按钮
-            $("#pageUp").click(function () {
-                $("#pageIndex").text(parseFloat($("#pageIndex").text()) - 1);
-                findAllBuyers();//查询
-            });
-            //首页按钮
-            $("#endPage").click(function () {
-                $("#pageIndex").text($("#pageCount").text());
-                findAllBuyers();//查询
-            });
+//            findAllBuyers();
             /*******************************************************************************************/
             //查询所有客户 点击事件
             $("#submit2").click(function () {
@@ -306,56 +26,20 @@
 
             //查询所有客户 无参
             function findAllBuyers() {
-                //查询客户总记录数
-                $.ajax({
-                    type: "POST",
-                    url: "ActionPart1_getBuyersCount.action",
-                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                    dataType: "json",
-                    async: false,
-                    cache: false,
-                    success: function (data) {
-                        //登录超时，请重新登录
-                        if (data.jsonObject == "-3") {
-                            new $.zui.Messager(loginTimeout, {
-                                type: 'danger',
-                                placement: 'top'
-                            }).show();
-                            setTimeout(function () {
-                                location.href = "../login.html";//重定向
-                            }, 2000);
-                        }
-                        //服务器出错
-                        else if (data.jsonObject == "-1") {
-                            new $.zui.Messager(serverError, {
-                                type: 'danger',
-                                placement: 'top'
-                            }).show();
-                        }
-                        //正确传输过来数据
-                        else {
-                            $("#totalCount").text(data.jsonObject);// 记录总数
-                            $("#pageCount").text(Math.ceil(parseFloat(data.jsonObject) / parseFloat($("#pageSize").text())));// 总页数
-//                            SetPagerInfo();//显示页码信息
-                            SetPageButtonEnabled();//确定分页按钮的是否可用
-                        }
-                    },
-                    error: function (jqXHR) {
-                        new $.zui.Messager("The operation failed, please try again. Possible causes:" + jqXHR.status + "！", {
-                            type: 'danger',
-                            placement: 'top'
-                        }).show();
-                    }
-                });
-
+                if ($("#query_key").val() == "") {
+                    new $.zui.Messager('The KEY can not be empty!', {
+                        type: 'danger',
+                        placement: 'top' // 定义显示位置
+                    }).show();
+                } else{
                 //查询所有客户
                 $.ajax({
                     type: "POST",
-                    url: "ActionPart1_findAllBuyers.action",
+                    url: "ActionPart1_findAllBuyersByOption.action",
                     contentType: "application/x-www-form-urlencoded; charset=utf-8",
                     data: {
-                        "value1": $("#pageIndex").text(),
-                        "value2": $("#pageSize").text()
+                        "value1": $("#query_option").val(),
+                        "value2": $("#query_key").val()
                     },
                     dataType: "json",
                     async: false,
@@ -411,10 +95,13 @@
                         }
                     },
                     error: function (jqXHR) {
-                        $("#modal-content").html("The operation failed, please try again. Possible causes:" + jqXHR.status + "！");
-                        $("#myModal").modal();
+                        new $.zui.Messager("The operation failed, please try again. Possible causes:" + jqXHR.status + "！", {
+                            type: 'danger',
+                            placement: 'top' // 定义显示位置
+                        }).show();
                     }
                 });
+                }
             }
 
             /*******************************************************************************************/
@@ -673,23 +360,9 @@
                 });
             });
             /*******************************************************************************************/
-
-            //数据补全函数，如1，保留为001，num为待操作数，length为最终保留的长度
-            function buquan(num, length) {
-                var numstr = num.toString();
-                var l = numstr.length;
-                if (numstr.length >= length) {
-                    return numstr;
-                }
-                for (var i = 0; i < length - l; i++) {
-                    numstr = "0" + numstr;
-                }
-                return numstr;
-            }
-            /*******************************************************************************************/
             //单独查询
-            $("#submit5").click(function () {
-                location.href = "buyers_query.html";//重定向
+            $("#submit1").click(function () {
+                location.href = "buyers.html";//重定向
             });
         })
     </script>
@@ -713,15 +386,25 @@
 <div>
     <div style="margin-top: 10px;width: 100%;height: 40px;">
         <span class="label label-badge label-primary label-define"
-              style="float: left; margin-left: 20px;margin-top: 10px">Buyers Management</span>
-        <button id="submit5" class="btn btn-primary" type="button"
-                style="float: right; margin-right: 20px"><i class="icon icon-search"></i> Query
-        </button>
-        <button id="submit2" class="btn btn-primary" type="button"
-                style="float: right; margin-right: 20px"><i class="icon icon-refresh"></i> Refresh
-        </button>
+              style="float: left; margin-left: 20px;margin-right: 20px ;margin-top: 7px">Buyers Query</span>
+        <div class="input-group" style="width: 450px;">
+            <span class="input-group-addon">OPTION</span>
+            <select id="query_option" class="form-control">
+                <option value="number" selected="selected">Number</option>
+                <option value="name">Name</option>
+                <option value="tpin">TPIN</option>
+            </select>
+            <span class="input-group-addon fix-border fix-padding"></span>
+            <input id="query_key" type="text" class="form-control" maxlength="50"
+                   placeholder="1-50 characters" >
+            <span class="input-group-btn">
+                <button id="submit2" class="btn btn-primary" type="button" style="width: 50px"><i
+                        class="icon icon-search"></i>
+                </button>
+            </span>
+        </div>
         <button id="submit1" class="btn btn-primary" type="button"
-                style="float: right; margin-right: 20px"><i class="icon icon-plus"></i> Add
+                style="float: right; margin-right: 20px;margin-top: -35px"><i class="icon icon-reply"></i>
         </button>
     </div>
     <div style="background-color: white;"
@@ -734,16 +417,6 @@
             </tbody>
         </table>
     </div>
-    <ul class="pager" style="float: right; margin-right: 20px">
-        <li id="firstPage"><a href="#">First</a></li>
-        <li id="pageUp" class="next"><a href="#">Front</a></li>
-        <li id="pageDown" class="previous"><a href="#">Next</a></li>
-        <li id="endPage"><a href="#">End</a></li>
-    </ul>
-    <strong style="float: right; margin-right: 20px; margin-top: 27px">The current page is【<strong
-            id="pageIndex">1</strong>】，each page shows【<strong
-            id="pageSize">10</strong>】records, a total of【<strong id="pageCount"></strong>】page, a total of【<strong
-            id="totalCount"></strong>】records</strong>
 </div>
 <!--对话框-->
 <div class="modal fade" id="myModal">
@@ -759,77 +432,6 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--对话框 新增-->
-<div class="modal fade" id="myModal1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
-                        class="sr-only">Close</span></button>
-                <h4 class="modal-title">Add A New Buyer</h4>
-            </div>
-            <div class="modal-body">
-                <form class="form-horizontal">
-                    <div class="form-group">
-                        <label class="col-sm-3">Number</label>
-                        <label id="number" class="col-sm-6" style="text-align: center"></label>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3">Name</label>
-                        <div class="col-sm-6">
-                            <input id="name" type="text" class="form-control" maxlength="50"
-                                   placeholder="1-50 characters">
-                        </div>
-                        <strong>*</strong>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3">TPIN</label>
-                        <div class="col-sm-6">
-                            <input id="tpin" type="tel" class="form-control" maxlength="10"
-                                   placeholder="fixed 10 digits number">
-                        </div>
-                        <strong>*</strong>
-                        <label style="padding-left: 10px"><i id="code_flag1" class="icon icon-check"
-                                                             style="color: green" hidden="hidden"></i> <i
-                                id="code_flag2"
-                                class="icon icon-times"
-                                style="color: red" hidden="hidden"></i></label>
-                        <label id="code_info" hidden="hidden"></label>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3">VAT ACC Name</label>
-                        <div class="col-sm-6">
-                            <input id="vat" type="text" class="form-control" maxlength="50"
-                                   placeholder="0-50 characters">
-                        </div>
-                        <strong>*</strong>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3">Telephone</label>
-                        <div class="col-sm-6">
-                            <input id="tel" type="tel" class="form-control" maxlength="18"
-                                   placeholder="0-18 characters">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3">Address</label>
-                        <div class="col-sm-6">
-                            <input id="address" type="text" class="form-control" maxlength="100"
-                                   placeholder="0-100 characters">
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel
-                </button>
-                <button id="submit1_1" class="btn btn-primary" type="button">
-                    Submit
-                </button>
             </div>
         </div>
     </div>

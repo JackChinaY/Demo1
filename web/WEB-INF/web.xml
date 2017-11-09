@@ -35,6 +35,10 @@
     <!--     <url-pattern>/*</url-pattern> -->
     <!--   </filter-mapping> -->
 
+    <!--实现在tomcat启动时执行某段代码-->
+    <listener>
+        <listener-class>control.InitListener</listener-class>
+    </listener>
     <!--表示使用的是struts2-->
     <filter>
         <filter-name>struts2</filter-name>
