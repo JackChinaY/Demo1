@@ -32,27 +32,44 @@ public class HQAction_Part2 extends BaseAction {
      * 序列化
      */
     private static final long serialVersionUID = 415712263988003225L;
-    private HQService hqService = new HQService();
     private HQService_Part2 hqService_part2 = new HQService_Part2();
     private String currentUserId = "cbb418cc-8520-459f-ab02-ae3516388eb5";  //当前用户名Id，软件发布的时候把该字符内容删除掉
-
+    private String databaseUrl = "jdbc:sqlite:D:/database/";  //sqlite数据库基础路径
+    private String programmingDB = "/programmingDB.db";  //连接的是programmingDB.db
+    private String systemDB = "/systemDB.db";  //连接的是systemDB.db
+    private String buyerDB = "/buyerDB.db";  //连接的是buyerDB.db
+    private String goodsDB = "/goodsDB.db";  //连接的是buyerDB.db
 
     /**
      * 方法序号：4_1 查询所有商品
      */
     public void findAllGoods() throws IOException, JSONException {
-        String userId = this.getSession().getAttribute("userId").toString();//获取用户UserId
-        int pageIndex = Integer.parseInt(this.getRequest().getParameter("pageIndex"));//当前页码
-        int pageSize = Integer.parseInt(this.getRequest().getParameter("pageSize"));//分页大小
-        String result = hqService_part2.findAllGoods(userId, pageIndex, pageSize);
-        JSONArray allJsonArray = new JSONArray(result);
-        if (result.equals(null)) {
-            result = "-1";// 服务器出错
+        //如果用户登录超时，则需要重新登录
+        if (this.getSession().getAttribute("userId") == null) {
+            JSONObject jo = new JSONObject();
+            jo.put("jsonObject", -3);//-3为登录超时
+            this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
+            this.getResponse().getWriter().print(jo);// 向前台发送json数据
         }
-        JSONObject jo = new JSONObject();
-        jo.put("allJsonArray", allJsonArray);
-        this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
-        this.getResponse().getWriter().print(jo);// 向前台发送json数据
+        //登录未超时
+        else {
+            String userId = this.getSession().getAttribute("userId").toString();//获取用户UserId
+            Page page = new Page();
+            page.setPageIndex(Integer.parseInt(this.getRequest().getParameter("pageIndex")));
+            page.setPageSize(Integer.parseInt(this.getRequest().getParameter("pageSize")));
+            //    int pageIndex = Integer.parseInt(this.getRequest().getParameter("pageIndex"));//当前页码
+            //  int pageSize = Integer.parseInt(this.getRequest().getParameter("pageSize"));//分页大小
+            //String result = hqService_part1.findAllCashiers(databaseUrl + userId + programmingDB);
+            String result = hqService_part2.findAllGoods(databaseUrl + userId + goodsDB, page);
+            JSONArray allJsonArray = new JSONArray(result);
+            if (result.equals(null)) {
+                result = "-1";// 服务器出错
+            }
+            JSONObject jo = new JSONObject();
+            jo.put("allJsonArray", allJsonArray);
+            this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
+            this.getResponse().getWriter().print(jo);// 向前台发送json数据
+        }
     }
 
     /**
@@ -69,7 +86,7 @@ public class HQAction_Part2 extends BaseAction {
         //登录未超时
         else {
             String userId = this.getSession().getAttribute("userId").toString();//获取用户userId
-            int result = hqService_part2.getGoodsCount(userId);// 0表示0条记录，1表示有1条记录
+            String result = hqService_part2.getGoodsCount(databaseUrl + userId + goodsDB);// 0表示0条记录，1表示有1条记录
             JSONObject jo = new JSONObject();
             jo.put("jsonObject", result);
             this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
@@ -91,7 +108,7 @@ public class HQAction_Part2 extends BaseAction {
         //登录未超时
         else {
             String userId = this.getSession().getAttribute("userId").toString();//获取用户userId
-            int result = hqService_part2.getGoodsMaxNumber(userId);// 0表示0条记录，1表示有1条记录
+            String result = hqService_part2.getGoodsMaxNumber(databaseUrl + userId + goodsDB);// 0表示0条记录，1表示有1条记录
             JSONObject jo = new JSONObject();
             jo.put("jsonObject", result);
             this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
@@ -103,13 +120,23 @@ public class HQAction_Part2 extends BaseAction {
      * 方法序号：4_4 验证商品条形码是否存在
      */
     public void verifyGoodsbarcode() throws IOException, JSONException {
-        String id = this.currentUserId;//获取用户UserId 本地测试用  TODO 软件正式发布时需将此行注释掉，并将下一行解注
-        String barcode = this.getRequest().getParameter("value1");
-        int result = hqService_part2.verifyGoodsbarcode(barcode);// 0表示0条记录，1表示有1条记录
-        JSONObject jo = new JSONObject();
-        jo.put("jsonObject", result);
-        this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
-        this.getResponse().getWriter().print(jo);// 向前台发送json数据
+        if (this.getSession().getAttribute("userId") == null) {
+            JSONObject jo = new JSONObject();
+            jo.put("jsonObject", -3);//-3为登录超时
+            this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
+            this.getResponse().getWriter().print(jo);// 向前台发送json数据
+        }
+        // 登录未超时
+        else {
+            ///////////
+            String userId = this.getSession().getAttribute("userId").toString();//获取用户userId
+            String barcode = this.getRequest().getParameter("value1");
+            String result = hqService_part2.verifyGoodsbarcode(databaseUrl + userId + goodsDB, barcode);// 0表示0条记录，1表示有1条记录
+            JSONObject jo = new JSONObject();
+            jo.put("jsonObject", result);
+            this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
+            this.getResponse().getWriter().print(jo);// 向前台发送json数据
+        }
     }
 
     /**
@@ -125,6 +152,7 @@ public class HQAction_Part2 extends BaseAction {
         }
         // 登录未超时
         else {
+            String userId = this.getSession().getAttribute("userId").toString();//获取用户userId
             PLU plu = new PLU();
             plu.setId(null);
             plu.setNumber(this.getRequest().getParameter("value1"));
@@ -135,7 +163,7 @@ public class HQAction_Part2 extends BaseAction {
             plu.setTax_Index(this.getRequest().getParameter("value6"));
             plu.setStock_Control(this.getRequest().getParameter("value7"));
             plu.setStock_Amount(this.getRequest().getParameter("value8"));
-            boolean result = hqService_part2.saveGoods(plu);
+            boolean result = hqService_part2.saveGoods(databaseUrl + userId + goodsDB,plu);
             String flag;
             if (result) {
                 flag = "1";// 成功
@@ -154,31 +182,52 @@ public class HQAction_Part2 extends BaseAction {
      * 方法序号：4_6 查询所有税种税目索引
      */
     public void getGoodsTaxTariff() throws IOException, JSONException {
-        String userId = this.getSession().getAttribute("userId").toString();//获取用户UserId
-        String result = hqService_part2.getGoodsTaxTariff(userId);
-        JSONArray allJsonArray = new JSONArray(result);
-        if (result.equals(null)) {
-            result = "-1";// 服务器出错
+        //如果用户登录超时，则需要重新登录
+        if (this.getSession().getAttribute("userId") == null) {
+            JSONObject jo = new JSONObject();
+            jo.put("jsonObject", -3);//-3为登录超时
+            this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
+            this.getResponse().getWriter().print(jo);// 向前台发送json数据
         }
-        JSONObject jo = new JSONObject();
-        jo.put("allJsonArray", allJsonArray);
-        this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
-        this.getResponse().getWriter().print(jo);// 向前台发送json数据
+        // 登录未超时
+        else {
+            String userId = this.getSession().getAttribute("userId").toString();//获取用户UserId
+            String result = hqService_part2.getGoodsTaxTariff(databaseUrl + userId + systemDB);
+            JSONArray allJsonArray = new JSONArray(result);
+            if (result.equals(null)) {
+                result = "-1";// 服务器出错
+            }
+            JSONObject jo = new JSONObject();
+            jo.put("allJsonArray", allJsonArray);
+            this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
+            this.getResponse().getWriter().print(jo);// 向前台发送json数据
+        }
     }
 
     /**
      * 方法序号：4_6_1 查询所有税种税目记录
      */
     public void getAllGoodsTaxTariff() throws IOException, JSONException {
-        String result = hqService_part2.getAllGoodsTaxTariff();
-        JSONArray allJsonArray = new JSONArray(result);
-        if (result.equals(null)) {
-            result = "-1";// 服务器出错
+        //如果用户登录超时，则需要重新登录
+        if (this.getSession().getAttribute("userId") == null) {
+            JSONObject jo = new JSONObject();
+            jo.put("jsonObject", -3);//-3为登录超时
+            this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
+            this.getResponse().getWriter().print(jo);// 向前台发送json数据
         }
-        JSONObject jo = new JSONObject();
-        jo.put("allJsonArray", allJsonArray);
-        this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
-        this.getResponse().getWriter().print(jo);// 向前台发送json数据
+        // 登录未超时
+        else {
+            String userId = this.getSession().getAttribute("userId").toString();//获取用户UserId
+            String result = hqService_part2.getAllGoodsTaxTariff(databaseUrl + userId + systemDB);
+            JSONArray allJsonArray = new JSONArray(result);
+            if (result.equals(null)) {
+                result = "-1";// 服务器出错
+            }
+            JSONObject jo = new JSONObject();
+            jo.put("allJsonArray", allJsonArray);
+            this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
+            this.getResponse().getWriter().print(jo);// 向前台发送json数据
+        }
     }
 
     /**
@@ -195,9 +244,10 @@ public class HQAction_Part2 extends BaseAction {
         // 登录未超时
         else {
             String goodsNumber = this.getRequest().getParameter("value1");
-            int result = hqService_part2.deleteOneGoods(goodsNumber);// >=1表示成功，0表示失败
-            if (result > 0) {
-                result = 1;
+            String userId = this.getSession().getAttribute("userId").toString();//获取用户UserId
+            String result = hqService_part2.deleteOneGoods(databaseUrl + userId + goodsDB,goodsNumber);// >=1表示成功，0表示失败
+            if (Integer.parseInt(result) > 0) {
+                result = "1";
             }
             JSONObject jo = new JSONObject();
             jo.put("jsonObject", result);
@@ -219,6 +269,7 @@ public class HQAction_Part2 extends BaseAction {
        }
         // 登录未超时
         else {
+            String userId = this.getSession().getAttribute("userId").toString();//获取用户UserId
            PLU plu = new PLU();
             plu.setId(null);
            //plu.setId(Integer.parseInt(this.getRequest().getParameter("Id")));
@@ -230,7 +281,7 @@ public class HQAction_Part2 extends BaseAction {
            plu.setStock_Control(this.getRequest().getParameter("value6"));
            plu.setStock_Amount(this.getRequest().getParameter("value7"));
            plu.setRRP(this.getRequest().getParameter("value8"));
-           boolean result = hqService_part2.updateOneGoods(plu);
+           boolean result = hqService_part2.updateOneGoods(databaseUrl + userId + goodsDB,plu);
            String flag;
            if (result) {
                 flag = "1";// 成功
@@ -247,7 +298,7 @@ public class HQAction_Part2 extends BaseAction {
     /**
      * 方法序号：4_9 按商品编号查询商品信息
      */
-    public void findGoodsInfByNumber() throws IOException, JSONException {
+    public void findAllGoodsByOption() throws IOException, JSONException {
         // 如果用户登录超时，则需要重新登录
         if (this.getSession().getAttribute("userId") == null) {
             JSONObject jo = new JSONObject();
@@ -257,58 +308,10 @@ public class HQAction_Part2 extends BaseAction {
         }
         // 登录未超时
         else {
-            String goodsNumber = this.getRequest().getParameter("value4_2");
-            String result = hqService_part2.findGoodsInfByNumber(goodsNumber);// >=1表示成功，0表示失败
-            if (result.equals(null)) {
-                result = "-1";// 服务器出错
-            }
-            JSONObject jo = new JSONObject();
-            jo.put("jsonObject", result);
-            this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
-            this.getResponse().getWriter().print(jo);// 向前台发送json数据
-        }
-    }
-
-    /**
-     * 方法序号：4_10 按商品编号查询商品信息
-     */
-    public void findGoodsInfByName() throws IOException, JSONException {
-        // 如果用户登录超时，则需要重新登录
-        if (this.getSession().getAttribute("userId") == null) {
-            JSONObject jo = new JSONObject();
-            jo.put("jsonObject", -3);// -3为登录超时
-            this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
-            this.getResponse().getWriter().print(jo);// 向前台发送json数据
-        }
-        // 登录未超时
-        else {
-            String goodsName = this.getRequest().getParameter("value4_2");
-            String result = hqService_part2.findGoodsInfByName(goodsName);// >=1表示成功，0表示失败
-            if (result.equals(null)) {
-                result = "-1";// 服务器出错
-            }
-            JSONObject jo = new JSONObject();
-            jo.put("jsonObject", result);
-            this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
-            this.getResponse().getWriter().print(jo);// 向前台发送json数据
-        }
-    }
-
-    /**
-     * 方法序号：4_11 按商品编号查询商品信息
-     */
-    public void findGoodsInfByBarcode() throws IOException, JSONException {
-        // 如果用户登录超时，则需要重新登录
-        if (this.getSession().getAttribute("userId") == null) {
-            JSONObject jo = new JSONObject();
-            jo.put("jsonObject", -3);// -3为登录超时
-            this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
-            this.getResponse().getWriter().print(jo);// 向前台发送json数据
-        }
-        // 登录未超时
-        else {
-            String goodsBarcode = this.getRequest().getParameter("value4_2");
-            String result = hqService_part2.findGoodsInfByBarcode(goodsBarcode);// >=1表示成功，0表示失败
+            String option = this.getRequest().getParameter("value1");//查询类型：number、name、tpin
+            String key = this.getRequest().getParameter("value2");//查询关键字
+            String userId = this.getSession().getAttribute("userId").toString();//获取用户UserId
+            String result = hqService_part2.findAllGoodsByOption(databaseUrl + userId + goodsDB, option, key);// >=1表示成功，0表示失败
             if (result.equals(null)) {
                 result = "-1";// 服务器出错
             }
@@ -323,30 +326,52 @@ public class HQAction_Part2 extends BaseAction {
      * 方法序号：5_1 查询所有部门信息
      */
     public void findAllDeptInf() throws IOException, JSONException {
-        String result = hqService_part2.findAllDeptInf();
-        JSONArray allJsonArray = new JSONArray(result);
-        if (result.equals(null)) {
-            result = "-1";// 服务器出错
+        // 如果用户登录超时，则需要重新登录
+        if (this.getSession().getAttribute("userId") == null) {
+            JSONObject jo = new JSONObject();
+            jo.put("jsonObject", -3);// -3为登录超时
+            this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
+            this.getResponse().getWriter().print(jo);// 向前台发送json数据
         }
-        JSONObject jo = new JSONObject();
-        jo.put("allJsonArray", allJsonArray);
-        this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
-        this.getResponse().getWriter().print(jo);// 向前台发送json数据
+        // 登录未超时
+        else {
+            String userId = this.getSession().getAttribute("userId").toString();//获取用户UserId
+            String result = hqService_part2.findAllDeptInf(databaseUrl + userId + goodsDB);
+            JSONArray allJsonArray = new JSONArray(result);
+            if (result.equals(null)) {
+                result = "-1";// 服务器出错
+            }
+            JSONObject jo = new JSONObject();
+            jo.put("allJsonArray", allJsonArray);
+            this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
+            this.getResponse().getWriter().print(jo);// 向前台发送json数据
+        }
     }
 
     /**
-     * 方法序号：5_2 查询所有部门信息
+     * 方法序号：5_2 查询所有商品信息
      */
     public void findAllGoodsInf() throws IOException, JSONException {
-        String result = hqService_part2.findAllGoodsInf();
-        JSONArray allJsonArray = new JSONArray(result);
-        if (result.equals(null)) {
-            result = "-1";// 服务器出错
+        // 如果用户登录超时，则需要重新登录
+        if (this.getSession().getAttribute("userId") == null) {
+            JSONObject jo = new JSONObject();
+            jo.put("jsonObject", -3);// -3为登录超时
+            this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
+            this.getResponse().getWriter().print(jo);// 向前台发送json数据
         }
-        JSONObject jo = new JSONObject();
-        jo.put("allJsonArray", allJsonArray);
-        this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
-        this.getResponse().getWriter().print(jo);// 向前台发送json数据
+        // 登录未超时
+        else {
+            String userId = this.getSession().getAttribute("userId").toString();//获取用户UserId
+            String result = hqService_part2.findAllGoodsInf(databaseUrl + userId + goodsDB);
+            JSONArray allJsonArray = new JSONArray(result);
+            if (result.equals(null)) {
+                result = "-1";// 服务器出错
+            }
+            JSONObject jo = new JSONObject();
+            jo.put("allJsonArray", allJsonArray);
+            this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
+            this.getResponse().getWriter().print(jo);// 向前台发送json数据
+        }
     }
 
     /**
@@ -365,7 +390,8 @@ public class HQAction_Part2 extends BaseAction {
             Integer Id=Integer.parseInt(this.getRequest().getParameter("Id"));
             String Dept_No=this.getRequest().getParameter("Dept_No");
             String PLU_No=this.getRequest().getParameter("PLU_No");
-            boolean result = hqService_part2.updateOneDeptInf(Dept_No,PLU_No,Id);
+            String userId = this.getSession().getAttribute("userId").toString();//获取用户UserId
+            boolean result = hqService_part2.updateOneDeptInf(databaseUrl + userId + goodsDB,Dept_No,PLU_No,Id);
             String flag;
             if (result) {
                 flag = "1";// 成功
