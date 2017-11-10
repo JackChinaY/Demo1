@@ -83,7 +83,7 @@ public class HQAction extends BaseAction {
         user.setPassword(DigestUtils.md5Hex(this.getRequest().getParameter("password")));//对密码进行加密
         user.setEmail(this.getRequest().getParameter("email"));
         user.setTel(this.getRequest().getParameter("tel"));
-        user.setAdress(this.getRequest().getParameter("address"));
+        user.setAddress(this.getRequest().getParameter("address"));
         user.setMachineType(this.getRequest().getParameter("machineType"));
         user.setMachineId(this.getRequest().getParameter("machineId"));
 //		System.out.println(user.toString());
@@ -201,9 +201,27 @@ public class HQAction extends BaseAction {
             User user = new User();
             user.setEmail(this.getRequest().getParameter("email"));
             user.setTel(this.getRequest().getParameter("tel"));
-            user.setAdress(this.getRequest().getParameter("address"));
+            user.setAddress(this.getRequest().getParameter("address"));
             user.setId(this.getSession().getAttribute("userId").toString());//获取用户UserId
             String result = hqService.saveUserInfo(user);
+            returnJsonObject(result);//可能的返回值：-1，0,1
+        }
+    }
+    /**
+     * 方法序号：5_3 保存修改后用户密码
+     */
+    public void saveNewPassword() throws IOException, JSONException {
+        //如果用户登录超时，则需要重新登录
+        if (this.getSession().getAttribute("userId") == null) {
+            connectionTimeOut();
+        }
+        //登录未超时
+        else {
+            User user = new User();
+            user.setPassword(DigestUtils.md5Hex(this.getRequest().getParameter("value1")));
+            user.setNewPassword(DigestUtils.md5Hex(this.getRequest().getParameter("value2")));
+            user.setId(this.getSession().getAttribute("userId").toString());//获取用户UserId
+            String result = hqService.saveNewPassword(user);
             returnJsonObject(result);//可能的返回值：-1，0,1
         }
     }

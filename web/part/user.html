@@ -15,6 +15,8 @@
              */
             var loginTimeout = "Login timeout, please login again !";
             var serverError = "possible reasons：server error !";
+            // 手动初始化工具提示
+            $('[data-toggle="tooltip"]').tooltip();
             /*******************************************************************************************/
             //查询所有收银员 点击事件
             $("#submit2").click(function () {
@@ -164,6 +166,104 @@
                     });
                 }
             });
+            /*******************************************************************************************/
+            //修改密码 弹出框
+            $("#submit1").click(function () {
+                $("#myModal3").modal();//显示对话框
+            });
+            //修改密码 提交
+            $("#submit5").click(function () {
+                if ($("#password").val() == "") {
+                    new $.zui.Messager('old password cannot be empty！', {
+                        type: 'danger',
+                        placement: 'top'
+                    }).show();
+                } else if ($("#password").val().indexOf(" ") != -1) {
+                    new $.zui.Messager('The old password can not contain space!', {
+                        type: 'danger',
+                        placement: 'top'
+                    }).show();
+                } else if ($("#new_password").val() == "") {
+                    new $.zui.Messager('New Password cannot be empty！', {
+                        type: 'danger',
+                        placement: 'top'
+                    }).show();
+                } else if ($("#new_password").val().indexOf(" ") != -1) {
+                    new $.zui.Messager('The New Password can not contain space!', {
+                        type: 'danger',
+                        placement: 'top'
+                    }).show();
+                } else if ($("#re_new_password").val() == "") {
+                    new $.zui.Messager('Confirm Password cannot be empty！', {
+                        type: 'danger',
+                        placement: 'top'
+                    }).show();
+                } else if ($("#re_new_password").val().indexOf(" ") != -1) {
+                    new $.zui.Messager('The Confirm Password can not contain space!', {
+                        type: 'danger',
+                        placement: 'top'
+                    }).show();
+                } else if ($("#new_password").val() != $("#re_new_password").val()) {
+                    new $.zui.Messager('The New Password and Confirm Password are inconsistent！', {
+                        type: 'danger',
+                        placement: 'top'
+                    }).show();
+                } else {
+                    $.ajax({
+                        type: "POST",
+                        url: "Action_saveNewPassword.action",
+                        contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                        data: {
+                            "value1": $("#password").val(),
+                            "value2": $("#new_password").val()
+
+                        },
+                        dataType: "json",
+                        cache: false,
+                        success: function (data) {
+                            //登录超时，请重新登录
+                            if (data.jsonObject == "-3") {
+                                new $.zui.Messager(loginTimeout, {
+                                    type: 'danger',
+                                    placement: 'top' // 定义显示位置
+                                }).show();
+                                setTimeout(function () {
+                                    location.href = "../login.html";//重定向
+                                }, 2000);
+                            }
+                            //服务器出错
+                            else if (data.jsonObject == "-1") {
+                                new $.zui.Messager(serverError, {
+                                    type: 'danger',
+                                    placement: 'top' // 定义显示位置
+                                }).show();
+                            }
+                            //正确传输过来数据
+                            else {
+                                if (data.jsonObject == "0") {
+                                    new $.zui.Messager('Submission failure.possible causes： Old Password error!', {
+                                        type: 'danger',
+                                        placement: 'top' // 定义显示位置
+                                    }).show();
+                                } else if (data.jsonObject == "1") {
+                                    new $.zui.Messager('Submit successfully !', {
+                                        type: 'success',
+                                        placement: 'top' // 定义显示位置
+                                    }).show();
+                                    $("#myModal3").modal('hide');   //显示对话框
+                                }
+                            }
+                        },
+                        error: function (jqXHR) {
+                            new $.zui.Messager("Operation failed, possible causes：" + jqXHR.status, {
+                                type: 'danger',
+                                placement: 'top' // 定义显示位置
+                            }).show();
+                        }
+                    });
+                }
+            });
+            /*******************************************************************************************/
         });
     </script>
     <style>
@@ -187,7 +287,14 @@
     <div style="margin-top: 10px;width: 100%;height: 40px;">
         <span class="label label-badge label-primary label-define"
               style="float: left; margin-left: 20px;margin-top: 10px">User Center</span>
-        <button id="submit2" class="btn btn-primary" type="button"
+        <button id="submit1" class="btn btn-primary" type="button"
+                style="float: right; margin-right: 20px" data-toggle="tooltip" data-tip-class="tooltip-default"
+                data-placement="bottom"
+                title="Modify password"><i class="icon icon-key"></i> Change
+        </button>
+        <button id="submit2" class="btn btn-primary" type="button" data-toggle="tooltip"
+                data-tip-class="tooltip-default"
+                title="Modifying user information" data-placement="bottom"
                 style="float: right; margin-right: 20px"><i class="icon icon-edit"></i> Edit
         </button>
     </div>
@@ -248,7 +355,7 @@
         </div>
     </div>
 </div>
-<!--对话框 修改-->
+<!--对话框 修改用户信息-->
 <div class="modal fade" id="myModal2">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -288,6 +395,54 @@
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel
                 </button>
                 <button id="submit3" class="btn btn-primary" type="button">
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--对话框 修改密码-->
+<div class="modal fade" id="myModal3">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title">Modify Password</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+
+                    <div class="form-group">
+                        <label class="col-sm-3">Old Password</label>
+                        <div class="col-sm-6">
+                            <input id="password" type="password" class="form-control" maxlength="50"
+                                   placeholder="old password">
+                        </div>
+                        <strong>*</strong>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3">New Password</label>
+                        <div class="col-sm-6">
+                            <input id="new_password" type="password" class="form-control" maxlength="20"
+                                   placeholder="0-20 characters">
+                        </div>
+                        <strong>*</strong>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3">Password Again</label>
+                        <div class="col-sm-6">
+                            <input id="re_new_password" type="password" class="form-control" maxlength="20"
+                                   placeholder="0-20 characters">
+                        </div>
+                        <strong>*</strong>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel
+                </button>
+                <button id="submit5" class="btn btn-primary" type="button">
                     Submit
                 </button>
             </div>
