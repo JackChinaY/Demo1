@@ -160,6 +160,14 @@
                         });
                     }
                 });
+                //若Stock_Control=1，则为Stock_Amount必填项，若Stock_Control=0，Stock_Amount可不填，默认为0
+                $("#value2_1_7").change(function () {
+                    if ($("#value2_1_7").val() == "0") {
+                        $("#value2_1_9").text("");
+                    } else if ($("#value2_1_7").val() == "1") {
+                        $("#value2_1_9").text("*");
+                    }
+                });
             });
             //添加商品，对话框， 点击事件
             $("#tbody").on("click", "a[name='chooseTaxIndex']", function () {
@@ -167,197 +175,270 @@
                 $("#myModal_tax").modal('hide');//关闭对话框
                 if ($("#value2_1_6").val() == "2") {
                     $("#RRPdiv").show();
-                    //若Stock_Control=1，则为Stock_Amount必填项，若Stock_Control=0，Stock_Amount可不填，默认为0
-                    $("#value2_1_7").change(function () {
-                        if ($("#value2_1_7").val() == "0") {
-                            $("#value2_1_9").text("");
-                        } else if ($("#value2_1_7").val() == "1") {
-                            $("#value2_1_9").text("*");
-                        }
-                    });
-                    /////////////////////////////////////////////////////
-                    //新增商品 提交
-                    $("#submit2_1_1_1").click(function () {
-                        if ($("#value2_1_2").val() == "") {
-                            new $.zui.Messager('Goods name is required!', {
-                                type: 'danger',
-                                placement: 'top' // 定义显示位置
-                            }).show();
-                        } else if ($("#value2_1_3").val() == "") {
-                            new $.zui.Messager('Goods barcode is required!', {
-                                type: 'danger',
-                                placement: 'top' // 定义显示位置
-                            }).show();
-                        } else if ($("#value2_1_4").val() == "") {
-                            new $.zui.Messager('Goods price is required!', {
-                                type: 'danger',
-                                placement: 'top' // 定义显示位置
-                            }).show();
-                        } else if ($("#value2_1_7").val() == "1" && $("#value2_1_10").val() == "") {
-                            new $.zui.Messager('When stock control is enabled, the stock amount is required!', {
-                                type: 'danger',
-                                placement: 'top' // 定义显示位置
-                            }).show();
-                        } else {
-                            if ($("#value2_1_7").val() == "0" && $("#value2_1_10").val() == "") {
-                                $("#value2_1_10").val(0)
-                            }
-                            $.ajax({
-                                type: "POST",
-                                url: "ActionPart2_saveGoods.action",
-                                contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                                data: {
-                                    "value1": $("#value2_1_1").text(),
-                                    "value2": $("#value2_1_2").val(),
-                                    "value3": $("#value2_1_3").val(),
-                                    "value4": parseFloat($("#value2_1_4").val()) * 100,
-                                    "value5": parseFloat($("#value2_1_5").val()) * 100,
-                                    "value6": $("#value2_1_6").val(),
-                                    "value7": $("#value2_1_7").val(),
-                                    "value8": parseFloat($("#value2_1_10").val()) * 10000
-                                },
-                                dataType: "json",
-                                cache: false,
-                                success: function (data) {
-                                    if (data.jsonObject == "-3") {
-                                        new $.zui.Messager("Login timeout, please login again!", {
-                                            type: 'danger',
-                                            placement: 'top' // 定义显示位置
-                                        }).show();
-                                        setTimeout(function () {
-                                            location.href = "login.html";//重定向
-                                        }, 2000);
-                                    } else if (data.jsonObject == "1") {
-                                        new $.zui.Messager("That the goods number is " + $("#value2_1_1").text() + " has added successfully！", {
-                                            type: 'success',
-                                            placement: 'top' //定义显示位置
-                                        }).show();
-                                        setTimeout(function () {
-                                            findAllGoods(); //刷新表格
-                                            $("#myModal_2_1_1").modal('hide');//关闭对话框
-                                            $("#value2_1_1").val("");
-                                            $("#value2_1_2").val("");
-                                            $("#value2_1_3").val("");
-                                            $("#value2_1_4").val("");
-                                            $("#value2_1_5").val("");
-                                            $("#value2_1_6").val("");
-                                            $("#value2_1_7").val("");
-                                            $("#value2_1_10").val("");
-                                        }, 1000);
-                                    } else if (data.jsonObject == "0") {
-                                        new $.zui.Messager("Add failed, possible reasons： a server error!", {
-                                            type: 'danger',
-                                            placement: 'top' // 定义显示位置
-                                        }).show();
-                                    }
-                                },
-                                error: function (jqXHR) {
-                                    new $.zui.Messager("Operation failed, possible causes：" + jqXHR.status, {
-                                        type: 'danger',
-                                        placement: 'top' // 定义显示位置
-                                    }).show();
-                                }
-                            });
-                        }
-                    });
+
+//                    /////////////////////////////////////////////////////
+//                    //新增商品 提交
+//                    $("#submit2_1_1_1").click(function () {
+//                        if ($("#value2_1_2").val() == "") {
+//                            new $.zui.Messager('Goods name is required!', {
+//                                type: 'danger',
+//                                placement: 'top' // 定义显示位置
+//                            }).show();
+//                        } else if ($("#value2_1_3").val() == "") {
+//                            new $.zui.Messager('Goods barcode is required!', {
+//                                type: 'danger',
+//                                placement: 'top' // 定义显示位置
+//                            }).show();
+//                        } else if ($("#value2_1_4").val() == "") {
+//                            new $.zui.Messager('Goods price is required!', {
+//                                type: 'danger',
+//                                placement: 'top' // 定义显示位置
+//                            }).show();
+//                        } else if ($("#value2_1_7").val() == "1" && $("#value2_1_10").val() == "") {
+//                            new $.zui.Messager('When stock control is enabled, the stock amount is required!', {
+//                                type: 'danger',
+//                                placement: 'top' // 定义显示位置
+//                            }).show();
+//                        } else {
+//                            if ($("#value2_1_7").val() == "0" && $("#value2_1_10").val() == "") {
+//                                $("#value2_1_10").val(0)
+//                            }
+//                            $.ajax({
+//                                type: "POST",
+//                                url: "ActionPart2_saveGoods.action",
+//                                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+//                                data: {
+//                                    "value1": $("#value2_1_1").text(),
+//                                    "value2": $("#value2_1_2").val(),
+//                                    "value3": $("#value2_1_3").val(),
+//                                    "value4": parseFloat($("#value2_1_4").val()) * 100,
+//                                    "value5": parseFloat($("#value2_1_5").val()) * 100,
+//                                    "value6": $("#value2_1_6").val(),
+//                                    "value7": $("#value2_1_7").val(),
+//                                    "value8": parseFloat($("#value2_1_10").val()) * 10000
+//                                },
+//                                dataType: "json",
+//                                cache: false,
+//                                success: function (data) {
+//                                    if (data.jsonObject == "-3") {
+//                                        new $.zui.Messager("Login timeout, please login again!", {
+//                                            type: 'danger',
+//                                            placement: 'top' // 定义显示位置
+//                                        }).show();
+//                                        setTimeout(function () {
+//                                            location.href = "login.html";//重定向
+//                                        }, 2000);
+//                                    } else if (data.jsonObject == "1") {
+//                                        new $.zui.Messager("That the goods number is " + $("#value2_1_1").text() + " has added successfully！", {
+//                                            type: 'success',
+//                                            placement: 'top' //定义显示位置
+//                                        }).show();
+//                                        setTimeout(function () {
+//                                            findAllGoods(); //刷新表格
+//                                            $("#myModal_2_1_1").modal('hide');//关闭对话框
+//                                            $("#value2_1_1").val("");
+//                                            $("#value2_1_2").val("");
+//                                            $("#value2_1_3").val("");
+//                                            $("#value2_1_4").val("");
+//                                            $("#value2_1_5").val("");
+//                                            $("#value2_1_6").val("");
+//                                            $("#value2_1_7").val("");
+//                                            $("#value2_1_10").val("");
+//                                        }, 1000);
+//                                    } else if (data.jsonObject == "0") {
+//                                        new $.zui.Messager("Add failed, possible reasons： a server error!", {
+//                                            type: 'danger',
+//                                            placement: 'top' // 定义显示位置
+//                                        }).show();
+//                                    }
+//                                },
+//                                error: function (jqXHR) {
+//                                    new $.zui.Messager("Operation failed, possible causes：" + jqXHR.status, {
+//                                        type: 'danger',
+//                                        placement: 'top' // 定义显示位置
+//                                    }).show();
+//                                }
+//                            });
+//                        }
+//                    });
+//                } else {
+//                    $("#RRPdiv").hide();
+//                    /////////////////////////////////////////////////////
+//                    //新增商品 提交
+//                    $("#submit2_1_1_1").click(function () {
+//                        if ($("#value2_1_2").val() == "") {
+//                            new $.zui.Messager('Goods name is required !', {
+//                                type: 'danger',
+//                                placement: 'top' // 定义显示位置
+//                            }).show();
+//                        } else if ($("#value2_1_3").val() == "") {
+//                            new $.zui.Messager('Goods barcode is required !', {
+//                                type: 'danger',
+//                                placement: 'top' // 定义显示位置
+//                            }).show();
+//                        } else if ($("#value2_1_4").val() == "") {
+//                            new $.zui.Messager('Goods price is required !', {
+//                                type: 'danger',
+//                                placement: 'top' // 定义显示位置
+//                            }).show();
+//                        } else if ($("#value2_1_7").val() == "1" && $("#value2_1_10").val() == "") {
+//                            new $.zui.Messager('When stock control is enabled, the stock amount is required !', {
+//                                type: 'danger',
+//                                placement: 'top' // 定义显示位置
+//                            }).show();
+//                        } else {
+//                            if ($("#value2_1_7").val() == "0" && $("#value2_1_10").val() == "") {
+//                                $("#value2_1_10").val(0)
+//                            }
+//                            $.ajax({
+//                                type: "POST",
+//                                url: "ActionPart2_saveGoods.action",
+//                                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+//                                data: {
+//                                    "value1": $("#value2_1_1").text(),
+//                                    "value2": $("#value2_1_2").val(),
+//                                    "value3": $("#value2_1_3").val(),
+//                                    "value4": parseFloat($("#value2_1_4").val()) * 100,
+//                                    "value5": 0,
+//                                    "value6": $("#value2_1_6").val(),
+//                                    "value7": $("#value2_1_7").val(),
+//                                    "value8": parseFloat($("#value2_1_10").val()) * 10000
+//                                },
+//                                dataType: "json",
+//                                cache: false,
+//                                success: function (data) {
+//                                    if (data.jsonObject == "-3") {
+//                                        new $.zui.Messager("Login timeout, please login again !", {
+//                                            type: 'danger',
+//                                            placement: 'top' // 定义显示位置
+//                                        }).show();
+//                                        setTimeout(function () {
+//                                            location.href = "login.html";//重定向
+//                                        }, 2000);
+//                                    } else if (data.jsonObject == "1") {
+//                                        new $.zui.Messager("That the goods number is " + $("#value2_1_1").text() + " has added successfully ！", {
+//                                            type: 'success',
+//                                            placement: 'top' //定义显示位置
+//                                        }).show();
+//                                        setTimeout(function () {
+//                                            findAllGoods(); //刷新表格
+//                                            $("#myModal_2_1_1").modal('hide');//关闭对话框
+//                                            $("#value2_1_1").val("");
+//                                            $("#value2_1_2").val("");
+//                                            $("#value2_1_3").val("");
+//                                            $("#value2_1_4").val("");
+//                                            $("#value2_1_5").val("");
+//                                            $("#value2_1_6").val("");
+//                                            $("#value2_1_7").val("");
+//                                            $("#value2_1_10").val("");
+//                                        }, 1000);
+//                                    } else if (data.jsonObject == "0") {
+//                                        new $.zui.Messager("possible reasons：server error !", {
+//                                            type: 'danger',
+//                                            placement: 'top' // 定义显示位置
+//                                        }).show();
+//                                    }
+//                                },
+//                                error: function (jqXHR) {
+//                                    new $.zui.Messager("Operation failed, possible causes：" + jqXHR.status, {
+//                                        type: 'danger',
+//                                        placement: 'top' // 定义显示位置
+//                                    }).show();
+//                                }
+//                            });
+//                        }
+//                    });
+                }
+            });
+            //新增商品 提交
+            $("#submit2_1_1_1").click(function () {
+                if ($("#value2_1_2").val() == "") {
+                    new $.zui.Messager('Goods name is required!', {
+                        type: 'danger',
+                        placement: 'top' // 定义显示位置
+                    }).show();
+                } else if ($("#value2_1_3").val() == "") {
+                    new $.zui.Messager('Goods barcode is required!', {
+                        type: 'danger',
+                        placement: 'top' // 定义显示位置
+                    }).show();
+                } else if ($("#value2_1_4").val() == "") {
+                    new $.zui.Messager('Goods price is required!', {
+                        type: 'danger',
+                        placement: 'top' // 定义显示位置
+                    }).show();
+                } else if ($("#value2_1_6").val() == "2" && $("#value2_1_5").val() == "") {
+                    new $.zui.Messager('Goods price is required!', {
+                        type: 'danger',
+                        placement: 'top' // 定义显示位置
+                    }).show();
+                } else if ($("#value2_1_7").val() == "1" && $("#value2_1_10").val() == "") {
+                    new $.zui.Messager('When stock control is enabled, the stock amount is required!', {
+                        type: 'danger',
+                        placement: 'top' // 定义显示位置
+                    }).show();
                 } else {
-                    $("#RRPdiv").hide();
-                    //若Stock_Control=1，则为Stock_Amount必填项，若Stock_Control=0，Stock_Amount可不填，默认为0
-                    $("#value2_1_7").change(function () {
-                        if ($("#value2_1_7").val() == "0") {
-                            $("#value2_1_9").text("");
-                        } else if ($("#value2_1_7").val() == "1") {
-                            $("#value2_1_9").text("*");
-                        }
-                    });
-                    /////////////////////////////////////////////////////
-                    //新增商品 提交
-                    $("#submit2_1_1_1").click(function () {
-                        if ($("#value2_1_2").val() == "") {
-                            new $.zui.Messager('Goods name is required !', {
-                                type: 'danger',
-                                placement: 'top' // 定义显示位置
-                            }).show();
-                        } else if ($("#value2_1_3").val() == "") {
-                            new $.zui.Messager('Goods barcode is required !', {
-                                type: 'danger',
-                                placement: 'top' // 定义显示位置
-                            }).show();
-                        } else if ($("#value2_1_4").val() == "") {
-                            new $.zui.Messager('Goods price is required !', {
-                                type: 'danger',
-                                placement: 'top' // 定义显示位置
-                            }).show();
-                        } else if ($("#value2_1_7").val() == "1" && $("#value2_1_10").val() == "") {
-                            new $.zui.Messager('When stock control is enabled, the stock amount is required !', {
-                                type: 'danger',
-                                placement: 'top' // 定义显示位置
-                            }).show();
-                        } else {
-                            if ($("#value2_1_7").val() == "0" && $("#value2_1_10").val() == "") {
-                                $("#value2_1_10").val(0)
+                    if ($("#value2_1_7").val() == "0" && $("#value2_1_10").val() == "") {
+                        $("#value2_1_10").val(0)
+                    }
+                    $.ajax({
+                        type: "POST",
+                        url: "ActionPart2_saveGoods.action",
+                        contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                        data: {
+                            "value1": $("#value2_1_1").text(),
+                            "value2": $("#value2_1_2").val(),
+                            "value3": $("#value2_1_3").val(),
+                            "value4": parseFloat($("#value2_1_4").val()) * 100,
+                            "value5": parseFloat($("#value2_1_5").val()) * 100,
+                            "value6": $("#value2_1_6").val(),
+                            "value7": $("#value2_1_7").val(),
+                            "value8": parseFloat($("#value2_1_10").val()) * 10000
+                        },
+                        dataType: "json",
+                        cache: false,
+                        success: function (data) {
+                            if (data.jsonObject == "-3") {
+                                new $.zui.Messager("Login timeout, please login again!", {
+                                    type: 'danger',
+                                    placement: 'top' // 定义显示位置
+                                }).show();
+                                setTimeout(function () {
+                                    location.href = "login.html";//重定向
+                                }, 2000);
+                            } else if (data.jsonObject == "1") {
+                                new $.zui.Messager("That the goods number is " + $("#value2_1_1").text() + " has added successfully！", {
+                                    type: 'success',
+                                    placement: 'top' //定义显示位置
+                                }).show();
+                                setTimeout(function () {
+                                    findAllGoods(); //刷新表格
+                                    $("#myModal_2_1_1").modal('hide');//关闭对话框
+                                    $("#value2_1_1").val("");
+                                    $("#value2_1_2").val("");
+                                    $("#value2_1_3").val("");
+                                    $("#value2_1_4").val("");
+                                    $("#value2_1_5").val("");
+                                    $("#value2_1_6").val("");
+                                    $("#value2_1_7").val("");
+                                    $("#value2_1_10").val("");
+                                }, 1000);
+                            } else if (data.jsonObject == "0") {
+                                new $.zui.Messager("Add failed, possible reasons： a server error!", {
+                                    type: 'danger',
+                                    placement: 'top' // 定义显示位置
+                                }).show();
                             }
-                            $.ajax({
-                                type: "POST",
-                                url: "ActionPart2_saveGoods.action",
-                                contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                                data: {
-                                    "value1": $("#value2_1_1").text(),
-                                    "value2": $("#value2_1_2").val(),
-                                    "value3": $("#value2_1_3").val(),
-                                    "value4": parseFloat($("#value2_1_4").val()) * 100,
-                                    "value5": 0,
-                                    "value6": $("#value2_1_6").val(),
-                                    "value7": $("#value2_1_7").val(),
-                                    "value8": parseFloat($("#value2_1_10").val()) * 10000
-                                },
-                                dataType: "json",
-                                cache: false,
-                                success: function (data) {
-                                    if (data.jsonObject == "-3") {
-                                        new $.zui.Messager("Login timeout, please login again !", {
-                                            type: 'danger',
-                                            placement: 'top' // 定义显示位置
-                                        }).show();
-                                        setTimeout(function () {
-                                            location.href = "login.html";//重定向
-                                        }, 2000);
-                                    } else if (data.jsonObject == "1") {
-                                        new $.zui.Messager("That the goods number is " + $("#value2_1_1").text() + " has added successfully ！", {
-                                            type: 'success',
-                                            placement: 'top' //定义显示位置
-                                        }).show();
-                                        setTimeout(function () {
-                                            findAllGoods(); //刷新表格
-                                            $("#myModal_2_1_1").modal('hide');//关闭对话框
-                                            $("#value2_1_1").val("");
-                                            $("#value2_1_2").val("");
-                                            $("#value2_1_3").val("");
-                                            $("#value2_1_4").val("");
-                                            $("#value2_1_5").val("");
-                                            $("#value2_1_6").val("");
-                                            $("#value2_1_7").val("");
-                                            $("#value2_1_10").val("");
-                                        }, 1000);
-                                    } else if (data.jsonObject == "0") {
-                                        new $.zui.Messager("possible reasons：server error !", {
-                                            type: 'danger',
-                                            placement: 'top' // 定义显示位置
-                                        }).show();
-                                    }
-                                },
-                                error: function (jqXHR) {
-                                    new $.zui.Messager("Operation failed, possible causes：" + jqXHR.status, {
-                                        type: 'danger',
-                                        placement: 'top' // 定义显示位置
-                                    }).show();
-                                }
-                            });
+                        },
+                        error: function (jqXHR) {
+                            new $.zui.Messager("Operation failed, possible causes：" + jqXHR.status, {
+                                type: 'danger',
+                                placement: 'top' // 定义显示位置
+                            }).show();
                         }
                     });
                 }
             });
-
             //修改商品，选择Tax Index
             $("#submit3_2").popover({
                 html: true,
