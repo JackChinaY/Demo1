@@ -35,6 +35,10 @@ public class HQAction extends BaseAction {
     private HQService hqService = new HQService();
 //    private String currentUserId = "cbb418cc-8520-459f-ab02-ae3516388eb5";  //当前用户名Id，软件发布的时候把该字符内容删除掉
 
+//    public HQAction() {
+//        System.out.println("111");
+//    }
+
     /**
      * 方法序号：1_1 登录
      *
