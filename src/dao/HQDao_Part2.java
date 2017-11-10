@@ -14,49 +14,45 @@ public class HQDao_Part2 extends BaseDAO_Sqlite {
 	 * 
 	 * @return json数组
 	 */
-	public String findAllGoods(String userId, int pageIndex, int pageSize)
+	public String findAllGoods(String databaseUrl, Page page)
 			throws Exception {
-		String sql = "SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4,RRP ASvalue5, Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8 from Goods_Info ORDER BY Number ASC";
-//		String sql = "SELECT Id AS value1, Number AS value2, Name AS value3, Barcode AS value4, Price AS value5, Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8 "
-//				+ "FROM (SELECT * FROM goods_info  ORDER BY Number ASC LIMIT ?)  LIMIT ?,offset?";
-		String url=URL+"cbb418cc-8520-459f-ab02-ae3516388eb5/"+"goodsDB.db";
-		return this.getForJson(sql,url);
+//		String sql = "SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4,RRP ASvalue5, Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8 from Goods_Info ORDER BY Number ASC";
+//		String sql="SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4,RRP ASvalue5, Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8 from Goods_Info ORDER BY Number ASC";
+		String sql = "SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4, RRP AS value5,Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8 "
+				+ "FROM (SELECT * FROM goods_info  ORDER BY Number ASC LIMIT ?)  LIMIT ? offset ?";
+		return this.getForJson(sql,databaseUrl,page.getPageSize() * page.getPageIndex(), page.getPageSize(), page.getPageSize() * (page.getPageIndex() - 1));
 	}
 
 	/**
 	 * 方法序号：4_2 查询商品总记录数
 	 */
-	public int getGoodsCount(String id) throws Exception {
+	public String getGoodsCount(String databaseUrl) throws Exception {
 		String sql = " SELECT count(*) as COUNTS from goods_info";
-		String url = URL+"cbb418cc-8520-459f-ab02-ae3516388eb5/"+"goodsDB.db";
-		return this.getCount(sql,url);
+		return Integer.toString(this.getCount(sql,databaseUrl));
 	}
 
 	/**
 	 * 方法序号：4_3 查询商品最大编号
 	 */
-	public int getGoodsMaxNumber(String id) throws Exception {
+	public String  getGoodsMaxNumber(String databaseUrl) throws Exception {
 		String sql = " SELECT MAX(Number) as MAXNUM from goods_info";
-		String url = URL+"cbb418cc-8520-459f-ab02-ae3516388eb5/"+"goodsDB.db";
-		return this.getCount(sql, url);
+		return Integer.toString(this.getCount(sql, databaseUrl));
 	}
 
 	/**
 	 * 方法序号：4_4 验证商品条形码是否存在
 	 */
-	public int verifyGoodsbarcode(String barcode) throws Exception {
+	public String verifyGoodsbarcode(String databaseUrl,String barcode) throws Exception {
 		String sql = " SELECT count(*) as COUNTS from goods_info WHERE Barcode=?";
-		String url = URL+"cbb418cc-8520-459f-ab02-ae3516388eb5/"+"goodsDB.db";
-		return this.getCount(sql,url, barcode);
+		return Integer.toString(this.getCount(sql,databaseUrl, barcode));
 	}
 
 	/**
 	 * 方法序号：4_5 保存单品
 	 */
-	public boolean saveGoods(PLU plu) throws Exception {
+	public boolean saveGoods(String databaseUrl,PLU plu) throws Exception {
 		String sql = "INSERT INTO goods_info (Number,Name,Barcode,Price,RRP,Tax_Index,Stock_Control,Stock_Amount) VALUES (?,?,?,?,?,?,?,?)";
-		String url = URL+"cbb418cc-8520-459f-ab02-ae3516388eb5/"+"goodsDB.db";
-		int result = this.saveOrUpdateOrDelete(sql,url, plu.getNumber(),
+		int result = this.saveOrUpdateOrDelete(sql,databaseUrl, plu.getNumber(),
 				plu.getName(), plu.getBarcode(),
 				plu.getPrice(), plu.getRRP(), plu.getTax_Index(),
 				plu.getStock_Control(), plu.getStock_Amount());
@@ -71,10 +67,9 @@ public class HQDao_Part2 extends BaseDAO_Sqlite {
 	 * 
 	 * @return json数组
 	 */
-	public String getGoodsTaxTariff(String userId) throws Exception {
+	public String getGoodsTaxTariff(String databaseUrl) throws Exception {
 		String sql = "SELECT Number AS value1 from Tax_Tariff  ORDER BY Number ASC";
-		String url = URL+"cbb418cc-8520-459f-ab02-ae3516388eb5/"+"systemDB.db ";
-		return this.getForJson(sql, url);
+		return this.getForJson(sql, databaseUrl);
 	}
 
 	/**
@@ -82,28 +77,25 @@ public class HQDao_Part2 extends BaseDAO_Sqlite {
 	 *
 	 * @return json数组
 	 */
-	public String getAllGoodsTaxTariff() throws Exception {
+	public String getAllGoodsTaxTariff(String databaseUrl) throws Exception {
 		String sql = "SELECT Number AS value1,Invoice_Code AS value2,Invoice_Name AS value3,Tax_Code AS value4,Tax_Name AS value5,Tax_Rate AS value6,Exempt_Flag AS value7,CRC32 AS value8 from Tax_Tariff  ORDER BY Number ASC";
-		String url = URL+"cbb418cc-8520-459f-ab02-ae3516388eb5/"+"systemDB.db ";
-		return this.getForJson(sql,url);
+		return this.getForJson(sql,databaseUrl);
 	}
 
 	/**
 	 * 方法序号：4_7 删除一条商品
 	 */
-	public int deleteOneGoods(String goodsNumber) throws Exception {
+	public String deleteOneGoods(String databaseUrl,String goodsNumber) throws Exception {
 		String sql = "DELETE FROM goods_info where Number=?";
-		String url = URL+"cbb418cc-8520-459f-ab02-ae3516388eb5/"+"goodsDB.db";
-		return this.saveOrUpdateOrDelete(sql, url, goodsNumber);
+		return Integer.toString(this.saveOrUpdateOrDelete(sql, databaseUrl, goodsNumber));
 	}
 
 	/**
 	 * 方法序号：4_8 修改一个商品
 	 */
-	public boolean updateOneGoods(PLU plu) throws Exception {
+	public boolean updateOneGoods(String databaseUrl,PLU plu) throws Exception {
 		String sql = "UPDATE goods_info SET Name=?,Barcode=?,Price=?,Tax_Index=?,RRP=?,Stock_Control=?,Stock_Amount=? where Number=? ";
-		String url = URL+"cbb418cc-8520-459f-ab02-ae3516388eb5/"+"goodsDB.db";
-		int result = this.saveOrUpdateOrDelete(sql,url, plu.getName(),
+		int result = this.saveOrUpdateOrDelete(sql,databaseUrl, plu.getName(),
 				plu.getBarcode(), plu.getPrice(),
 				plu.getTax_Index(),plu.getRRP(), plu.getStock_Control(),
 				plu.getStock_Amount(),plu.getNumber()
@@ -120,11 +112,10 @@ public class HQDao_Part2 extends BaseDAO_Sqlite {
 	 *
 	 * @return json数组
 	 */
-	public String findGoodsInfByNumber(String GoodsNumber)
+	public String findAllGoodsByOption_ByNumber(String databaseUrl, String key)
 			throws Exception {
-		String sql = "SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4,RRP ASvalue5, Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8 from Goods_Info where Number=? ";
-		String url=URL+"cbb418cc-8520-459f-ab02-ae3516388eb5/"+"goodsDB.db";
-		return this.getForJson(sql,url);
+		String sql = "SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4, RRP AS value5, Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8 FROM Goods_Info WHERE Number LIKE ?";
+		return this.getForJson(sql,databaseUrl,"%" + key + "%");
 	}
 
 	/**
@@ -133,11 +124,10 @@ public class HQDao_Part2 extends BaseDAO_Sqlite {
 	 *
 	 * @return json数组
 	 */
-	public String findGoodsInfByName(String GoodsName)
+	public String findAllGoodsByOption_ByName(String databaseUrl, String key)
 			throws Exception {
-		String sql = "SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4,RRP ASvalue5, Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8 from Goods_Info where Name=? ";
-		String url=URL+"cbb418cc-8520-459f-ab02-ae3516388eb5/"+"goodsDB.db";
-		return this.getForJson(sql,url);
+		String sql = "SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4,RRP AS value5, Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8 FROM Goods_Info WHERE Name LIKE ?";
+		return this.getForJson(sql,databaseUrl,"%" + key + "%");
 	}
 	/**
 	 * 方法序号： 4_11 按商品条形码查询商品信息
@@ -145,11 +135,10 @@ public class HQDao_Part2 extends BaseDAO_Sqlite {
 	 *
 	 * @return json数组
 	 */
-	public String findGoodsInfByBarcode(String GoodsBarcode)
+	public String findAllGoodsByOption_ByBarcode(String databaseUrl, String key)
 			throws Exception {
-		String sql = "SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4,RRP ASvalue5, Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8 from Goods_Info where Barcode=? ";
-		String url=URL+"cbb418cc-8520-459f-ab02-ae3516388eb5/"+"goodsDB.db";
-		return this.getForJson(sql,url);
+		String sql = "SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4,RRP AS value5, Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8 FROM Goods_Info WHERE Barcode LIKE ?";
+		return this.getForJson(sql,databaseUrl,"%" + key + "%");
 	}
 
 	/**
@@ -158,10 +147,9 @@ public class HQDao_Part2 extends BaseDAO_Sqlite {
 	 *
 	 * @return json数组
 	 */
-	public String findAllDeptInf() throws Exception {
+	public String findAllDeptInf(String databaseUrl) throws Exception {
 		String sql = "SELECT id AS value1, Dept_No AS value2, PLU_No AS value3 from Department_Associate ORDER BY id ASC";
-		String url=URL+"cbb418cc-8520-459f-ab02-ae3516388eb5/"+"goodsDB.db";
-		return this.getForJson(sql,url);
+		return this.getForJson(sql,databaseUrl);
 	}
 
 	/**
@@ -170,20 +158,18 @@ public class HQDao_Part2 extends BaseDAO_Sqlite {
 	 *
 	 * @return json数组
 	 */
-	public String findAllGoodsInf()
+	public String findAllGoodsInf(String databaseUrl)
 			throws Exception {
 		String sql = "SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4,RRP ASvalue5, Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8 from Goods_Info ORDER BY Number ASC";
-		String url=URL+"cbb418cc-8520-459f-ab02-ae3516388eb5/"+"goodsDB.db";
-		return this.getForJson(sql,url);
+		return this.getForJson(sql,databaseUrl);
 	}
 
 	/**
 	 * 方法序号：5_3 修改一个部门关联信息
 	 */
-	public boolean updateOneDeptInf(String Dept_No,String PLU_No,Integer Id) throws Exception {
+	public boolean updateOneDeptInf(String databaseUrl,String Dept_No,String PLU_No,Integer Id) throws Exception {
 		String sql = "UPDATE Department_Associate SET Dept_No=?,PLU_No=? where id=? ";
-		String url = URL+"cbb418cc-8520-459f-ab02-ae3516388eb5/"+"goodsDB.db";
-		int result = this.saveOrUpdateOrDelete(sql,url,Dept_No,PLU_No,Id);
+		int result = this.saveOrUpdateOrDelete(sql,databaseUrl,Dept_No,PLU_No,Id);
 		if (result > 0)
 			return true;
 		else
