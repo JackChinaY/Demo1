@@ -90,7 +90,7 @@
                 $("#email2").val($("#email").val());
                 $("#tel2").val($("#tel").val());
                 $("#address2").val($("#address").val());
-                $("#myModal2").modal();//显示对话框
+                $("#myModal2").modal({moveable: true});//显示对话框
             });
             //修改用户信息 提交
             $("#submit3").click(function () {
@@ -169,7 +169,7 @@
             /*******************************************************************************************/
             //修改密码 弹出框
             $("#submit1").click(function () {
-                $("#myModal3").modal();//显示对话框
+                $("#myModal3").modal({moveable: true});//显示对话框
             });
             //修改密码 提交
             $("#submit5").click(function () {

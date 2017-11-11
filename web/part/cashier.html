@@ -23,7 +23,7 @@
                 $("#submit1").click(function () {
                     getCashiersMaxNumber();
                     getCashiersMaxCode();
-                    $("#myModal1").modal();   //显示对话框
+                    $("#myModal1").modal({moveable: true});   //显示对话框
                 });
 
                 //查询收银员最大编号，并填充加1后的数值
@@ -118,6 +118,7 @@
                         }
                     });
                 }
+
                 //验证验证收银员code是否存在
                 $("#code").blur(function () {
                     if ($("#code").val() == "") {
@@ -251,12 +252,12 @@
                             placement: 'top'
                         }).show();
                     } else if ($("#re_password").val() == "") {
-                        new $.zui.Messager('The Password can not be empty!', {
+                        new $.zui.Messager('The Re-Password can not be empty!', {
                             type: 'danger',
                             placement: 'top'
                         }).show();
                     } else if ($("#re_password").val().length != 6) {
-                        new $.zui.Messager('The length of the Password must be 6 numbers!', {
+                        new $.zui.Messager('The length of the Re-Password must be 6 numbers!', {
                             type: 'danger',
                             placement: 'top'
                         }).show();
@@ -375,7 +376,7 @@
                                 }
                                 //当数组为不为空时
                                 else if (jsonArray.length != 0) {
-                                    var head = '<tr><th>ID</th><th>Name</th><th>Code</th><th>Password</th><th>Operation</th></tr>';
+                                    var head = '<tr><th>Number</th><th>Name</th><th>Code</th><th>Password</th><th>Operation</th></tr>';
                                     $("#thead").html(head);
                                     var html;
                                     for (var i = 0; i < jsonArray.length; i++) {
@@ -400,6 +401,7 @@
                         }
                     });
                 }
+
                 /*******************************************************************************************/
                 //修改按钮，修改收银员
                 $("#tbody").on("click", "a[name='update']", function () {
@@ -409,7 +411,7 @@
                     $("#name2").val($(this).parents("tr").find(".Name").text());
                     $("#password2").val($(this).parents("tr").find(".Password").text());
                     $("#re_password2").val($(this).parents("tr").find(".Password").text());
-                    $("#myModal2").modal();//显示对话框
+                    $("#myModal2").modal({moveable: true});//显示对话框
                 });
                 //保存修改后的收银员
                 $("#submit3").click(function () {
@@ -434,17 +436,17 @@
                             placement: 'top'
                         }).show();
                     } else if ($("#re_password2").val() == "") {
-                        new $.zui.Messager('The Password can not be empty!', {
+                        new $.zui.Messager('The Re-Password can not be empty!', {
                             type: 'danger',
                             placement: 'top'
                         }).show();
                     } else if ($("#re_password2").val().length != 6) {
-                        new $.zui.Messager('The length of the Password must be 6 numbers!', {
+                        new $.zui.Messager('The length of the Re-Password must be 6 numbers!', {
                             type: 'danger',
                             placement: 'top'
                         }).show();
                     } else if ($("#re_password2").val().indexOf(" ") != -1) {
-                        new $.zui.Messager('The Password can not contain space!', {
+                        new $.zui.Messager('The Re-Password can not contain space!', {
                             type: 'danger',
                             placement: 'top'
                         }).show();
@@ -514,8 +516,8 @@
                 //删除收银员，因为表格是自动生成的，所以只能用on函数，click事件无效
                 $("#tbody").on("click", "a[name='delete']", function () {
                     $("#deleteId").val($(this).parents("tr").find(".Id").text());
-                    $("#deleteTip").html("Confirm that you want to delete this record ID is " + $(this).parents("tr").find(".Id").text() + " ？");
-                    $("#myModal3").modal();
+                    $("#deleteTip").html("Confirm that you want to delete this record ( Number : " + $(this).parents("tr").find(".Id").text() + " ) ？");
+                    $("#myModal3").modal({moveable: true});
                 });
                 //删除收银员 提交
                 $("#submit4").click(function () {
@@ -627,7 +629,6 @@
         </table>
     </div>
 </div>
-
 <!--基础对话框-->
 <div class="modal fade" id="myModal">
     <div class="modal-dialog">
@@ -648,7 +649,7 @@
 </div>
 <!--对话框 新增-->
 <div class="modal fade" id="myModal1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-moveable">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
@@ -768,7 +769,7 @@
 </div>
 <!--对话框 删除商品-->
 <div class="modal fade" id="myModal3">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-moveable">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
