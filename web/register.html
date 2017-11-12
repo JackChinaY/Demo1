@@ -56,6 +56,12 @@
     </style>
     <script type="text/javascript">
         $(function () {
+            /**
+             *在此统一定义一些常用字符串
+             */
+            var loginTimeout = "Login timeout, please login again !";
+            var serverError = "possible reasons：server error !";
+            /*******************************************************************************************/
             //验证机器编号是否为正品
             $("#machineId").blur(function () {
                 if ($("#machineId").val() == "") {
@@ -228,7 +234,7 @@
                         type: 'danger',
                         placement: 'top'
                     }).show();
-                }else if ($("#email").val().indexOf("@") == -1) {
+                } else if ($("#email").val().indexOf("@") == -1) {
                     new $.zui.Messager('The format of the E-mail is incorrect, please re-enter it !', {
                         type: 'danger',
                         placement: 'top'
@@ -250,11 +256,21 @@
                         dataType: "json",
                         cache: false,
                         success: function (data) {
-                            if (data.jsonObject == "1") {
+                            //服务器出错
+                            if (data.jsonObject == "-1") {
+                                new $.zui.Messager(serverError, {
+                                    type: 'danger',
+                                    placement: 'top'
+                                }).show();
+                            }
+                            //注册成功
+                            else if (data.jsonObject == "1") {
                                 $("#modal-content").html("Congratulations on your successful registration!");
                                 $("#myModal").modal();
                                 clearAll();
-                            } else {
+                            }
+                            //注册失败
+                            else {
                                 $("#modal-content").html("Registration failed. Please re register!");
                                 $("#myModal").modal();
                             }
@@ -262,7 +278,7 @@
                         error: function (jqXHR) {
                             new $.zui.Messager("Operation failed, possible causes：" + jqXHR.status, {
                                 type: 'danger',
-                                placement: 'top' // 定义显示位置
+                                placement: 'top'
                             }).show();
                         }
                     });

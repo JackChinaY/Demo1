@@ -108,6 +108,19 @@ public class HQService_Part2 extends BaseService {
     }
 
     /**
+     * 方法序号：4_7_0 删除商品前做验证，验证该商品是否设置了部类关联
+     */
+    public String verifyDepartmentAssociate(String databaseUrl, String goodsNumber) {
+        try {
+            return this.hqDao_part2.verifyDepartmentAssociate(databaseUrl, goodsNumber);
+        } catch (Exception e) {
+            System.out.println("4_7 删除一条商品时出错！");
+            e.printStackTrace();
+            return "-1";//程序运行出错，服务器出错
+        }
+    }
+
+    /**
      * 方法序号：4_7 删除一条商品
      */
     public String deleteOneGoods(String databaseUrl, String goodsNumber) {
@@ -167,7 +180,7 @@ public class HQService_Part2 extends BaseService {
     }
 
     /**
-     * 方法序号：5_1 查询所有商品
+     * 方法序号：5_1 查询所有部类关联信息
      *
      * @return json数组字符串
      */
@@ -175,14 +188,14 @@ public class HQService_Part2 extends BaseService {
         try {
             return this.hqDao_part2.findAllDept(databaseUrl);
         } catch (Exception e) {
-            System.out.println("5_1 查询所有部门信息时出错！");
+            System.out.println("5_1 查询所有部类关联信息时出错！");
             e.printStackTrace();
             return "-1";//程序运行出错，服务器出错
         }
     }
 
     /**
-     * 方法序号：5_2 查询所有商品
+     * 方法序号：5_2 简易查询所有商品信息
      *
      * @return json数组字符串
      */
@@ -190,7 +203,7 @@ public class HQService_Part2 extends BaseService {
         try {
             return this.hqDao_part2.findAllGoodsInfo(databaseUrl);
         } catch (Exception e) {
-            System.out.println("5_2 查询所有商品信息时出错！");
+            System.out.println("5_2 简易查询所有商品信息时出错！");
             e.printStackTrace();
             return "-1";//程序运行出错，服务器出错
         }

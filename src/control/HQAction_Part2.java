@@ -31,9 +31,9 @@ public class HQAction_Part2 extends BaseAction {
     /**
      * 序列化
      */
-    private static final long serialVersionUID = 415712263988003225L;
+//    private static final long serialVersionUID = 415712263988003225L;
     private HQService_Part2 hqService_part2 = new HQService_Part2();
-    private String currentUserId = "cbb418cc-8520-459f-ab02-ae3516388eb5";  //当前用户名Id，软件发布的时候把该字符内容删除掉
+    //    private String currentUserId = "cbb418cc-8520-459f-ab02-ae3516388eb5";  //当前用户名Id，软件发布的时候把该字符内容删除掉
     private String databaseUrl = "jdbc:sqlite:D:/database/";  //sqlite数据库基础路径
     private String systemDB = "/systemDB.db";  //连接的是systemDB.db
     private String goodsDB = "/goodsDB.db";  //连接的是goodsDB.db
@@ -110,7 +110,7 @@ public class HQAction_Part2 extends BaseAction {
     }
 
     /**
-     * 方法序号：4_5 保存商品 Id,Number,Name,Barcode,Price,Tax_Index,Stock_Control,Stock_Amount
+     * 方法序号：4_5 保存商品
      */
     public void saveGoods() throws IOException, JSONException {
         //如果用户登录超时，则需要重新登录
@@ -153,6 +153,23 @@ public class HQAction_Part2 extends BaseAction {
     }
 
     /**
+     * 方法序号：4_7_0 删除商品前做验证，验证该商品是否设置了部类关联
+     */
+    public void verifyDepartmentAssociate() throws IOException, JSONException {
+        // 如果用户登录超时，则需要重新登录
+        if (this.getSession().getAttribute("userId") == null) {
+            connectionTimeOut();
+        }
+        // 登录未超时
+        else {
+            String goodsNumber = this.getRequest().getParameter("value1");
+            String userId = this.getSession().getAttribute("userId").toString();//获取用户UserId
+            String result = hqService_part2.verifyDepartmentAssociate(databaseUrl + userId + goodsDB, goodsNumber);// >=1表示成功，0表示失败
+            returnJsonObject(result);//可能的返回值：-1，0,1
+        }
+    }
+
+    /**
      * 方法序号：4_7 删除一条商品
      */
     public void deleteOneGoods() throws IOException, JSONException {
@@ -187,10 +204,10 @@ public class HQAction_Part2 extends BaseAction {
             plu.setName(this.getRequest().getParameter("value2"));
             plu.setBarcode(this.getRequest().getParameter("value3"));
             plu.setPrice(this.getRequest().getParameter("value4"));
-            plu.setTax_Index(this.getRequest().getParameter("value5"));
-            plu.setStock_Control(this.getRequest().getParameter("value6"));
-            plu.setStock_Amount(this.getRequest().getParameter("value7"));
-            plu.setRRP(this.getRequest().getParameter("value8"));
+            plu.setRRP(this.getRequest().getParameter("value5"));
+            plu.setTax_Index(this.getRequest().getParameter("value6"));
+            plu.setStock_Control(this.getRequest().getParameter("value7"));
+            plu.setStock_Amount(this.getRequest().getParameter("value8"));
             String result = hqService_part2.updateOneGoods(databaseUrl + userId + goodsDB, plu);
             returnJsonObject(result);//可能的返回值：-1，0,1
         }
@@ -215,7 +232,7 @@ public class HQAction_Part2 extends BaseAction {
     }
 
     /**
-     * 方法序号：5_1 查询所有部门信息
+     * 方法序号：5_1 查询所有部类关联信息
      */
     public void findAllDept() throws IOException, JSONException {
         // 如果用户登录超时，则需要重新登录
@@ -231,7 +248,7 @@ public class HQAction_Part2 extends BaseAction {
     }
 
     /**
-     * 方法序号：5_2 查询所有商品信息
+     * 方法序号：5_2 简易查询所有商品信息
      */
     public void findAllGoodsInfo() throws IOException, JSONException {
         // 如果用户登录超时，则需要重新登录

@@ -53,7 +53,7 @@ public class HQService_Admin extends BaseService {
 		} catch (Exception e) {
 			System.out.println("1_3查询所有机器编号时出错！");
 			e.printStackTrace();
-			return null;//程序运行出错，服务器出错
+			return "-1";//程序运行出错，服务器出错
 		}
 	}
 	/**

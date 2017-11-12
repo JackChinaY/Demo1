@@ -1,5 +1,7 @@
 package util;
 
+import entity.User;
+
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
@@ -14,8 +16,8 @@ public class SendEmail {
 	// 发件人的 邮箱 和 密码（替换为自己的邮箱和密码）
     // PS: 某些邮箱服务器为了增加邮箱本身密码的安全性，给 SMTP 客户端设置了独立密码（有的邮箱称为“授权码”）, 
     //     对于开启了独立密码的邮箱, 这里的邮箱密码必需使用这个独立密码（授权码）。
-    public static String myEmailAccount = "";//yangnianemail@163.com
-    public static String myEmailPassword = "";//网易邮箱此处应填写授权码
+    public static String myEmailAccount = "yangnianemail@163.com";//yangnianemail@163.com
+    public static String myEmailPassword = "china123";//网易邮箱此处应填写授权码
     // 发件人邮箱的 SMTP 服务器地址, 必须准确, 不同邮件服务器地址不同, 一般(只是一般, 绝非绝对)格式为: smtp.xxx.com
     // 网易163邮箱的 SMTP 服务器地址为: smtp.163.com
     public static String myEmailSMTPHost = "smtp.163.com";
@@ -96,11 +98,8 @@ public class SendEmail {
     }
     /**
      * 带参数的邮箱发送函数
-     * @param receiveMail 接收邮箱
-     * @param newPassword 用户新密码
-     * @throws Exception
      */
-    public static void toEmail(String receiveMail,String newPassword) throws Exception{
+    public static void sendOneEmail(User user) throws Exception{
     	// 1. 创建参数配置, 用于连接邮件服务器的参数配置
     	Properties props = new Properties();                    // 参数配置
         props.setProperty("mail.transport.protocol", "smtp");   // 使用的协议（JavaMail规范要求）
@@ -112,13 +111,13 @@ public class SendEmail {
         // 3. 创建一封邮件
         MimeMessage message = new MimeMessage(session);
         // 3.1 From: 发件人
-        message.setFrom(new InternetAddress(myEmailAccount, "和桥科技", "UTF-8"));
+        message.setFrom(new InternetAddress(myEmailAccount, "Houge Technology", "UTF-8"));
         // 3.2 To: 收件人（可以增加多个收件人、抄送、密送）
-        message.setRecipient(MimeMessage.RecipientType.TO, new InternetAddress(receiveMail, "", "UTF-8"));
+        message.setRecipient(MimeMessage.RecipientType.TO, new InternetAddress(user.getEmail(), "", "UTF-8"));
         // 3.3 Subject: 邮件主题
-        message.setSubject("税控上位机密码找回", "UTF-8");
+        message.setSubject("Tax control PC password retrieval", "UTF-8");
         // 3.4 Content: 邮件正文（可以使用html标签）
-        message.setContent("尊敬的用户您好，您的密码已重置，新密码是"+newPassword+"。\t感谢您使用和桥产品，和桥用心做好每一件产品!", "text/html;charset=UTF-8");
+        message.setContent("Dear <strong>"+ user.getUsername()+"</strong>, your password has been reset, the new password is: <strong>"+user.getNewPassword()+"</strong> , please remember it。<br/>Thank you for using the Houge products !", "text/html;charset=UTF-8");
         // 3.5 设置发件时间
         message.setSentDate(new Date());
         // 3.6 保存设置

@@ -24,7 +24,7 @@ public class HQAction_Part1 extends BaseAction {
      */
 //    private static final long serialVersionUID = 415712263988003225L;
     private HQService_Part1 hqService_part1 = new HQService_Part1();
-    private String currentUserId = "cbb418cc-8520-459f-ab02-ae3516388eb5";  //当前用户名Id，软件发布的时候把该字符内容删除掉
+//    private String currentUserId = "cbb418cc-8520-459f-ab02-ae3516388eb5";  //当前用户名Id，软件发布的时候把该字符内容删除掉
     private String databaseUrl = "jdbc:sqlite:D:/database/";  //sqlite数据库基础路径
     private String programmingDB = "/programmingDB.db";  //连接的是programmingDB.db
     private String systemDB = "/systemDB.db";  //连接的是systemDB.db

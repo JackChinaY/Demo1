@@ -21,30 +21,26 @@ public class HQDao extends BaseDAO {
     /**
      * 方法序号：1_2验证用户名是否存在
      */
-    public int verifyUsername(String id) throws Exception {
+    public String verifyUsername(String id) throws Exception {
         String sql = "SELECT count(*) AS count FROM User_Table WHERE Username=?";
-        return this.getCount(sql, id);
+        return Integer.toString(this.getCount(sql, id));
     }
 
     /**
      * 方法序号：1_3 注册
      */
-    public boolean register(User user) throws Exception {
-        String sql = "INSERT INTO user_table VALUES (?,?,?,?,?,?,?,?)";
-        int result = this.saveEntity(sql, user);
-        if (result > 0)
-            return true;
-        else
-            return false;
+    public String register(User user) throws Exception {
+        String sql = "INSERT INTO user_table (Id,Username,Password,Email,Telephone,Address,MachineType,MachineId) VALUES (?,?,?,?,?,?,?,?)";
+        return Integer.toString(this.saveOrUpdateOrDelete(sql, user.getId(), user.getUsername(), user.getPassword(), user.getEmail(), user.getTel(), user.getAddress(), user.getMachineType(), user.getMachineId()));
+
     }
 
     /**
      * 方法序号：1_4验证该找回密码的用户名是否存在
      */
     public int verifyUsernameIsExist(User user) throws Exception {
-        String sql = "SELECT count(*) AS count FROM User_Table WHERE Username=? AND Email=? AND Telephone=? AND MachineType=? AND MachineId=?";
-        return this.getCount(sql, user.getUsername(), user.getEmail(),
-                user.getTel(), user.getMachineType(), user.getMachineId());
+        String sql = "SELECT count(*) AS count FROM User_Table WHERE Username=? AND Email=? AND MachineType=? AND MachineId=?";
+        return this.getCount(sql, user.getUsername(), user.getEmail(), user.getMachineType(), user.getMachineId());
     }
 
     /**
@@ -63,10 +59,10 @@ public class HQDao extends BaseDAO {
     /**
      * 方法序号：1_6 验证验证机器是否为正品
      */
-    public int verifyMachine(String machineType, String machineId)
+    public String verifyMachine(String machineType, String machineId)
             throws Exception {
-        String sql = " SELECT count(*) AS count FROM Machine_Table WHERE MachineType=? AND MachineId=?";
-        return this.getCount(sql, machineType, machineId);
+        String sql = " SELECT count(*) AS count FROM machine_table WHERE MachineType=? AND MachineId=?";
+        return Integer.toString(this.getCount(sql, machineType, machineId));
     }
 
     /**

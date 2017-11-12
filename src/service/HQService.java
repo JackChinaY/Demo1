@@ -27,31 +27,31 @@ public class HQService extends BaseService {
     /**
      * 方法序号： 1_2验证用户名是否存在
      */
-    public int verifyUsername(String id) {
+    public String verifyUsername(String id) {
         try {
             return this.hqDao.verifyUsername(id);
         } catch (Exception e) {
             System.out.println("1_2验证用户名是否存在时出错！");
             e.printStackTrace();
+            return "-1";
         }
-        return 2;
     }
 
     /**
      * 方法序号：1_3 注册
      */
-    public boolean register(User user) {
+    public String register(User user) {
         try {
             return this.hqDao.register(user);// 添加
         } catch (Exception e) {
             System.out.println("1_3注册时出错！");
             e.printStackTrace();
+            return "-1";
         }
-        return false;
     }
 
     /**
-     * 方法序号： 1_4验证该找回密码的用户名是否存在
+     * 方法序号： 1_4 验证该找回密码的用户名是否存在
      */
     public int verifyUsernameIsExist(User user) {
         try {
@@ -79,14 +79,14 @@ public class HQService extends BaseService {
     /**
      * 方法序号：1_6  验证验证机器是否为正品
      */
-    public int verifyMachine(String machineType, String machineId) {
+    public String verifyMachine(String machineType, String machineId) {
         try {
             return this.hqDao.verifyMachine(machineType, machineId);
         } catch (Exception e) {
             System.out.println("2_1 验证验证机器是否为正品时出错！");
             e.printStackTrace();
+            return "-1";
         }
-        return -1;
     }
 
     /**

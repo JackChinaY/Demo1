@@ -85,15 +85,19 @@
                                 $("#button_login").val("Login");
                                 location.href = "index.html";
                             } else {
-                                $("#modal-content").html("Username or Password error!");
+                                new $.zui.Messager("Username or Password error !", {
+                                    type: 'danger',
+                                    placement: 'top'
+                                }).show();
                                 $("#button_login").val("Login");
-                                $("#myModal").modal();
                             }
                         },
                         error: function (jqXHR) {
-                            $("#modal-content").html("The operation failed, please try again. Possible causes:" + jqXHR.status + "！");
+                            new $.zui.Messager("Operation failed, possible causes：" + jqXHR.status, {
+                                type: 'danger',
+                                placement: 'top'
+                            }).show();
                             $("#button_login").val("Login");
-                            $("#myModal").modal();
                         }
                     });
                 }
@@ -107,6 +111,7 @@
     </script>
 </head>
 <body>
+<!--标题-->
 <div style="height: 50px;width: 100%;position: absolute;">
     <h1 style="font-family: Arial;">&nbsp;Fiscal cash host computer system, please login!</h1>
 </div>

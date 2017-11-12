@@ -384,7 +384,7 @@
                                             + '<td class="Name">' + jsonArray[i].value2 + '</td>'
                                             + '<td class="Code">' + jsonArray[i].value3 + '</td>'
                                             + '<td class="Password">' + jsonArray[i].value4 + '</td>'
-                                            + '<td>&nbsp;&nbsp;&nbsp;&nbsp;<a name="update" href="#" data-toggle="tooltip" data-tip-class="tooltip-primary" title="Modify"><i class="icon icon-edit"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a name="delete" href="#" data-toggle="tooltip" data-tip-class="tooltip-danger" title="Delete" style="color: #ea644a"><i class="icon icon-trash"></i></a></td></tr>';
+                                            + '<td>&nbsp;&nbsp;<a name="update" href="#" data-toggle="tooltip" data-tip-class="tooltip-primary" title="Modify"><i class="icon icon-edit"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a name="delete" href="#" data-toggle="tooltip" data-tip-class="tooltip-danger" title="Delete" style="color: #ea644a"><i class="icon icon-trash"></i></a></td></tr>';
                                     }
                                     $("#tbody").html(html);
 //                                    console.log(jsonArray.length);
@@ -516,7 +516,7 @@
                 //删除收银员，因为表格是自动生成的，所以只能用on函数，click事件无效
                 $("#tbody").on("click", "a[name='delete']", function () {
                     $("#deleteId").val($(this).parents("tr").find(".Id").text());
-                    $("#deleteTip").html("Confirm that you want to delete this record ( Number : " + $(this).parents("tr").find(".Id").text() + " ) ？");
+                    $("#deleteTip").html("Do you want to delete this record ( Number : " + $(this).parents("tr").find(".Id").text() + " ) ？");
                     $("#myModal3").modal({moveable: true});
                 });
                 //删除收银员 提交

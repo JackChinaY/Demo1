@@ -38,7 +38,7 @@ public class HQDao_Part2 extends BaseDAO_Sqlite {
      * 方法序号：4_4 验证商品条形码是否存在
      */
     public String verifyGoodsbarcode(String databaseUrl, String barcode) throws Exception {
-        String sql = " SELECT count(*) as COUNTS from goods_info WHERE Barcode=?";
+        String sql = " SELECT COUNT(*) as COUNTS from goods_info WHERE Barcode=?";
         return Integer.toString(this.getCount(sql, databaseUrl, barcode));
     }
 
@@ -51,8 +51,6 @@ public class HQDao_Part2 extends BaseDAO_Sqlite {
                 plu.getName(), plu.getBarcode(),
                 plu.getPrice(), plu.getRRP(), plu.getTax_Index(),
                 plu.getStock_Control(), plu.getStock_Amount()));
-
-
     }
 
     /**
@@ -63,6 +61,14 @@ public class HQDao_Part2 extends BaseDAO_Sqlite {
     public String getAllGoodsTaxTariff(String databaseUrl) throws Exception {
         String sql = "SELECT Number AS value1,Invoice_Code AS value2,Invoice_Name AS value3,Tax_Code AS value4,Tax_Name AS value5,Tax_Rate AS value6,Exempt_Flag AS value7,CRC32 AS value8 from Tax_Tariff  ORDER BY Number ASC";
         return this.getForJson(sql, databaseUrl);
+    }
+
+    /**
+     * 方法序号：4_7_0 删除商品前做验证，验证该商品是否设置了部类关联
+     */
+    public String verifyDepartmentAssociate(String databaseUrl, String goodsNumber) throws Exception {
+        String sql = "SELECT COUNT(*) AS COUNTS FROM Department_Associate WHERE PLU_No=?";
+        return Integer.toString(this.getCount(sql, databaseUrl, goodsNumber));
     }
 
     /**
@@ -77,7 +83,7 @@ public class HQDao_Part2 extends BaseDAO_Sqlite {
      * 方法序号：4_8 修改一个商品
      */
     public String updateOneGoods(String databaseUrl, PLU plu) throws Exception {
-        String sql = "UPDATE goods_info SET Name=?,Barcode=?,Price=?,Tax_Index=?,RRP=?,Stock_Control=?,Stock_Amount=? where Number=? ";
+        String sql = "UPDATE goods_info SET Name=?,Barcode=?,Price=?,Tax_Index=?,RRP=?,Stock_Control=?,Stock_Amount=? WHERE Number=? ";
         return Integer.toString(this.saveOrUpdateOrDelete(sql, databaseUrl, plu.getName(),
                 plu.getBarcode(), plu.getPrice(),
                 plu.getTax_Index(), plu.getRRP(), plu.getStock_Control(),
@@ -121,8 +127,7 @@ public class HQDao_Part2 extends BaseDAO_Sqlite {
     }
 
     /**
-     * 方法序号： 5_1 查询所有部门信息
-     * Id,Dept_No,PLU_No
+     * 方法序号： 5_1 查询所有部类关联信息
      *
      * @return json数组
      */
@@ -132,8 +137,7 @@ public class HQDao_Part2 extends BaseDAO_Sqlite {
     }
 
     /**
-     * 方法序号： 5_2 查询商品信息
-     * Id,Number,Name,Barcode,Price,Tax_Index,Stock_Control,Stock_Amount
+     * 方法序号： 5_2 简易查询所有商品信息
      *
      * @return json数组
      */

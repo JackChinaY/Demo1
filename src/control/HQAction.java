@@ -70,11 +70,8 @@ public class HQAction extends BaseAction {
      */
     public void verifyUsername() throws IOException, JSONException {
         String id = this.getRequest().getParameter("username");
-        int result = hqService.verifyUsername(id);// 0表示0条记录，1表示有1条记录
-        JSONObject jo = new JSONObject();
-        jo.put("jsonObject", result);
-        this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
-        this.getResponse().getWriter().print(jo);// 向前台发送json数据
+        String result = hqService.verifyUsername(id);// 0表示0条记录，1表示有1条记录
+        returnJsonObject(result);//可能的返回值：-1，0,1
     }
 
     /**
@@ -90,20 +87,12 @@ public class HQAction extends BaseAction {
         user.setAddress(this.getRequest().getParameter("address"));
         user.setMachineType(this.getRequest().getParameter("machineType"));
         user.setMachineId(this.getRequest().getParameter("machineId"));
-//		System.out.println(user.toString());
-        boolean result = hqService.register(user);
-        String flag;
-        if (result) {
-            flag = "1";//注册成功
-            //注册成功后创建数据该用户的数据库
-            FileOperation.copyFolder("database", "D:\\database\\" + user.getId());
-        } else {
-            flag = "0";//注册失败
+        String result = hqService.register(user);
+        //注册成功后创建数据该用户的数据库
+        if (result.equals("1")) {
+            FileOperation.copyFolder(this.getServletContext().getRealPath("")+"\\database", "D:\\database\\" + user.getId());
         }
-        JSONObject jo = new JSONObject();
-        jo.put("jsonObject", flag);
-        this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
-        this.getResponse().getWriter().print(jo);// 向前台发送json数据
+        returnJsonObject(result);//可能的返回值：-1，0,1
     }
 
     /**
@@ -120,20 +109,21 @@ public class HQAction extends BaseAction {
         int result = hqService.verifyUsernameIsExist(user);
         String flag;
         if (result == 0) {//该用户不存在
-            flag = "The user account does not exist or other information is incorrectly filled in ！";//该用户账号不存在或其他信息填写不正确
+            flag = "The user account does not exist or other information is incorrectly ！";//该用户账号不存在或其他信息填写不正确
         } else if (result == 1) {//该用户存在 TODO
             String newPassword = UtilsAll.getRandomString(8);//随机生成8位新密码
             user.setPassword(DigestUtils.md5Hex(newPassword));
+            user.setNewPassword(newPassword);//这里用NewPassword储存用户的新密码
             try {
-                SendEmail.toEmail(user.getEmail(), newPassword);//发送带新密码的邮件给用户
+                SendEmail.sendOneEmail(user);//发送带新密码的邮件给用户
             } catch (Exception e) {
                 e.printStackTrace();
             }
             boolean resultOfReset = hqService.resetPassord(user);
-            System.out.println(newPassword);
+//            System.out.println(newPassword);
             if (resultOfReset) {
                 //找回成功
-                flag = "Your password has been reset successfully. Please go to your registered mailbox：" + user.getEmail() + ",to view the new password！";
+                flag = "Your password has been reset successfully. Please go to your registered mailbox：" + user.getEmail() + " to view the new password！";
             } else {
                 //找回失败
                 flag = "Password reset failed！";
@@ -155,11 +145,12 @@ public class HQAction extends BaseAction {
         if (session == null) {
             this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
             this.getResponse().getWriter().print("1");// 向前台发送json数据
+        }else {
+            session.removeAttribute("userId");
+            session.invalidate();//清除session
+            this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
+            this.getResponse().getWriter().print("1");// 向前台发送json数据
         }
-        session.removeAttribute("userId");
-        session.invalidate();//清除session
-        this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
-        this.getResponse().getWriter().print("1");// 向前台发送json数据
     }
 
     /**
@@ -168,12 +159,8 @@ public class HQAction extends BaseAction {
     public void verifyMachine() throws IOException, JSONException {
         String machineType = this.getRequest().getParameter("machineType");
         String machineId = this.getRequest().getParameter("machineId");
-//		System.out.println(machineType+machineId);
-        int result = hqService.verifyMachine(machineType, machineId);//1表示正品。0表示赝品
-        JSONObject jo = new JSONObject();
-        jo.put("jsonObject", result);
-        this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
-        this.getResponse().getWriter().print(jo);// 向前台发送json数据
+        String result = hqService.verifyMachine(machineType, machineId);//1表示正品。0表示赝品
+        returnJsonObject(result);//可能的返回值：-1，0,1
     }
 
     /**

@@ -35,8 +35,8 @@ public class HQService_Part1 extends BaseService {
         } catch (Exception e) {
             System.out.println("1_2 查询收银员最大编号时出错！");
             e.printStackTrace();
+            return "-1";
         }
-        return "-1";
     }
 
     /**
@@ -48,8 +48,8 @@ public class HQService_Part1 extends BaseService {
         } catch (Exception e) {
             System.out.println("1_3 查询收银员最大code时出错！");
             e.printStackTrace();
+            return "-1";
         }
-        return "-1";
     }
 
     /**
