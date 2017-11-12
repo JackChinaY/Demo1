@@ -6,173 +6,147 @@ import javax.sql.DataSource;
 
 public class HQDao_Part2 extends BaseDAO_Sqlite {
 
-	String URL="jdbc:sqlite:D:/database/";
+    /**
+     * 方法序号： 4_1 查询所有商品
+     * Id,Number,Name,Barcode,Price,Tax_Index,Stock_Control,Stock_Amount
+     *
+     * @return json数组
+     */
+    public String findAllGoods(String databaseUrl, Page page) throws Exception {
+        String sql = "SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4, RRP AS value5,Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8 "
+                + "FROM (SELECT * FROM goods_info  ORDER BY Number ASC LIMIT ?)  LIMIT ? offset ?";
+        return this.getForJson(sql, databaseUrl, page.getPageSize() * page.getPageIndex(), page.getPageSize(), page.getPageSize() * (page.getPageIndex() - 1));
+    }
 
-	/**
-	 * 方法序号： 4_1 查询所有商品
-	 * Id,Number,Name,Barcode,Price,Tax_Index,Stock_Control,Stock_Amount
-	 * 
-	 * @return json数组
-	 */
-	public String findAllGoods(String databaseUrl, Page page)
-			throws Exception {
-//		String sql = "SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4,RRP ASvalue5, Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8 from Goods_Info ORDER BY Number ASC";
-//		String sql="SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4,RRP ASvalue5, Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8 from Goods_Info ORDER BY Number ASC";
-		String sql = "SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4, RRP AS value5,Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8 "
-				+ "FROM (SELECT * FROM goods_info  ORDER BY Number ASC LIMIT ?)  LIMIT ? offset ?";
-		return this.getForJson(sql,databaseUrl,page.getPageSize() * page.getPageIndex(), page.getPageSize(), page.getPageSize() * (page.getPageIndex() - 1));
-	}
+    /**
+     * 方法序号：4_2 查询商品总记录数
+     */
+    public String getGoodsCount(String databaseUrl) throws Exception {
+        String sql = " SELECT count(*) as COUNTS from goods_info";
+        return Integer.toString(this.getCount(sql, databaseUrl));
+    }
 
-	/**
-	 * 方法序号：4_2 查询商品总记录数
-	 */
-	public String getGoodsCount(String databaseUrl) throws Exception {
-		String sql = " SELECT count(*) as COUNTS from goods_info";
-		return Integer.toString(this.getCount(sql,databaseUrl));
-	}
+    /**
+     * 方法序号：4_3 查询商品最大编号
+     */
+    public String getGoodsMaxNumber(String databaseUrl) throws Exception {
+        String sql = " SELECT MAX(Number) as MAXNUM from goods_info";
+        return this.getOneRecard(sql, databaseUrl);
+    }
 
-	/**
-	 * 方法序号：4_3 查询商品最大编号
-	 */
-	public String  getGoodsMaxNumber(String databaseUrl) throws Exception {
-		String sql = " SELECT MAX(Number) as MAXNUM from goods_info";
-		return Integer.toString(this.getCount(sql, databaseUrl));
-	}
+    /**
+     * 方法序号：4_4 验证商品条形码是否存在
+     */
+    public String verifyGoodsbarcode(String databaseUrl, String barcode) throws Exception {
+        String sql = " SELECT count(*) as COUNTS from goods_info WHERE Barcode=?";
+        return Integer.toString(this.getCount(sql, databaseUrl, barcode));
+    }
 
-	/**
-	 * 方法序号：4_4 验证商品条形码是否存在
-	 */
-	public String verifyGoodsbarcode(String databaseUrl,String barcode) throws Exception {
-		String sql = " SELECT count(*) as COUNTS from goods_info WHERE Barcode=?";
-		return Integer.toString(this.getCount(sql,databaseUrl, barcode));
-	}
+    /**
+     * 方法序号：4_5 保存单品
+     */
+    public String saveGoods(String databaseUrl, PLU plu) throws Exception {
+        String sql = "INSERT INTO goods_info (Number,Name,Barcode,Price,RRP,Tax_Index,Stock_Control,Stock_Amount) VALUES (?,?,?,?,?,?,?,?)";
+        return Integer.toString(this.saveOrUpdateOrDelete(sql, databaseUrl, plu.getNumber(),
+                plu.getName(), plu.getBarcode(),
+                plu.getPrice(), plu.getRRP(), plu.getTax_Index(),
+                plu.getStock_Control(), plu.getStock_Amount()));
 
-	/**
-	 * 方法序号：4_5 保存单品
-	 */
-	public boolean saveGoods(String databaseUrl,PLU plu) throws Exception {
-		String sql = "INSERT INTO goods_info (Number,Name,Barcode,Price,RRP,Tax_Index,Stock_Control,Stock_Amount) VALUES (?,?,?,?,?,?,?,?)";
-		int result = this.saveOrUpdateOrDelete(sql,databaseUrl, plu.getNumber(),
-				plu.getName(), plu.getBarcode(),
-				plu.getPrice(), plu.getRRP(), plu.getTax_Index(),
-				plu.getStock_Control(), plu.getStock_Amount());
-		if (result > 0)
-			return true;
-		else
-			return false;
-	}
 
-	/**
-	 * 方法序号： 4_6 查询所有税种税目索引
-	 * 
-	 * @return json数组
-	 */
-	public String getGoodsTaxTariff(String databaseUrl) throws Exception {
-		String sql = "SELECT Number AS value1 from Tax_Tariff  ORDER BY Number ASC";
-		return this.getForJson(sql, databaseUrl);
-	}
+    }
 
-	/**
-	 * 方法序号： 4_6_1 查询所有税种税目记录
-	 *
-	 * @return json数组
-	 */
-	public String getAllGoodsTaxTariff(String databaseUrl) throws Exception {
-		String sql = "SELECT Number AS value1,Invoice_Code AS value2,Invoice_Name AS value3,Tax_Code AS value4,Tax_Name AS value5,Tax_Rate AS value6,Exempt_Flag AS value7,CRC32 AS value8 from Tax_Tariff  ORDER BY Number ASC";
-		return this.getForJson(sql,databaseUrl);
-	}
+    /**
+     * 方法序号： 4_6 查询所有税种税目索引
+     *
+     * @return json数组
+     */
+    public String getAllGoodsTaxTariff(String databaseUrl) throws Exception {
+        String sql = "SELECT Number AS value1,Invoice_Code AS value2,Invoice_Name AS value3,Tax_Code AS value4,Tax_Name AS value5,Tax_Rate AS value6,Exempt_Flag AS value7,CRC32 AS value8 from Tax_Tariff  ORDER BY Number ASC";
+        return this.getForJson(sql, databaseUrl);
+    }
 
-	/**
-	 * 方法序号：4_7 删除一条商品
-	 */
-	public String deleteOneGoods(String databaseUrl,String goodsNumber) throws Exception {
-		String sql = "DELETE FROM goods_info where Number=?";
-		return Integer.toString(this.saveOrUpdateOrDelete(sql, databaseUrl, goodsNumber));
-	}
+    /**
+     * 方法序号：4_7 删除一条商品
+     */
+    public String deleteOneGoods(String databaseUrl, String goodsNumber) throws Exception {
+        String sql = "DELETE FROM goods_info where Number=?";
+        return Integer.toString(this.saveOrUpdateOrDelete(sql, databaseUrl, goodsNumber));
+    }
 
-	/**
-	 * 方法序号：4_8 修改一个商品
-	 */
-	public boolean updateOneGoods(String databaseUrl,PLU plu) throws Exception {
-		String sql = "UPDATE goods_info SET Name=?,Barcode=?,Price=?,Tax_Index=?,RRP=?,Stock_Control=?,Stock_Amount=? where Number=? ";
-		int result = this.saveOrUpdateOrDelete(sql,databaseUrl, plu.getName(),
-				plu.getBarcode(), plu.getPrice(),
-				plu.getTax_Index(),plu.getRRP(), plu.getStock_Control(),
-				plu.getStock_Amount(),plu.getNumber()
-				);
-		if (result > 0)
-			return true;
-		else
-			return false;
-	}
+    /**
+     * 方法序号：4_8 修改一个商品
+     */
+    public String updateOneGoods(String databaseUrl, PLU plu) throws Exception {
+        String sql = "UPDATE goods_info SET Name=?,Barcode=?,Price=?,Tax_Index=?,RRP=?,Stock_Control=?,Stock_Amount=? where Number=? ";
+        return Integer.toString(this.saveOrUpdateOrDelete(sql, databaseUrl, plu.getName(),
+                plu.getBarcode(), plu.getPrice(),
+                plu.getTax_Index(), plu.getRRP(), plu.getStock_Control(),
+                plu.getStock_Amount(), plu.getNumber()));
+    }
 
-	/**
-	 * 方法序号： 4_9 按商品编号查询商品信息
-	 * Id,Number,Name,Barcode,Price,Tax_Index,Stock_Control,Stock_Amount
-	 *
-	 * @return json数组
-	 */
-	public String findAllGoodsByOption_ByNumber(String databaseUrl, String key)
-			throws Exception {
-		String sql = "SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4, RRP AS value5, Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8 FROM Goods_Info WHERE Number LIKE ?";
-		return this.getForJson(sql,databaseUrl,"%" + key + "%");
-	}
+    /**
+     * 方法序号： 4_9 按商品编号查询商品信息
+     * Id,Number,Name,Barcode,Price,Tax_Index,Stock_Control,Stock_Amount
+     *
+     * @return json数组
+     */
+    public String findAllGoodsByOption_ByNumber(String databaseUrl, String key)
+            throws Exception {
+        String sql = "SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4, RRP AS value5, Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8 FROM Goods_Info WHERE Number LIKE ?";
+        return this.getForJson(sql, databaseUrl, "%" + key + "%");
+    }
 
-	/**
-	 * 方法序号： 4_10 按商品名称查询商品信息
-	 * Id,Number,Name,Barcode,Price,Tax_Index,Stock_Control,Stock_Amount
-	 *
-	 * @return json数组
-	 */
-	public String findAllGoodsByOption_ByName(String databaseUrl, String key)
-			throws Exception {
-		String sql = "SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4,RRP AS value5, Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8 FROM Goods_Info WHERE Name LIKE ?";
-		return this.getForJson(sql,databaseUrl,"%" + key + "%");
-	}
-	/**
-	 * 方法序号： 4_11 按商品条形码查询商品信息
-	 * Id,Number,Name,Barcode,Price,Tax_Index,Stock_Control,Stock_Amount
-	 *
-	 * @return json数组
-	 */
-	public String findAllGoodsByOption_ByBarcode(String databaseUrl, String key)
-			throws Exception {
-		String sql = "SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4,RRP AS value5, Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8 FROM Goods_Info WHERE Barcode LIKE ?";
-		return this.getForJson(sql,databaseUrl,"%" + key + "%");
-	}
+    /**
+     * 方法序号： 4_10 按商品名称查询商品信息
+     * Id,Number,Name,Barcode,Price,Tax_Index,Stock_Control,Stock_Amount
+     *
+     * @return json数组
+     */
+    public String findAllGoodsByOption_ByName(String databaseUrl, String key)
+            throws Exception {
+        String sql = "SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4,RRP AS value5, Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8 FROM Goods_Info WHERE Name LIKE ?";
+        return this.getForJson(sql, databaseUrl, "%" + key + "%");
+    }
 
-	/**
-	 * 方法序号： 5_1 查询所有部门信息
-	 * Id,Dept_No,PLU_No
-	 *
-	 * @return json数组
-	 */
-	public String findAllDeptInf(String databaseUrl) throws Exception {
-		String sql = "SELECT id AS value1, Dept_No AS value2, PLU_No AS value3 from Department_Associate ORDER BY id ASC";
-		return this.getForJson(sql,databaseUrl);
-	}
+    /**
+     * 方法序号： 4_11 按商品条形码查询商品信息
+     * Id,Number,Name,Barcode,Price,Tax_Index,Stock_Control,Stock_Amount
+     *
+     * @return json数组
+     */
+    public String findAllGoodsByOption_ByBarcode(String databaseUrl, String key)
+            throws Exception {
+        String sql = "SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4,RRP AS value5, Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8 FROM Goods_Info WHERE Barcode LIKE ?";
+        return this.getForJson(sql, databaseUrl, "%" + key + "%");
+    }
 
-	/**
-	 * 方法序号： 5_2 查询商品信息
-	 * Id,Number,Name,Barcode,Price,Tax_Index,Stock_Control,Stock_Amount
-	 *
-	 * @return json数组
-	 */
-	public String findAllGoodsInf(String databaseUrl)
-			throws Exception {
-		String sql = "SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4,RRP ASvalue5, Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8 from Goods_Info ORDER BY Number ASC";
-		return this.getForJson(sql,databaseUrl);
-	}
+    /**
+     * 方法序号： 5_1 查询所有部门信息
+     * Id,Dept_No,PLU_No
+     *
+     * @return json数组
+     */
+    public String findAllDept(String databaseUrl) throws Exception {
+        String sql = "SELECT id AS value1, Dept_No AS value2, PLU_No AS value3 from Department_Associate ORDER BY id ASC";
+        return this.getForJson(sql, databaseUrl);
+    }
 
-	/**
-	 * 方法序号：5_3 修改一个部门关联信息
-	 */
-	public boolean updateOneDeptInf(String databaseUrl,String Dept_No,String PLU_No,Integer Id) throws Exception {
-		String sql = "UPDATE Department_Associate SET Dept_No=?,PLU_No=? where id=? ";
-		int result = this.saveOrUpdateOrDelete(sql,databaseUrl,Dept_No,PLU_No,Id);
-		if (result > 0)
-			return true;
-		else
-			return false;
-	}
+    /**
+     * 方法序号： 5_2 查询商品信息
+     * Id,Number,Name,Barcode,Price,Tax_Index,Stock_Control,Stock_Amount
+     *
+     * @return json数组
+     */
+    public String findAllGoodsInfo(String databaseUrl) throws Exception {
+        String sql = "SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4 from Goods_Info ORDER BY Number ASC";
+        return this.getForJson(sql, databaseUrl);
+    }
+
+    /**
+     * 方法序号：5_3 修改一个部门关联信息
+     */
+    public String updateOneDept(String databaseUrl, String Dept_No, String PLU_No) throws Exception {
+        String sql = "UPDATE Department_Associate SET PLU_No=? WHERE Dept_No=? ";
+        return Integer.toString(this.saveOrUpdateOrDelete(sql, databaseUrl, PLU_No, Dept_No));
+    }
 }

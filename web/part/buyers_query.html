@@ -15,6 +15,8 @@
              */
             var loginTimeout = "Login timeout, please login again !";
             var serverError = "possible reasons：server error !";
+            // 手动初始化工具提示
+            $('[data-toggle="tooltip"]').tooltip();
             /*******************************************************************************************/
             //页面加载时自动执行的函数，生成表格
 //            findAllBuyers();
@@ -83,7 +85,7 @@
                                         + '<td class="VAT_ACC_Name">' + jsonArray[i].value4 + '</td>'
                                         + '<td class="Tel">' + jsonArray[i].value6 + '</td>'
                                         + '<td class="Address">' + jsonArray[i].value5 + '</td>'
-                                        + '<td>&nbsp;&nbsp;&nbsp;&nbsp;<a name="update" href="#" data-toggle="tooltip" data-tip-class="tooltip-primary" title="Modify"><i class="icon icon-edit"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a name="delete" href="#" data-toggle="tooltip" data-tip-class="tooltip-danger" title="Delete" style="color: #ea644a"><i class="icon icon-trash"></i></a></td></tr>';
+                                        + '<td>&nbsp;&nbsp;<a name="update" href="#" data-toggle="tooltip" data-tip-class="tooltip-primary" title="Modify"><i class="icon icon-edit"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a name="delete" href="#" data-toggle="tooltip" data-tip-class="tooltip-danger" title="Delete" style="color: #ea644a"><i class="icon icon-trash"></i></a></td></tr>';
                                 }
                                 $("#tbody").html(html);
 //                                    console.log(jsonArray.length);
@@ -403,7 +405,8 @@
                 </button>
             </span>
         </div>
-        <button id="submit1" class="btn btn-primary" type="button"
+        <button id="submit1" class="btn btn-primary" type="button"  data-toggle="tooltip"
+                data-tip-class="tooltip-default" title="return to buyers management" data-placement="left"
                 style="float: right; margin-right: 20px;margin-top: -35px"><i class="icon icon-reply"></i>
         </button>
     </div>
