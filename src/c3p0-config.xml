@@ -3,19 +3,23 @@
 <c3p0-config>
     <!-- 所有数据都存放在一个数据库中 -->
     <named-config name="CashMachine">
+        <!-- mysql连接方式 -->
+        <property name="driverClass">org.gjt.mm.mysql.Driver</property>
+        <!--  本地测试时用以下数据库 用户名 密码-->
+        <property name="jdbcUrl">jdbc:mysql://localhost:3306/taxmastercomputer</property>
         <!--用户名-->
         <property name="user">root</property>
         <!--密码-->
         <property name="password"></property>
-        <!--部署在阿里云上用到以下密码-->
-        <!-- <property name="password">1236547</property> -->
-        <!-- mysql连接方式 -->
-        <property name="driverClass">org.gjt.mm.mysql.Driver</property>
-        <!--  本地测试时用以下数据库 -->
-        <property name="jdbcUrl">jdbc:mysql://localhost:3306/taxmastercomputer</property>
-        <!--  部署在阿里云上用以下数据库 -->
-        <!-- <property name="jdbcUrl">jdbc:mysql://47.93.232.64:3306/taxmastercomputer</property> -->
 
+        <!--  部署在阿里云上用以下数据库 用户名 密码 -->
+         <!--<property name="jdbcUrl">jdbc:mysql://47.93.232.64:3306/taxmastercomputer</property>-->
+        <!--用户名-->
+        <!--<property name="user">root</property>-->
+        <!--部署在阿里云上用到以下密码-->
+         <!--<property name="password">1236547</property>-->
+
+        <!--以下为sqlite的连接方式-->
         <!-- 	<property name="driverClass">org.sqlite.JDBC</property> -->
         <!-- 	<property name="jdbcUrl">jdbc:sqlite:E:\\DB\\programmingDB.db</property> -->
 

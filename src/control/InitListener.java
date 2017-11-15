@@ -26,10 +26,10 @@ public class InitListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent context) {
         // 上下文初始化执行
-        System.out.println("自动加载启动开始.");
+        System.out.println("Auto start...");
         //需要实现的功能
 //        HQService hqService = new HQService();
         dataSource = new ComboPooledDataSource("CashMachine");
-        System.out.println("自动加载启动结束.");
+        System.out.println("Auto end.");
     }
 }

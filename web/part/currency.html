@@ -60,13 +60,19 @@
                             }
                             //当数组为不为空时
                             else if (jsonArray.length != 0) {
-                                var head = '<tr><th>Number</th><th>Abbreviation</th><th>Exchange_Rate</th><th>Operation</th></tr>';
+                                var head = '<tr><th>Number</th><th>Abbreviation</th><th>Exchange Rate</th><th>Operation</th></tr>';
                                 $("#thead").html(head);
                                 var html;
                                 for (var i = 0; i < jsonArray.length; i++) {
+                                    var temp;
+                                    if (jsonArray[i].value3 == "") {
+                                        temp = "";
+                                    } else {
+                                        temp = (parseFloat(jsonArray[i].value3) / 10000).toFixed(4);
+                                    }
                                     html += '<tr><td class="number">' + jsonArray[i].value1 + '</td>'
                                         + '<td class="abbreviation">' + jsonArray[i].value2 + '</td>'
-                                        + '<td class="rate">' + (parseFloat(jsonArray[i].value3) / 10000).toFixed(4) + '</td>'
+                                        + '<td class="rate">' + temp + '</td>'
                                         + '<td>&nbsp;&nbsp;&nbsp;&nbsp;<a name="update" href="#" data-toggle="tooltip" data-tip-class="tooltip-primary" title="Modify"><i class="icon icon-edit"></i></a></tr>';
                                 }
                                 $("#tbody").html(html);
@@ -93,6 +99,7 @@
             });
             //所有外币
             var abb = ["CNY", "USD", "GBP", "EUR", "JPY", "HKD", "DEM", "CHF", "FRF", "NLG", "ATS", "BEF", "ITL", "CAD", "AUD", "SEK", "DKK", "NOK", "FIM", "KRW", "THB", "PHP", "INR", "SUR", "BUK", "NZD", "SGD"];
+
             //组合成所有外币
             function findAllAbbreviation() {
                 var html = '<div class="table-responsive" style="height: 360px;"><table class="table table-striped table-hover table-bordered" >' +
@@ -105,6 +112,7 @@
                 html += '</tbody></table></div>';
                 return html;
             }
+
             //弹出面板进行初始化，选择外币
             $("#Choose").popover({
                 html: true,
@@ -120,22 +128,44 @@
             /*******************************************************************************************/
             //保存修改后的外汇
             $("#submit3").click(function () {
-                if ($("#abbreviation").val() == "") {
-                    new $.zui.Messager('The Abbreviation can not be empty!', {
+                if ($("#abbreviation").val() == "" && $("#rate").val() != "") {
+                    new $.zui.Messager('The Abbreviation can not be empty !', {
                         type: 'danger',
                         placement: 'top'
                     }).show();
-                } else if ($("#abbreviation").val().length != 3) {
-                    new $.zui.Messager('The length of the Abbreviation must be 3 numbers!', {
+                } else if ($("#abbreviation").val().length != 3 && $("#rate").val() != "") {
+                    new $.zui.Messager('The length of the Abbreviation must be 3 numbers !', {
                         type: 'danger',
                         placement: 'top'
                     }).show();
-                } else if ($("#rate").val() == "") {
-                    new $.zui.Messager('The Exchange Rate can not be empty!', {
+                } else if ($("#abbreviation").val() != "" && $("#rate").val() == "") {
+                    new $.zui.Messager('The Exchange Rate can not be empty !', {
+                        type: 'danger',
+                        placement: 'top'
+                    }).show();
+                } else if ($("#rate").val() == "0") {
+                    new $.zui.Messager('The Exchange Rate can not be "0" !', {
+                        type: 'danger',
+                        placement: 'top'
+                    }).show();
+                } else if (parseFloat($("#rate").val()) > 99999.9999) {
+                    new $.zui.Messager('The rate exceeds the upper limit, it should be less than or equal to 99999.9999 !', {
+                        type: 'danger',
+                        placement: 'top'
+                    }).show();
+                } else if (parseFloat($("#rate").val()) < 0.0001) {
+                    new $.zui.Messager('The exchange rate is lower than the offline, it should be more than or equal to 0.0001 !', {
                         type: 'danger',
                         placement: 'top'
                     }).show();
                 } else {
+                    var temp;
+                    if ($("#abbreviation").val() == "" && $("#rate").val() == "") {
+                        temp = "";
+
+                    } else {
+                        temp = (parseFloat($("#rate").val()) * 10000);
+                    }
                     $.ajax({
                         type: "POST",
                         url: "ActionPart1_modifyAbbreviation.action",
@@ -143,7 +173,7 @@
                         data: {
                             "value1": $("#number").text(),
                             "value2": $("#abbreviation").val(),
-                            "value3": (parseFloat($("#rate").val()) * 10000)
+                            "value3": temp
                         },
                         dataType: "json",
                         cache: false,
@@ -173,10 +203,19 @@
                                         placement: 'top'
                                     }).show();
                                 } else if (data.jsonObject == "1") {
-                                    new $.zui.Messager('Submit successfully !', {
-                                        type: 'success',
-                                        placement: 'top'
-                                    }).show();
+                                    if (temp == "") {
+                                        new $.zui.Messager('Submitting null data is equivalent to clearing the record !', {
+                                            type: 'warning',
+                                            placement: 'top',
+                                            time:6000
+                                        }).show();
+                                    }
+                                    else {
+                                        new $.zui.Messager('Submit successfully !', {
+                                            type: 'success',
+                                            placement: 'top'
+                                        }).show();
+                                    }
                                     $("#myModal1").modal('hide');
                                     findAllCurrency();
                                 }
@@ -223,7 +262,7 @@
         <span class="label label-badge label-primary label-define"
               style="float: left; margin-left: 20px;margin-top: 10px">Foreign Currency</span>
         <!--<button id="submit2" class="btn btn-primary" type="button"-->
-                <!--style="float: right; margin-right: 20px"><i class="icon icon-refresh"></i> Refresh-->
+        <!--style="float: right; margin-right: 20px"><i class="icon icon-refresh"></i> Refresh-->
         <!--</button>-->
     </div>
     <div style="background-color: white;"
@@ -285,7 +324,7 @@
                     <div class="form-group">
                         <label class="col-sm-3">Exchange Rate</label>
                         <div class="col-sm-6">
-                            <input id="rate" type="number" class="form-control" maxlength="6"
+                            <input id="rate" type="tel" class="form-control" maxlength="10"
                                    placeholder="0.0001 - 99999.9999">
                         </div>
                         <strong>*</strong>

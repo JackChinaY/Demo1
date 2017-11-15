@@ -110,8 +110,13 @@
                 $("#name2").val($(this).parents("tr").find(".Name").text());
                 $("#barcode2").val($(this).parents("tr").find(".Barcode").text());
                 $("#barcode2_copy").val($(this).parents("tr").find(".Barcode").text());//用于和自身验证
-                $("#code_flag3").show();//对号
-                $("#code_flag4").hide();//叉号
+                if($(this).parents("tr").find(".Barcode").text()==""){
+                    $("#code_flag3").hide();//对号
+                    $("#code_flag4").hide();//叉号
+                }else{
+                    $("#code_flag3").show();//对号
+                    $("#code_flag4").hide();//叉号
+                }
                 $("#price2").val($(this).parents("tr").find(".Price").text());
                 $("#tax_index2").val($(this).parents("tr").find(".Tax_Index").text());//设置税种默认选中项
                 $("#tax_code2").val($(this).parents("tr").find(".Tax_Code").text());
@@ -129,13 +134,10 @@
             //验证验证商品条形码是否存在
             $("#barcode2").blur(function () {
                 if ($("#barcode2").val() == "") {
-                    new $.zui.Messager('The barcode can not be empty !', {
-                        type: 'danger',
-                        placement: 'top'
-                    }).show();
                     $("#code_flag3").hide();//对号
-                    $("#code_flag4").show();//叉号
-                } else if ($("#barcode2").val().trim() == "") {
+                    $("#code_flag4").hide();//叉号
+                    $("#code_info2").html(1);
+                } else if ($("#barcode2").val().trim() == "" && $("#barcode2").val().length != 0) {
                     new $.zui.Messager('The Barcode can not be all spaces!', {
                         type: 'danger',
                         placement: 'top'
@@ -309,12 +311,7 @@
                         type: 'danger',
                         placement: 'top'
                     }).show();
-                } else if ($("#barcode2").val() == "") {
-                    new $.zui.Messager('The Barcode can not be empty!', {
-                        type: 'danger',
-                        placement: 'top'
-                    }).show();
-                } else if ($("#barcode2").val().trim() == "") {
+                } else if ($("#barcode2").val().trim() == "" && $("#barcode2").val().length != 0) {
                     new $.zui.Messager('The Barcode can not be all spaces!', {
                         type: 'danger',
                         placement: 'top'
@@ -420,6 +417,9 @@
                                     $("#name2").val("");
                                     $("#price2").val("");
                                     $("#barcode2").val("");
+                                    $("#code_flag3").hide();//对号
+                                    $("#code_flag4").hide();//叉号
+                                    $("#code_info2").html("");
                                     $("#tax_index2").val("");
                                     $("#tax_code2").val("");
                                     $("#rrp2").val("");
@@ -617,7 +617,6 @@
         </table>
     </div>
 </div>
-
 <!--对话框-->
 <div class="modal fade" id="myModal">
     <div class="modal-dialog">
@@ -667,10 +666,9 @@
                         <label class="col-sm-3">Barcode</label>
                         <div class="col-sm-6">
                             <input id="barcode2" type="tel" class="form-control" maxlength="13"
-                                   placeholder="1-13 characters">
+                                   placeholder="0-13 characters">
                             <input id="barcode2_copy" type="text" class="form-control" style="display: none">
                         </div>
-                        <strong>*</strong>
                         <label style="padding-left: 10px"><i id="code_flag3" class="icon icon-check"
                                                              style="color: green" hidden="hidden"></i>
                             <i id="code_flag4" class="icon icon-times"
