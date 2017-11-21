@@ -26,8 +26,7 @@ public class HQDao_Admin extends BaseDAO {
 	public int addMachineId(String machineType, String machineId,
 			Timestamp timestamp) throws Exception {
 		String sql = "INSERT INTO machine_table (machineType,machineId,AddDateTime) VALUES (?,?,?)";
-		return this
-				.saveOrUpdateOrDelete(sql, machineType, machineId, timestamp);
+		return this.saveOrUpdateOrDelete(sql, machineType, machineId, timestamp);
 	}
 
 	/**
@@ -52,10 +51,10 @@ public class HQDao_Admin extends BaseDAO {
 	/**
 	 * 方法序号：1_4 删除机器编号
 	 */
-	public int deleteOneMachine(String machineType, String machineId)
+	public String deleteOneMachine(String machineType, String machineId)
 			throws Exception {
 		String sql = "DELETE FROM machine_table WHERE machineType=? AND machineId=?";
-		return this.saveOrUpdateOrDelete(sql, machineType, machineId);
+		return Integer.toString(this.saveOrUpdateOrDelete(sql, machineType, machineId));
 	}
 
 	/**
@@ -72,8 +71,8 @@ public class HQDao_Admin extends BaseDAO {
 	 * 方法序号： 2_1 查询所有用户
 	 * @return json数组
 	 */
-	public String findAllUser() throws Exception {
-		String sql = " SELECT Id AS value1, Username AS value2,Email AS value3, Telephone AS value4,Address AS value5, MachineType AS value6, MachineId AS value7 FROM user_table ORDER BY MachineId";
+	public String findAllUsers() throws Exception {
+		String sql = " SELECT Username AS value2, Email AS value3, Telephone AS value4, Address AS value5, MachineType AS value6, MachineId AS value7 FROM user_table ORDER BY MachineId";
 		return this.getForJson(sql);
 	}
 

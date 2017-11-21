@@ -108,18 +108,17 @@ public class HQAction_Admin extends BaseAction {
      * 方法序号：1_4 删除机器编号
      */
     public void deleteOneMachine() throws IOException, JSONException {
-        String machineType = this.getRequest().getParameter("machineType");
-        String machineId = this.getRequest().getParameter("machineId");
-        // System.out.println(machineType+machineId);
-        int result = hqService_Admin.deleteOneMachine(machineType, machineId);// >=1表示插入成功，0表示插入失败
-        // System.out.println(result);
-        if (result > 0) {
-            result = 1;
+        //如果用户登录超时，则需要重新登录
+        if (this.getSession().getAttribute("userId") == null) {
+            connectionTimeOut();
         }
-        JSONObject jo = new JSONObject();
-        jo.put("jsonObject", result);
-        this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
-        this.getResponse().getWriter().print(jo);// 向前台发送json数据
+        //登录未超时
+        else {
+            String machineType = this.getRequest().getParameter("machineType");
+            String machineId = this.getRequest().getParameter("machineId");
+            String result = hqService_Admin.deleteOneMachine(machineType, machineId);// >=1表示插入成功，0表示插入失败
+            returnJsonObject(result);//可能的返回值：-1，0,1
+        }
     }
 
     /**
@@ -142,17 +141,16 @@ public class HQAction_Admin extends BaseAction {
     /**
      * 方法序号：2_1 查询所有用户
      */
-    public void findAllUser() throws IOException, JSONException {
-        String result = hqService_Admin.findAllUser();
-        // System.out.println(result);
-        JSONArray allJsonArray = new JSONArray(result);
-        if (result.equals(null)) {
-            result = "0";// 失败
+    public void findAllUsers() throws IOException, JSONException {
+        //如果用户登录超时，则需要重新登录
+        if (this.getSession().getAttribute("userId") == null) {
+            connectionTimeOut();
         }
-        JSONObject jo = new JSONObject();
-        jo.put("allJsonArray", allJsonArray);
-        this.getResponse().setContentType("text/html;charset=UTF-8");// 设置响应数据类型
-        this.getResponse().getWriter().print(jo);// 向前台发送json数据
+        //登录未超时
+        else {
+            String result = hqService_Admin.findAllUsers();
+            returnJsonObject(result);//可能的返回值：-1，[],json数组字符串
+        }
     }
 
     /**

@@ -91,6 +91,14 @@ public class HQDao_Part1 extends BaseDAO_Sqlite {
     }
 
     /**
+     * 方法序号： 3_3 查询外汇列表，供用户选择用
+     */
+    public String findAllAbbreviationList(String databaseUrl) throws Exception {
+        String sql = "SELECT Number AS value1, Name AS value2, Abbreviation AS value3, Symbol AS value4 FROM Currency_List ORDER BY Number ASC";
+        return this.getForJson(sql, databaseUrl);
+    }
+
+    /**
      * 方法序号： 4_1 查询客户总记录数
      */
     public String getBuyersCount(String databaseUrl) throws Exception {

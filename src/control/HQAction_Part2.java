@@ -34,7 +34,7 @@ public class HQAction_Part2 extends BaseAction {
 //    private static final long serialVersionUID = 415712263988003225L;
     private HQService_Part2 hqService_part2 = new HQService_Part2();
     //    private String currentUserId = "cbb418cc-8520-459f-ab02-ae3516388eb5";  //当前用户名Id，软件发布的时候把该字符内容删除掉
-    private String databaseUrl = "jdbc:sqlite:D:/database/";  //sqlite数据库基础路径
+    private String databaseUrl = "jdbc:sqlite:E:/database/";  //sqlite数据库基础路径
     private String systemDB = "/systemDB.db";  //连接的是systemDB.db
     private String goodsDB = "/goodsDB.db";  //连接的是goodsDB.db
 

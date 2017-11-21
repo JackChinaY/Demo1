@@ -59,13 +59,13 @@ public class HQService_Admin extends BaseService {
 	/**
 	 * 方法序号：1_4  删除机器编号
 	 */
-	public int deleteOneMachine(String machineType, String machineId) {
+	public String deleteOneMachine(String machineType, String machineId) {
 		try {
 			return this.hqDao_Admin.deleteOneMachine(machineType, machineId);
 		} catch (Exception e) {
 			System.out.println("1_4  删除机器编号时出错！");
 			e.printStackTrace();
-			return -1;//程序运行出错，服务器出错
+			return "-1";//程序运行出错，服务器出错
 		}
 	}
 	/**
@@ -90,9 +90,9 @@ public class HQService_Admin extends BaseService {
 	 * 方法序号：2_1 查询所有用户
 	 * @return json数组字符串
 	 */
-	public String findAllUser() {
+	public String findAllUsers() {
 		try {
-			return this.hqDao_Admin.findAllUser();
+			return this.hqDao_Admin.findAllUsers();
 		} catch (Exception e) {
 			System.out.println("2_1 查询所有用户时出错！");
 			e.printStackTrace();

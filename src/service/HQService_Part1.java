@@ -142,7 +142,18 @@ public class HQService_Part1 extends BaseService {
         }
         return "-1";
     }
-
+    /**
+     * 方法序号：3_3 查询外汇列表，供用户选择用
+     */
+    public String findAllAbbreviationList(String databaseUrl) {
+        try {
+            return this.hqDao_part1.findAllAbbreviationList(databaseUrl);
+        } catch (Exception e) {
+            System.out.println("3_3 查询外汇列表，供用户选择用时出错！");
+            e.printStackTrace();
+            return "-1";//程序运行出错，服务器出错
+        }
+    }
     /**
      * 方法序号：4_1 查询客户总记录数
      */

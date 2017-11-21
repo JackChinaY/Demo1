@@ -24,11 +24,12 @@ public class HQAction_Part1 extends BaseAction {
      */
 //    private static final long serialVersionUID = 415712263988003225L;
     private HQService_Part1 hqService_part1 = new HQService_Part1();
-//    private String currentUserId = "cbb418cc-8520-459f-ab02-ae3516388eb5";  //当前用户名Id，软件发布的时候把该字符内容删除掉
-    private String databaseUrl = "jdbc:sqlite:D:/database/";  //sqlite数据库基础路径
+    //    private String currentUserId = "cbb418cc-8520-459f-ab02-ae3516388eb5";  //当前用户名Id，软件发布的时候把该字符内容删除掉
+    private String databaseUrl = "jdbc:sqlite:E:/database/";  //sqlite数据库基础路径
     private String programmingDB = "/programmingDB.db";  //连接的是programmingDB.db
     private String systemDB = "/systemDB.db";  //连接的是systemDB.db
     private String buyerDB = "/buyerDB.db";  //连接的是buyerDB.db
+    private String currencylistDB = "/currencylistDB.db";  //连接的是currencylistDB.db
 
     /**
      * 方法序号：1_1 查询所有收银员
@@ -215,6 +216,22 @@ public class HQAction_Part1 extends BaseAction {
     }
 
     /**
+     * 方法序号：3_3 查询外汇列表，供用户选择用
+     */
+    public void findAllAbbreviationList() throws IOException, JSONException {
+        //如果用户登录超时，则需要重新登录
+        if (this.getSession().getAttribute("userId") == null) {
+            connectionTimeOut();
+        }
+        //登录未超时
+        else {
+            String userId = this.getSession().getAttribute("userId").toString();//获取用户UserId
+            String result = hqService_part1.findAllAbbreviationList(databaseUrl + userId + currencylistDB);
+            returnJsonObject(result);//可能的返回值：-1，[],json数组字符串
+        }
+    }
+
+    /**
      * 方法序号：4_1 查询客户总记录数
      */
     public void getBuyersCount() throws IOException, JSONException {
@@ -369,6 +386,7 @@ public class HQAction_Part1 extends BaseAction {
             returnJsonObject(result);//可能的返回值：-1，[],json数组字符串
         }
     }
+
     /**
      * 如果用户登录超时，则需要重新登录
      */

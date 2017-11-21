@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
-  <artifact type="exploded-war" name="Demo1:war exploded">
-    <output-path>D:/programfile/Tomcat7.0/webapps/Demo1</output-path>
+  <artifact type="exploded-war" name="Demo1">
+    <output-path>$PROJECT_DIR$/../Tomcat7</output-path>
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
