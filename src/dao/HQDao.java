@@ -30,8 +30,8 @@ public class HQDao extends BaseDAO {
      * 方法序号：1_3 注册
      */
     public String register(User user) throws Exception {
-        String sql = "INSERT INTO user_table (Id,Username,Password,Email,Telephone,Address,MachineType,MachineId) VALUES (?,?,?,?,?,?,?,?)";
-        return Integer.toString(this.saveOrUpdateOrDelete(sql, user.getId(), user.getUsername(), user.getPassword(), user.getEmail(), user.getTel(), user.getAddress(), user.getMachineType(), user.getMachineId()));
+        String sql = "INSERT INTO user_table (Id,Username,Password,Email,Telephone,Address,MachineType,MachineId,AddDateTime) VALUES (?,?,?,?,?,?,?,?,?)";
+        return Integer.toString(this.saveOrUpdateOrDelete(sql, user.getId(), user.getUsername(), user.getPassword(), user.getEmail(), user.getTel(), user.getAddress(), user.getMachineType(), user.getMachineId(), user.getTimestamp()));
 
     }
 

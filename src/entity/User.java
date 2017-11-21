@@ -1,5 +1,7 @@
 package entity;
 
+import java.sql.Timestamp;
+
 public class User {
     /**
      * 用户注册
@@ -13,6 +15,7 @@ public class User {
     private String machineType;
     private String machineId;
     private String newPassword;
+    private Timestamp timestamp;
 
     public User() {
         this.id = "";
@@ -98,6 +101,14 @@ public class User {
         this.newPassword = newPassword;
     }
 
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -110,6 +121,7 @@ public class User {
                 ", machineType='" + machineType + '\'' +
                 ", machineId='" + machineId + '\'' +
                 ", newPassword='" + newPassword + '\'' +
+                ", timestamp=" + timestamp +
                 '}';
     }
 }

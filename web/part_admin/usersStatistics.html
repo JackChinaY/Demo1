@@ -56,7 +56,7 @@
                             }
                             //当数组为不为空时
                             else if (jsonArray.length != 0) {
-                                var head = '<tr><th>ID</th><th>Username</th><th>E-mail</th><th>Telephone</th><th>Address</th><th>Machine Type</th><th>Machine SN</th></tr>';
+                                var head = '<tr><th>ID</th><th>Username</th><th>E-mail</th><th>Telephone</th><th>Address</th><th>Machine Type</th><th>Machine SN</th><th>Register DateTime</th></tr>';
                                 $("#thead").html(head);
                                 var html;
                                 for (var i = 0; i < jsonArray.length; i++) {
@@ -67,6 +67,7 @@
                                         + '<td>' + jsonArray[i].value5 + '</td>'
                                         + '<td>' + jsonArray[i].value6 + '</td>'
                                         + '<td>' + jsonArray[i].value7 + '</td>'
+                                        + '<td>' + jsonArray[i].value8.substr(0, 19) + '</td>'
                                         + '</tr>';
                                 }
                                 $("#tbody").html(html);

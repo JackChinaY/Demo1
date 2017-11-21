@@ -13,6 +13,7 @@ import util.UtilsAll;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
 import java.util.UUID;
 
 /**
@@ -87,6 +88,7 @@ public class HQAction extends BaseAction {
         user.setAddress(this.getRequest().getParameter("address"));
         user.setMachineType(this.getRequest().getParameter("machineType"));
         user.setMachineId(this.getRequest().getParameter("machineId"));
+        user.setTimestamp(new Timestamp(System.currentTimeMillis()));
         String result = hqService.register(user);
         //注册成功后创建数据该用户的数据库
         if (result.equals("1")) {

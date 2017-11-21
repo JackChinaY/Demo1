@@ -72,7 +72,7 @@ public class HQDao_Admin extends BaseDAO {
 	 * @return json数组
 	 */
 	public String findAllUsers() throws Exception {
-		String sql = " SELECT Username AS value2, Email AS value3, Telephone AS value4, Address AS value5, MachineType AS value6, MachineId AS value7 FROM user_table ORDER BY MachineId";
+		String sql = " SELECT Username AS value2, Email AS value3, Telephone AS value4, Address AS value5, MachineType AS value6, MachineId AS value7, AddDateTime AS value8 FROM user_table ORDER BY MachineId";
 		return this.getForJson(sql);
 	}
 
