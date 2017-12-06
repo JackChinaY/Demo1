@@ -25,11 +25,12 @@ public class HQAction_Part1 extends BaseAction {
 //    private static final long serialVersionUID = 415712263988003225L;
     private HQService_Part1 hqService_part1 = new HQService_Part1();
     //    private String currentUserId = "cbb418cc-8520-459f-ab02-ae3516388eb5";  //当前用户名Id，软件发布的时候把该字符内容删除掉
-    private String databaseUrl = "jdbc:sqlite:E:/database/";  //sqlite数据库基础路径
+    private String databaseUrl = "jdbc:sqlite:D:/database/";  //sqlite数据库基础路径
     private String programmingDB = "/programmingDB.db";  //连接的是programmingDB.db
     private String systemDB = "/systemDB.db";  //连接的是systemDB.db
     private String buyerDB = "/buyerDB.db";  //连接的是buyerDB.db
     private String currencylistDB = "/currencylistDB.db";  //连接的是currencylistDB.db
+    private String goodsDB = "/goodsDB.db";  //连接的是goodsDB.db
 
     /**
      * 方法序号：1_1 查询所有收银员
@@ -209,6 +210,7 @@ public class HQAction_Part1 extends BaseAction {
             currency.setNumber(this.getRequest().getParameter("value1"));
             currency.setAbbreviation(this.getRequest().getParameter("value2"));
             currency.setExchangeRate(this.getRequest().getParameter("value3"));
+            currency.setCurrent(this.getRequest().getParameter("value4"));
             String userId = this.getSession().getAttribute("userId").toString();//获取用户userId
             String result = hqService_part1.modifyAbbreviation(databaseUrl + userId + programmingDB, currency);// 0表示0条记录，1表示有1条记录
             returnJsonObject(result);//可能的返回值：-1,0,1
@@ -230,7 +232,54 @@ public class HQAction_Part1 extends BaseAction {
             returnJsonObject(result);//可能的返回值：-1，[],json数组字符串
         }
     }
-
+    /**
+     * 方法序号：3_4 将所有外币的Current设置为0
+     */
+    public void setAllAbbreviation0() throws IOException, JSONException {
+        //如果用户登录超时，则需要重新登录
+        if (this.getSession().getAttribute("userId") == null) {
+            connectionTimeOut();//返回值：-3
+        }
+        //登录未超时
+        else {
+            String userId = this.getSession().getAttribute("userId").toString();//获取用户userId
+            String result = hqService_part1.setAllAbbreviation0(databaseUrl + userId + programmingDB);// 0表示0条记录，1表示有1条记录
+            returnJsonObject(result);//可能的返回值：-1,0,1
+        }
+    }
+    /**
+     * 方法序号：3_5 将商品库中的所有商品的Currency设置为当前的外币的缩写
+     */
+    public void setAllGoodsCurrency() throws IOException, JSONException {
+        //如果用户登录超时，则需要重新登录
+        if (this.getSession().getAttribute("userId") == null) {
+            connectionTimeOut();//返回值：-3
+        }
+        //登录未超时
+        else {
+            ForeignCurrency currency = new ForeignCurrency();
+            currency.setCurrent(this.getRequest().getParameter("value1"));
+            String userId = this.getSession().getAttribute("userId").toString();//获取用户userId
+            String result = hqService_part1.setAllGoodsCurrency(databaseUrl + userId + goodsDB, currency);// 0表示0条记录，1表示有1条记录
+            returnJsonObject(result);//可能的返回值：-1,0,1
+        }
+    }
+    /**
+     * 方法序号：3_6 验证外币是否已被设置过
+     */
+    public void verifyAbbreviation() throws IOException, JSONException {
+        //如果用户登录超时，则需要重新登录
+        if (this.getSession().getAttribute("userId") == null) {
+            connectionTimeOut();//返回值：-3
+        }
+        //登录未超时
+        else {
+            String abbreviation = this.getRequest().getParameter("value1");
+            String userId = this.getSession().getAttribute("userId").toString();//获取用户userId
+            String result = hqService_part1.verifyAbbreviation(databaseUrl + userId + programmingDB, abbreviation);// 0表示0条记录，1表示有1条记录
+            returnJsonObject(result);//可能的返回值：-1,0,1
+        }
+    }
     /**
      * 方法序号：4_1 查询客户总记录数
      */

@@ -80,6 +80,19 @@ public class HQService_Part2 extends BaseService {
     }
 
     /**
+     * 方法序号：4_5_0 获取当前外币
+     */
+    public String getAbbreviation(String databaseUrl) {
+        try {
+            return this.hqDao_part2.getAbbreviation(databaseUrl);// 添加
+        } catch (Exception e) {
+            System.out.println("4_5_0 获取当前外币时出错！");
+            e.printStackTrace();
+        }
+        return "-1";
+    }
+
+    /**
      * 方法序号：4_5 保存单品
      */
     public String saveGoods(String databaseUrl, PLU plu) {
@@ -123,9 +136,14 @@ public class HQService_Part2 extends BaseService {
     /**
      * 方法序号：4_7 删除一条商品
      */
-    public String deleteOneGoods(String databaseUrl, String goodsNumber) {
+    public String deleteOneGoods(String databaseUrl, String goodsNumber, String goodsFlag) {
         try {
-            return this.hqDao_part2.deleteOneGoods(databaseUrl, goodsNumber);
+            if (goodsFlag == "0") {
+                return this.hqDao_part2.deleteOneGoods(databaseUrl, goodsNumber);
+            }else {
+                this.hqDao_part2.setOneDeptGoodsNumber0(databaseUrl, goodsNumber);
+                return this.hqDao_part2.deleteOneGoods(databaseUrl, goodsNumber);
+            }
         } catch (Exception e) {
             System.out.println("4_7 删除一条商品时出错！");
             e.printStackTrace();

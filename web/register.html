@@ -306,12 +306,12 @@
                 <label class="col-sm-3">Machine Type</label>
                 <div class="col-sm-6">
                     <select id="machineType" class="form-control">
-                        <option value="HGT-752" selected="selected">HGT-752</option>
+                        <option value="IP-200" selected="selected">IP-200</option>
                     </select>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3">Machine Id</label>
+                <label class="col-sm-3">Machine SN</label>
                 <div class="col-sm-6">
                     <input id="machineId" type="text" class="form-control" placeholder="please enter the Machine Id">
                 </div>
@@ -363,7 +363,9 @@
             <div class="form-group">
                 <label class="col-sm-3">Telephone</label>
                 <div class="col-sm-6">
-                    <input id="tel" type="number" class="form-control" placeholder="please enter the Telephone">
+                    <input id="tel" type="text" class="form-control" maxlength="18"
+                           placeholder="0-18 characters"
+                           onkeypress="return (event.keyCode == 40 ||event.keyCode == 41 ||event.keyCode == 43 ||event.keyCode == 45 || event.keyCode >= 48 && event.keyCode <= 57)">
                 </div>
             </div>
             <div class="form-group">

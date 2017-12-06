@@ -29,7 +29,7 @@ public class InitListener implements ServletContextListener {
         System.out.println("Auto start...");
         //需要实现的功能
 //        HQService hqService = new HQService();
-        dataSource = new ComboPooledDataSource("CashMachine");
+//        dataSource = new ComboPooledDataSource("CashMachine");
         System.out.println("Auto end.");
     }
 }

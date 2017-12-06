@@ -6,6 +6,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.security.Security;
 import java.util.Date;
 import java.util.Properties;
 
@@ -97,14 +98,20 @@ public class SendEmail {
         return message;
     }
     /**
-     * 带参数的邮箱发送函数
+     * 带参数的邮箱发送函数 使用加密的方式,利用465端口进行传输邮件,开启ssl
      */
     public static void sendOneEmail(User user) throws Exception{
+        Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
+        final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
     	// 1. 创建参数配置, 用于连接邮件服务器的参数配置
     	Properties props = new Properties();                    // 参数配置
         props.setProperty("mail.transport.protocol", "smtp");   // 使用的协议（JavaMail规范要求）
         props.setProperty("mail.smtp.host", myEmailSMTPHost);   // 发件人的邮箱的 SMTP 服务器地址
         props.setProperty("mail.smtp.auth", "true");            // 需要请求认证
+        props.setProperty("mail.smtp.socketFactory.class", SSL_FACTORY);
+        props.setProperty("mail.smtp.socketFactory.fallback", "false");
+        props.setProperty("mail.smtp.port", "465");
+        props.setProperty("mail.smtp.socketFactory.port", "465");
         // 2. 根据配置创建会话对象, 用于和邮件服务器交互
         Session session = Session.getDefaultInstance(props);
         session.setDebug(true);                                 // 设置为debug模式, 可以查看详细的发送 log

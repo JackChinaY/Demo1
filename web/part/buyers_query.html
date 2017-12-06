@@ -75,7 +75,7 @@
                             }
                             //当数组为不为空时
                             else if (jsonArray.length != 0) {
-                                var head = '<tr><th>Number</th><th>Name</th><th>TPIN</th><th>VAT_ACC_Name</th><th>Telephone</th><th>Address</th><th>Operation</th></tr>';
+                                var head = '<tr><th>Number</th><th>Name</th><th>TPIN</th><th>TAX_ACC_NAME</th><th>Telephone</th><th>Address</th><th>Operation</th></tr>';
                                 $("#thead").html(head);
                                 var html;
                                 for (var i = 0; i < jsonArray.length; i++) {
@@ -232,12 +232,12 @@
                         placement: 'top'
                     }).show();
                 } else if ($("#vat2").val() == "") {
-                    new $.zui.Messager('The VAT ACC Name can not be empty!', {
+                    new $.zui.Messager('The TAX ACC NAME can not be empty!', {
                         type: 'danger',
                         placement: 'top'
                     }).show();
                 } else if ($("#vat2").val().trim() == "") {
-                    new $.zui.Messager('The VAT ACC Name can not be all spaces!', {
+                    new $.zui.Messager('The TAX ACC NAME can not be all spaces!', {
                         type: 'danger',
                         placement: 'top'
                     }).show();
@@ -466,7 +466,8 @@
                         <label class="col-sm-3">TPIN</label>
                         <div class="col-sm-6">
                             <input id="tpin2" type="tel" class="form-control" maxlength="10"
-                                   placeholder="fixed 10 digits number">
+                                   placeholder="fixed 10 digits number"
+                                   onkeypress="return (event.keyCode >= 48 && event.keyCode <= 57)">
                             <!--隐藏，用于和自身验证-->
                             <input id="tpin2_copy" type="tel" hidden="hidden">
                         </div>
@@ -479,7 +480,7 @@
                         <label id="code_info2" hidden="hidden"></label>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-3">VAT ACC Name</label>
+                        <label class="col-sm-3">TAX ACC NAME</label>
                         <div class="col-sm-6">
                             <input id="vat2" type="text" class="form-control" maxlength="50"
                                    placeholder="0-50 characters">
@@ -490,7 +491,8 @@
                         <label class="col-sm-3">Telephone</label>
                         <div class="col-sm-6">
                             <input id="tel2" type="tel" class="form-control" maxlength="18"
-                                   placeholder="0-18 characters">
+                                   placeholder="0-18 characters"
+                                   onkeypress="return (event.keyCode == 40 ||event.keyCode == 41 ||event.keyCode == 43 ||event.keyCode == 45 || event.keyCode >= 48 && event.keyCode <= 57)">
                         </div>
                     </div>
                     <div class="form-group">

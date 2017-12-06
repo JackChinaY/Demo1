@@ -13,7 +13,7 @@ public class HQDao_Part2 extends BaseDAO_Sqlite {
      * @return json数组
      */
     public String findAllGoods(String databaseUrl, Page page) throws Exception {
-        String sql = "SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4, RRP AS value5,Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8 "
+        String sql = "SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4, RRP AS value5,Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8, Currency AS value12 "
                 + "FROM (SELECT * FROM goods_info  ORDER BY Number ASC LIMIT ?)  LIMIT ? offset ?";
         return this.getForJson(sql, databaseUrl, page.getPageSize() * page.getPageIndex(), page.getPageSize(), page.getPageSize() * (page.getPageIndex() - 1));
     }
@@ -43,14 +43,21 @@ public class HQDao_Part2 extends BaseDAO_Sqlite {
     }
 
     /**
+     * 方法序号：4_5_0 获取当前外币
+     */
+    public String getAbbreviation(String databaseUrl) throws Exception {
+        String sql = "SELECT Abbreviation FROM Currency_Table WHERE Current=1 ";
+        return this.getOneRecard(sql, databaseUrl);
+    }
+    /**
      * 方法序号：4_5 保存单品
      */
     public String saveGoods(String databaseUrl, PLU plu) throws Exception {
-        String sql = "INSERT INTO goods_info (Number,Name,Barcode,Price,RRP,Tax_Index,Stock_Control,Stock_Amount) VALUES (?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO goods_info (Number,Name,Barcode,Price,RRP,Tax_Index,Stock_Control,Stock_Amount,Currency) VALUES (?,?,?,?,?,?,?,?,?)";
         return Integer.toString(this.saveOrUpdateOrDelete(sql, databaseUrl, plu.getNumber(),
                 plu.getName(), plu.getBarcode(),
-                plu.getPrice(), plu.getRRP(), plu.getTax_Index(),
-                plu.getStock_Control(), plu.getStock_Amount()));
+                plu.getPrice(), plu.getRrp(), plu.getTax_Index(),
+                plu.getStock_Control(), plu.getStock_Amount(),plu.getCurrency()));
     }
 
     /**
@@ -86,7 +93,7 @@ public class HQDao_Part2 extends BaseDAO_Sqlite {
         String sql = "UPDATE goods_info SET Name=?,Barcode=?,Price=?,Tax_Index=?,RRP=?,Stock_Control=?,Stock_Amount=? WHERE Number=? ";
         return Integer.toString(this.saveOrUpdateOrDelete(sql, databaseUrl, plu.getName(),
                 plu.getBarcode(), plu.getPrice(),
-                plu.getTax_Index(), plu.getRRP(), plu.getStock_Control(),
+                plu.getTax_Index(), plu.getRrp(), plu.getStock_Control(),
                 plu.getStock_Amount(), plu.getNumber()));
     }
 
@@ -98,7 +105,7 @@ public class HQDao_Part2 extends BaseDAO_Sqlite {
      */
     public String findAllGoodsByOption_ByNumber(String databaseUrl, String key)
             throws Exception {
-        String sql = "SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4, RRP AS value5, Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8 FROM Goods_Info WHERE Number LIKE ?";
+        String sql = "SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4, RRP AS value5, Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8, Currency AS value12 FROM Goods_Info WHERE Number LIKE ?";
         return this.getForJson(sql, databaseUrl, "%" + key + "%");
     }
 
@@ -110,7 +117,7 @@ public class HQDao_Part2 extends BaseDAO_Sqlite {
      */
     public String findAllGoodsByOption_ByName(String databaseUrl, String key)
             throws Exception {
-        String sql = "SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4,RRP AS value5, Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8 FROM Goods_Info WHERE Name LIKE ?";
+        String sql = "SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4,RRP AS value5, Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8, Currency AS value12 FROM Goods_Info WHERE Name LIKE ?";
         return this.getForJson(sql, databaseUrl, "%" + key + "%");
     }
 
@@ -122,7 +129,7 @@ public class HQDao_Part2 extends BaseDAO_Sqlite {
      */
     public String findAllGoodsByOption_ByBarcode(String databaseUrl, String key)
             throws Exception {
-        String sql = "SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4,RRP AS value5, Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8 FROM Goods_Info WHERE Barcode LIKE ?";
+        String sql = "SELECT Number AS value1, Name AS value2, Barcode AS value3, Price AS value4,RRP AS value5, Tax_Index AS value6, Stock_Control AS value7, Stock_Amount AS value8, Currency AS value12 FROM Goods_Info WHERE Barcode LIKE ?";
         return this.getForJson(sql, databaseUrl, "%" + key + "%");
     }
 
@@ -152,5 +159,12 @@ public class HQDao_Part2 extends BaseDAO_Sqlite {
     public String updateOneDept(String databaseUrl, String Dept_No, String PLU_No) throws Exception {
         String sql = "UPDATE Department_Associate SET PLU_No=? WHERE Dept_No=? ";
         return Integer.toString(this.saveOrUpdateOrDelete(sql, databaseUrl, PLU_No, Dept_No));
+    }
+    /**
+     * 方法序号：5_4 将一个部门关联的商品编号置0
+     */
+    public String setOneDeptGoodsNumber0(String databaseUrl, String PLU_No) throws Exception {
+        String sql = "UPDATE Department_Associate SET PLU_No=0 WHERE PLU_No=? ";
+        return Integer.toString(this.saveOrUpdateOrDelete(sql, databaseUrl, PLU_No));
     }
 }

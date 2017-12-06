@@ -69,7 +69,7 @@
                                     $("#thead").html('<tr><th>No data！</th></tr>');
                                     $("#tbody").html('');
                                 } else if (jsonArray.length != 0) {
-                                    var head = '<tr><th>Number</th><th>Name</th><th>Barcode</th><th>Price</th><th>RRP</th><th>Tax Index</th><th>Tax Code</th><th>Tax Name</th><th>Tax Rate</th><th>Stock Control</th><th>Stock Amuont</th><th>Operation</th></tr>';
+                                    var head = '<tr><th>Number</th><th>Name</th><th>Barcode</th><th>Price</th><th>RRP</th><th>Tax Index</th><th>Tax Code</th><th>Tax Name</th><th>Tax Rate</th><th>Stock Control</th><th>Stock Amuont</th><th>Currency</th><th>Operation</th></tr>';
                                     $("#thead").html(head);
                                     var html;
                                     for (var i = 0; i < jsonArray.length; i++) {
@@ -85,6 +85,7 @@
                                             + '<td class="Tax_Rate">' + (parseFloat(jsonArray[i].value11) / 100).toFixed(2) + '%</td>'
                                             + '<td class="Stock_Control">' + jsonArray[i].value7 + '</td>'
                                             + '<td class="Stock_Amount">' + (parseFloat(jsonArray[i].value8) / 10000).toFixed(4) + '</td>'
+                                            + '<td class="Currency">' + jsonArray[i].value12 + '</td>'
                                             + '<td>&nbsp;&nbsp;<a name="update" href="#" data-toggle="tooltip" data-tip-class="tooltip-primary" title="modify"><i class="icon icon-edit"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;<a name="delete" href="#" data-toggle="tooltip" data-tip-class="tooltip-danger" title="delete" style="color: #ea644a"><i class="icon icon-trash"></i></a></td></tr>';
                                     }
                                     $("#tbody").html(html);
@@ -594,8 +595,8 @@
                 <option value="barcode">Barcode</option>
             </select>
             <span class="input-group-addon fix-border fix-padding"></span>
-            <input id="query_key" type="text" class="form-control" maxlength="50"
-                   placeholder="1-50 characters">
+            <input id="query_key" type="text" class="form-control" maxlength="15"
+                   placeholder="1-15 characters">
             <span class="input-group-btn">
                 <button id="submit_goods" class="btn btn-primary" type="button" style="width: 50px"><i
                         class="icon icon-search"></i>
@@ -678,8 +679,9 @@
                     <div class="form-group">
                         <label class="col-sm-3">Price</label>
                         <div class="col-sm-6">
-                            <input id="price2" type="number" class="form-control" maxlength="9"
-                                   placeholder="0-999999.99">
+                            <input id="price2" type="tel" class="form-control" maxlength="9"
+                                   placeholder="0-999999.99"
+                                   onkeypress="return (event.keyCode == 46 || event.keyCode >= 48 && event.keyCode <= 57)">
                         </div>
                         <strong>*</strong>
                     </div>
@@ -697,7 +699,8 @@
                         <label class="col-sm-3">RRP</label>
                         <div class="col-sm-6">
                             <input id="rrp2" type="number" class="form-control" maxlength="9"
-                                   placeholder="0-999999.99">
+                                   placeholder="0-999999.99"
+                                   onkeypress="return (event.keyCode == 46 || event.keyCode >= 48 && event.keyCode <= 57)">
                         </div>
                         <strong>*</strong>
                     </div>
@@ -715,7 +718,8 @@
                         <label class="col-sm-3">Stock Amount</label>
                         <div class="col-sm-6">
                             <input id="stock_amount2" type="tel" class="form-control" maxlength="9"
-                                   placeholder="0-9999.9999">
+                                   placeholder="0-9999.9999"
+                                   onkeypress="return (event.keyCode == 46 || event.keyCode >= 48 && event.keyCode <= 57)">
                         </div>
                         <strong id="stock_amount_info2"></strong>
                     </div>

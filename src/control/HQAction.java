@@ -92,7 +92,7 @@ public class HQAction extends BaseAction {
         String result = hqService.register(user);
         //注册成功后创建数据该用户的数据库
         if (result.equals("1")) {
-            FileOperation.copyFolder(this.getServletContext().getRealPath("")+"\\database", "E:\\database\\" + user.getId());
+            FileOperation.copyFolder(this.getServletContext().getRealPath("")+"\\database", "D:\\database\\" + user.getId());
         }
         returnJsonObject(result);//可能的返回值：-1，0,1
     }

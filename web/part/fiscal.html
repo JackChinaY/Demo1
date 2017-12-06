@@ -60,18 +60,20 @@
                             }
                             //当数组为不为空时
                             else if (jsonArray.length != 0) {
-                                var head = '<tr><th>Number</th><th>Invoice_Code</th><th>Invoice_Name</th><th>Tax_Code</th><th>Tax_Name</th><th>Tax_Rate</th><th>Exempt_Flag</th><th>CRC32</th></tr>';
+//                                var head = '<tr><th>Number</th><th>Invoice_Code</th><th>Invoice_Name</th><th>Tax_Code</th><th>Tax_Name</th><th>Tax_Rate</th><th>Exempt_Flag</th><th>CRC32</th></tr>';
+                                var head = '<tr><th>Number</th><th>Tax Code</th><th>Tax Name</th><th>Tax Rate</th></tr>';
                                 $("#thead").html(head);
                                 var html;
                                 for (var i = 0; i < jsonArray.length; i++) {
                                     html += '<tr><td>' + jsonArray[i].value1 + '</td>'
-                                        + '<td>' + jsonArray[i].value2 + '</td>'
-                                        + '<td>' + jsonArray[i].value3 + '</td>'
+//                                        + '<td>' + jsonArray[i].value2 + '</td>'
+//                                        + '<td>' + jsonArray[i].value3 + '</td>'
                                         + '<td>' + jsonArray[i].value4 + '</td>'
                                         + '<td>' + jsonArray[i].value5 + '</td>'
                                         + '<td>' + (parseFloat(jsonArray[i].value6) / 100).toFixed(2) + '%</td>'
-                                        + '<td>' + jsonArray[i].value7 + '</td>'
-                                        + '<td>' + jsonArray[i].value8 + '</td></tr>';
+//                                        + '<td>' + jsonArray[i].value7 + '</td>'
+//                                        + '<td>' + jsonArray[i].value8 + '</td>'
+                                        + '</tr>';
                                 }
                                 $("#tbody").html(html);
 //                                    console.log(jsonArray.length);

@@ -155,6 +155,42 @@ public class HQService_Part1 extends BaseService {
         }
     }
     /**
+     * 方法序号： 3_4 将所有外币的Current设置为0
+     */
+    public String setAllAbbreviation0(String databaseUrl) {
+        try {
+            return this.hqDao_part1.setAllAbbreviation0(databaseUrl);
+        } catch (Exception e) {
+            System.out.println("3_4 将所有外币的Current设置为0时出错！");
+            e.printStackTrace();
+        }
+        return "-1";
+    }
+    /**
+     * 方法序号： 3_5 将商品库中的所有商品的Currency设置为当前的外币的缩写
+     */
+    public String setAllGoodsCurrency(String databaseUrl, ForeignCurrency currency) {
+        try {
+            return this.hqDao_part1.setAllGoodsCurrency(databaseUrl, currency);
+        } catch (Exception e) {
+            System.out.println("3_5 将商品库中的所有商品的Currency设置为当前的外币的缩写时出错！");
+            e.printStackTrace();
+        }
+        return "-1";
+    }
+    /**
+     * 方法序号： 3_6 验证外币是否已被设置过
+     */
+    public String verifyAbbreviation(String databaseUrl, String abbreviation) {
+        try {
+            return this.hqDao_part1.verifyAbbreviation(databaseUrl, abbreviation);
+        } catch (Exception e) {
+            System.out.println("3_6 验证外币是否已被设置过时出错！");
+            e.printStackTrace();
+        }
+        return "-1";
+    }
+    /**
      * 方法序号：4_1 查询客户总记录数
      */
     public String getBuyersCount(String databaseUrl) {
