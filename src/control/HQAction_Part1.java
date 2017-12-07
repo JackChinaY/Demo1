@@ -211,6 +211,10 @@ public class HQAction_Part1 extends BaseAction {
             currency.setAbbreviation(this.getRequest().getParameter("value2"));
             currency.setExchangeRate(this.getRequest().getParameter("value3"));
             currency.setCurrent(this.getRequest().getParameter("value4"));
+            currency.setName(this.getRequest().getParameter("value5"));
+            currency.setSymbol(this.getRequest().getParameter("value6"));
+            currency.setFlag("1");
+//            System.out.println(currency.toString());
             String userId = this.getSession().getAttribute("userId").toString();//获取用户userId
             String result = hqService_part1.modifyAbbreviation(databaseUrl + userId + programmingDB, currency);// 0表示0条记录，1表示有1条记录
             returnJsonObject(result);//可能的返回值：-1,0,1

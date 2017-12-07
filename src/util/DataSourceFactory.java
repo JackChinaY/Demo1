@@ -13,7 +13,7 @@ public class DataSourceFactory {
 //	public static DataSource dataSource_dmDB_factory = null;
 	static {
 		// 数据源只能被创建一次
-		dataSource = new ComboPooledDataSource("CashMachine");
+		dataSource = new ComboPooledDataSource();
 //		dataSource_pluDB = new ComboPooledDataSource("CashMachine_pluDB");
 //		dataSource_dmDB_factory = new ComboPooledDataSource("CashMachine_dmDB_factory");
 	}

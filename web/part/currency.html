@@ -39,7 +39,7 @@
                                 placement: 'top' // 定义显示位置
                             }).show();
                             setTimeout(function () {
-                                location.href = "../login.html";//重定向
+                                top.location.href = "../login.html";//重定向
                             }, 2000);
                         }
                         //服务器出错
@@ -60,7 +60,7 @@
                             }
                             //当数组为不为空时
                             else if (jsonArray.length != 0) {
-                                var head = '<tr><th>Number</th><th>Abbreviation</th><th>Exchange Rate</th><th>Current</th><th>Operation</th></tr>';
+                                var head = '<tr><th>Number</th><th>Name</th><th>Abbreviation</th><th>Symbol</th><th>Exchange Rate</th><th>Current</th><th>Operation</th></tr>';
                                 $("#thead").html(head);
                                 var html;
                                 for (var i = 0; i < jsonArray.length; i++) {
@@ -71,7 +71,9 @@
                                         temp = (parseFloat(jsonArray[i].value3) / 10000).toFixed(4);
                                     }
                                     html += '<tr><td class="number">' + jsonArray[i].value1 + '</td>'
+                                        + '<td class="name">' + jsonArray[i].value5 + '</td>'
                                         + '<td class="abbreviation">' + jsonArray[i].value2 + '</td>'
+                                        + '<td class="symbol">' + jsonArray[i].value6 + '</td>'
                                         + '<td class="rate">' + temp + '</td>'
                                         + '<td class="current">' + jsonArray[i].value4 + '</td>'
                                         + '<td>&nbsp;&nbsp;&nbsp;&nbsp;<a name="update" href="#" data-toggle="tooltip" data-tip-class="tooltip-primary" title="Modify"><i class="icon icon-edit"></i></a></tr>';
@@ -88,6 +90,7 @@
                     }
                 });
             }
+
             /*******************************************************************************************/
             //加载所有可选外币集合
 
@@ -126,7 +129,7 @@
                                 placement: 'top'
                             }).show();
                             setTimeout(function () {
-                                location.href = "../login.html";//重定向
+                                top.location.href = "../login.html";//重定向
                             }, 2000);
                         }
                         //服务器出错
@@ -143,9 +146,9 @@
                             if (jsonArray.length != 0) {
                                 for (var i = 0; i < jsonArray.length; i++) {
                                     html += '<tr><td class="Number">' + jsonArray[i].value1 + '</td>'
-                                        + '<td class="Name">' + jsonArray[i].value2 + '</td>'
+                                        + '<td class="name">' + jsonArray[i].value2 + '</td>'
                                         + '<td class="abbreviation">' + jsonArray[i].value3 + '</td>'
-                                        + '<td class="Symbol">' + jsonArray[i].value4 + '</td>'
+                                        + '<td class="symbol">' + jsonArray[i].value4 + '</td>'
                                         + '<td>&nbsp;&nbsp;<a name="abbreviation" href="#" title="select this one"><i class="icon icon-tag"></i></a></td></tr>';
                                 }
                                 html += '</tbody></table></div>';
@@ -171,12 +174,14 @@
                 content: findAllAbbreviation()
             });
             /*******************************************************************************************/
-            //修改按钮，修改
+            //修改按钮，弹出对话框
             $("#tbody").on("click", "a[name='update']", function () {
                 //数据初始化
                 $("#number").html($(this).parents("tr").find(".number").text());
                 $("#abbreviation").val($(this).parents("tr").find(".abbreviation").text());
                 $("#abbreviation_copy").val($(this).parents("tr").find(".abbreviation").text());
+                $("#name").val($(this).parents("tr").find(".name").text());
+                $("#symbol").val($(this).parents("tr").find(".symbol").text());
                 $("#rate").val($(this).parents("tr").find(".rate").text());
 //              设置按钮开关的初始状态
                 if ($(this).parents("tr").find(".current").text() == "1") {
@@ -186,26 +191,28 @@
                 }
                 $("#myModal1").modal({moveable: true});//显示对话框
             });
-
-            //因为表格是自动生成的，所以只能用on函数，click事件无效，选择一种新的外币后验证是否存在
+            //选择一种新的外币，并验证是否存在
+            //因为表格是自动生成的，所以只能用on函数，click事件无效
             $("body").on("click", "a[name='abbreviation']", function () {
-                $("#abbreviation").val($(this).parents("tr").find(".abbreviation").text());
-                $("#Choose").popover('hide');//关闭对话框
-                //验证外币是否存在
-                if ($("#abbreviation").val() == "") {
-                    new $.zui.Messager('The Abbreviation can not be empty !', {
-                        type: 'danger',
+                //如果和当前外币一样
+                if ($("#abbreviation").val() == $(this).parents("tr").find(".abbreviation").text()) {
+                    new $.zui.Messager('The Abbreviation is the same as the one that you are modifying, but you can submit it again !', {
+                        type: 'warning',
                         placement: 'top'
                     }).show();
-                } else if ($("#abbreviation").val() == $("#abbreviation_copy").val()) {
-                    $("#code_info").html(1);//0代表已存在，1代表可用
-                } else {
+                    $("#code_info").html(1);//0代表不可用，1代表可用
+                }
+                //验证外币是否存在
+                else {
+                    var abbreviation = $(this).parents("tr").find(".abbreviation").text();
+                    var name = $(this).parents("tr").find(".name").text();
+                    var symbol = $(this).parents("tr").find(".symbol").text();
                     $.ajax({
                         type: "POST",
                         url: "ActionPart1_verifyAbbreviation.action",
                         contentType: "application/x-www-form-urlencoded; charset=utf-8",
                         data: {
-                            "value1": $("#abbreviation").val()
+                            "value1": abbreviation
                         },
                         dataType: "json",
                         cache: false,
@@ -217,7 +224,9 @@
                                     placement: 'top' // 定义显示位置
                                 }).show();
                                 setTimeout(function () {
-                                    location.href = "../login.html";//重定向
+                                    top.location.href = "../login.html";//最顶层的页面进行跳转
+//                                    parent.window.returnToLeginPage();
+//                                    location.href = "../login.html";//重定向
                                 }, 2000);
                             }
                             //服务器出错
@@ -229,10 +238,15 @@
                             }
                             //正确传输过来数据
                             else {
-                                if (data.jsonObject == "0") {
-                                    $("#code_info").html(1);//0代表已存在，1代表可用
+                                if (data.jsonObject == "0") {//0代表不存在
+                                    //赋值
+                                    $("#abbreviation").val(abbreviation);
+                                    $("#name").val(name);
+                                    $("#symbol").val(symbol);
+                                    $("#Choose").popover('hide');//关闭对话框
+                                    $("#code_info").html(1);//0代表不可用，1代表可用
                                 } else if (data.jsonObject == "1") {//1代表已存在，0代表可用
-                                    $("#code_info").html(0);//0代表已存在，1代表可用
+                                    $("#code_info").html(0);//0代表不可用，1代表可用
                                     new $.zui.Messager('The Abbreviation already existed in the table. Please re-enter it !', {
                                         type: 'danger',
                                         placement: 'top' // 定义显示位置
@@ -294,13 +308,13 @@
                     }).show();
                 } else {
 //                    console.log();
-                    var abbreviation;
+                    var abbreviation;//外币缩写
                     if ($("#abbreviation").val() == "" && $("#rate").val() == "") {
                         abbreviation = "";
                     } else {
                         abbreviation = (parseFloat($("#rate").val()) * 10000);
                     }
-                    var current;
+                    var current;//当前外币标志
                     if ($("#checkbox").is(':checked')) {
                         current = 1;
 
@@ -309,7 +323,7 @@
                     }
                     //如果开关被选中
                     if ($("#checkbox").is(':checked')) {
-                        //将其它外币的Current设置为0
+                        //第一步，将其它外币的Current设置为0
                         $.ajax({
                             type: "POST",
                             url: "ActionPart1_setAllAbbreviation0.action",
@@ -325,7 +339,7 @@
                                         placement: 'top' // 定义显示位置
                                     }).show();
                                     setTimeout(function () {
-                                        location.href = "../login.html";//重定向
+                                        top.location.href = "../login.html";//重定向
                                     }, 2000);
                                 }
                                 //服务器出错
@@ -346,7 +360,7 @@
                                 }).show();
                             }
                         });
-                        //如果当前外币被设置为当前使用的外币，则需要将商品库中的所有商品的Currency设置为当前的外币的缩写
+                        //第二步，如果当前外币被设置为当前使用的外币，则需要将商品库中的所有商品的Currency设置为当前的外币的缩写
                         $.ajax({
                             type: "POST",
                             url: "ActionPart1_setAllGoodsCurrency.action",
@@ -365,7 +379,7 @@
                                         placement: 'top' // 定义显示位置
                                     }).show();
                                     setTimeout(function () {
-                                        location.href = "../login.html";//重定向
+                                        top.location.href = "../login.html";//重定向
                                     }, 2000);
                                 }
                                 //服务器出错
@@ -387,6 +401,7 @@
                             }
                         });
                     }
+                    //第三步，修改外币值
                     $.ajax({
                         type: "POST",
                         url: "ActionPart1_modifyAbbreviation.action",
@@ -395,7 +410,9 @@
                             "value1": $("#number").text(),
                             "value2": $("#abbreviation").val(),
                             "value3": abbreviation,
-                            "value4": current
+                            "value4": current,
+                            "value5": $("#name").val(),
+                            "value6": $("#symbol").val()
                         },
                         dataType: "json",
                         cache: false,
@@ -407,7 +424,7 @@
                                     placement: 'top' // 定义显示位置
                                 }).show();
                                 setTimeout(function () {
-                                    location.href = "../login.html";//重定向
+                                    top.location.href = "../login.html";//重定向
                                 }, 2000);
                             }
                             //服务器出错
@@ -438,9 +455,15 @@
                                             placement: 'top'
                                         }).show();
                                     }
-                                    $("#myModal1").modal('hide');
-                                    findAllCurrency();
                                 }
+                                $("#myModal1").modal('hide');
+                                findAllCurrency();
+                                //清除对话框中内容
+                                $("#number").html("");
+                                $("#abbreviation").val("");
+                                $("#name").val("");
+                                $("#symbol").val("");
+                                $("#code_info").html("");
                             }
                         },
                         error: function (jqXHR) {
@@ -542,7 +565,9 @@
                         <button id="Choose" class="btn btn-default" type="button">
                             ...
                         </button>
-                        <input id="abbreviation_copy" type="text" class="form-control" style="display: none">
+                        <input id="abbreviation_copy" type="text" style="display: none">
+                        <input id="name" type="text" style="display: none">
+                        <input id="symbol" type="text" style="display: none">
                         <label id="code_info" hidden="hidden"></label>
                     </div>
                     <div class="form-group">

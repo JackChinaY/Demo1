@@ -78,7 +78,7 @@ public class HQDao_Part1 extends BaseDAO_Sqlite {
      * 方法序号： 3_1 查询所有外汇
      */
     public String findAllCurrency(String databaseUrl) throws Exception {
-        String sql = "SELECT Number AS value1,Abbreviation AS value2,Exchange_Rate AS value3,Current AS value4 FROM Currency_Table ORDER BY Number ASC";
+        String sql = "SELECT Number AS value1,Abbreviation AS value2,Exchange_Rate AS value3,Current AS value4,Name AS value5,Symbol AS value6 FROM Currency_Table ORDER BY Number ASC";
         return this.getForJson(sql, databaseUrl);
     }
 
@@ -86,8 +86,8 @@ public class HQDao_Part1 extends BaseDAO_Sqlite {
      * 方法序号：3_2 保存修改后的外汇
      */
     public String modifyAbbreviation(String databaseUrl, ForeignCurrency currency) throws Exception {
-        String sql = "UPDATE Currency_Table SET Abbreviation=?,Exchange_Rate=?,Current=? WHERE Number=?";
-        return Integer.toString(this.saveOrUpdateOrDelete(sql, databaseUrl, currency.getAbbreviation(), currency.getExchangeRate(),currency.getCurrent(), currency.getNumber()));
+        String sql = "UPDATE Currency_Table SET Abbreviation=?,Exchange_Rate=?,Current=?,Name=?,Symbol=?,Flag=? WHERE Number=?";
+        return Integer.toString(this.saveOrUpdateOrDelete(sql, databaseUrl, currency.getAbbreviation(), currency.getExchangeRate(),currency.getCurrent(), currency.getName(), currency.getSymbol(), currency.getFlag(), currency.getNumber()));
     }
 
     /**

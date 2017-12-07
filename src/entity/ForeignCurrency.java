@@ -10,6 +10,7 @@ public class ForeignCurrency {
     private String id;
     private String number;
     private String code;
+    private String name;
     private String abbreviation;
     private String symbol;
     private String symbolDirection;
@@ -24,6 +25,7 @@ public class ForeignCurrency {
         this.id = "";
         this.number = "";
         this.code = "";
+        this.name = "";
         this.abbreviation = "";
         this.symbol = "";
         this.symbolDirection = "";
@@ -131,16 +133,30 @@ public class ForeignCurrency {
         Current = current;
     }
 
-    @Override
-    public String toString() {
-        return "ForeignCurrency [id=" + id + ", number=" + number
-                + ", code=" + code + ", abbreviation=" + abbreviation
-                + ", symbol=" + symbol + ", symbolDirection="
-                + symbolDirection + ", thousandSeparator="
-                + thousandSeparator + ", centSeparator=" + centSeparator
-                + ", decimalPlaces=" + decimalPlaces + ", exchangeRate="
-                + exchangeRate + ", flag=" + flag + "]";
+    public String getName() {
+        return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 
+    @Override
+    public String toString() {
+        return "ForeignCurrency{" +
+                "id='" + id + '\'' +
+                ", number='" + number + '\'' +
+                ", code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", abbreviation='" + abbreviation + '\'' +
+                ", symbol='" + symbol + '\'' +
+                ", symbolDirection='" + symbolDirection + '\'' +
+                ", thousandSeparator='" + thousandSeparator + '\'' +
+                ", centSeparator='" + centSeparator + '\'' +
+                ", decimalPlaces='" + decimalPlaces + '\'' +
+                ", exchangeRate='" + exchangeRate + '\'' +
+                ", flag='" + flag + '\'' +
+                ", Current='" + Current + '\'' +
+                '}';
+    }
 }

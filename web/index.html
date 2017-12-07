@@ -67,7 +67,7 @@
             //成功登陆后加载用户信息
             function loginsuccess() {
                 if ($.cookie("username") != null) {
-                    $("#successlogin").html( '  ' + $.cookie("username")+ '  ' );
+                    $("#successlogin").html('  ' + $.cookie("username") + '  ');
                 } else {
                     location.href = "login.html";
                 }
@@ -101,6 +101,15 @@
                     location.href = "login.html";
                 }
             });
+            /*******************************************************************************************/
+
+            //登陆超时后返回登录页面
+            function returnToLeginPage() {
+                location.href = "login.html";
+                $.cookie("username", null, {expires: -1});//删除cookie信息
+            }
+
+            /*******************************************************************************************/
         })
     </script>
     <style>

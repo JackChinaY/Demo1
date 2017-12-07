@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/2002/xmlspec/dtd/2.10/xmlspec.dtd">
+<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/2002/xmlspec/dtd/2.10/xmlspec.dtd">-->
 <c3p0-config>
     <!-- 所有数据都存放在一个数据库中 -->
-    <named-config name="CashMachine">
+    <!--<named-config name="CashMachine">-->
+    <default-config>
         <!-- mysql连接方式 -->
         <property name="driverClass">org.gjt.mm.mysql.Driver</property>
         <!--  本地测试时用以下数据库 用户名 密码-->
@@ -47,5 +48,6 @@
 
         <!--maxStatementsPerConnection定义了连接池内单个连接所拥有的最大缓存statements数。Default: 0 -->
         <property name="maxStatementsPerConnection">20</property>
-    </named-config>
+    </default-config>
+    <!--</named-config>-->
 </c3p0-config>
